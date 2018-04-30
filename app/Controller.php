@@ -1,5 +1,6 @@
 <?php
 require '../model/DB.php';
+require 'libs/utils.php';
 
 class Controller {
     
@@ -53,11 +54,35 @@ class Controller {
     
     
     public function subirReceta() {
-        $model=DB::GetInstance();
-        $params = array (
+        if($this->checkCampos()){
+            echo "\nInsertar\n";
+            $nombre = ucfirst(strtolower(recogeTexto($_POST["nombre"])));
+            $elabo  = recogeTexto($_POST["elaboracion"]);
+            $ingre  = recogeArray($_POST["ingredientes"]);
+            $diff   = recogeNumero($_POST["dificultad"]);
+            $tIngre = recogeNumero($_POST["tipoIngredientes"]);
+            $tRece  = recogetipoRece($_POST["tipoReceta"]);
+            $numCom = recogeNumero($_POST["numCom"]);
             
-        );
-	    require __DIR__ . '/templates/subirReceta.php';
+            $model=DB::GetInstance();
+            $inserted = $model->setReceta($nombre, $elabo, $ingre, $diff, $tIngre, $numCom);
+            if($inserted){
+                $idReceta = $model->lastInsertedId();
+                
+                //Asignar tipos a receta
+                $model->setRecetaTipos($idReceta, $tRece);
+                
+                //Asignar receta a usuario
+                $model->setRecetaUser($_POST["login"], $idReceta);
+            }else{
+                $model->delReceta($lastId);
+            }
+            
+        }else{
+            echo "\nFaltan campos por rellenar\n";
+        }
+        
+	    //require __DIR__ . '/templates/subirReceta.php';
 	}
 	
 	
@@ -70,173 +95,6 @@ class Controller {
 	    require __DIR__ . '/templates/receta.php';
 	}
 	
-    
-	
-	/**
-	 * Inserta un empleado
-	 */
-	public function insertar() {
-		$params = array (
-				'first_name' => '',
-				'last_name' => '',
-				'gender' => '',
-				'birth_date' => '',
-				'hire_date' => '' 
-		);
-		
-		$m = new DB ();
-		
-		if (isset ( $_POST ['insertar'] )) {
-			$nombre = recoge ( 'first_name' );
-			$apellido = recoge ( 'last_name' );
-			$genero = recoge ( 'gender' );
-			$nac = recoge ( 'birth_date' );
-			$contra = recoge ( 'hire_date' );
-			// comprobar campos formulario
-			if (validarDatos ( $nombre, $apellido, $genero, $nac, $contra )) {
-				if ($m->insertarEmpleado ( recoge ( 'first_name' ), recoge ( 'last_name' ), recoge ( 'gender' ), recoge ( 'birth_date' ), recoge ( 'hire_date' ) )) {
-					header ( 'Location: index.php?ctl=listar' );
-				} else {
-					$params = array (
-							'first_name' => $nombre,
-							'last_name' => $apellido,
-							'gender' => $genero,
-							'birth_date' => $nac,
-							'hire_date' => $contra 
-					);
-					$params ['mensaje'] = 'No se ha podido insertar el empleado. Revisa el formulario';
-				}
-			} else {
-				$params = array (
-						'first_name' => $nombre,
-						'last_name' => $apellido,
-						'gender' => $genero,
-						'birth_date' => $nac,
-						'hire_date' => $contra 
-				);
-				$params ['mensaje'] = 'Hay datos que no son correctos. Revisa el formulario';
-			}
-		}
-		
-		require __DIR__ . '/templates/formInsertar.php';
-	}
-	
-	
-	/**
-	 * Busca empleados con un determinado nombre
-	 */
-	public function buscarPorNombre() {
-		$params = array (
-				'nombre' => '',
-				'resultado' => array () 
-		);
-		
-		$m = new DB ();
-		
-		if ($_SERVER ['REQUEST_METHOD'] == 'POST') {
-			$nombre = recoge ( "nombre" );
-			$params ['nombre'] = $nombre;
-			$params ['resultado'] = $m->buscarEmpleadosPorNombre ( $nombre );
-		}
-		
-		require __DIR__ . '/templates/buscarPorNombre.php';
-	}
-	
-	
-	/**
-	 * Muestra empleados hasta un determinado salario
-	 */
-	public function buscarPorSalario() {
-		$params = array (
-				'salary' => '',
-				'resultado' => array () 
-		);
-		
-		$m = new DB ();
-		
-		if ($_SERVER ['REQUEST_METHOD'] == 'POST') {
-			$salario = recoge ( "salario" );
-			$params ['salary'] = $salario;
-			$params ['resultado'] = $m->buscarEmpleadosPorSalario ( $salario );
-		}
-		
-		require __DIR__ . '/templates/buscarPorSalario.php';
-	}
-	
-	
-	/**
-	 * Muestra empleados en un determinado departamento
-	 */
-	public function buscarPorDepartamento() {
-		$params = array (
-				'dept_name' => '',
-				'resultado' => array () 
-		);
-		
-		$m = new DB ();
-		
-		if ($_SERVER ['REQUEST_METHOD'] == 'POST') {
-			$departamento = recoge ( "departamento" );
-			$params ['dept_name'] = $departamento;
-			$params ['resultado'] = $m->buscarEmpleadosPorDepartamento ( $departamento );
-		}
-		
-		require __DIR__ . '/templates/buscarPorDepartamento.php';
-	}
-	
-	
-	/**
-	 * Muestra empleados en un determinado puesto
-	 */
-	public function buscarPorPuesto() {
-		$params = array (
-				'title' => '',
-				'resultado' => array ()
-		);
-	
-		$m = new DB ();
-	
-		if ($_SERVER ['REQUEST_METHOD'] == 'POST') {
-			$puesto = recoge ( "puesto" );
-			$params ['title'] = $puesto;
-			$params ['resultado'] = $m->buscarEmpleadosPorPuesto( $puesto );
-		}
-	
-		require __DIR__ . '/templates/buscarPorPuesto.php';
-	}
-	
-	
-	/**
-	 * Muestra el empleado sobre el que se ha hecho click
-	 */
-	public function ver() {
-		if (! isset ( $_GET ['id'] )) {
-			$params = array (
-					'mensaje' => 'No has seleccionado ningun elemento que mostrar',
-					'fecha' => date ( 'd-m-y' ) 
-			);
-			require __DIR__ . '/templates/inicio.php';
-		}
-		
-		$id = recoge ( 'id' );
-		
-		$m = new DB ();
-		
-		$empleado = $m->dameEmpleado ( $id );
-		
-		$params = $empleado;
-		// Si la consulta no ha devuelto resultados volvemos a la página de inicio
-		if (empty ( $params )) {
-			$params = array (
-					'mensaje' => 'No hay empleado que mostar',
-					'fecha' => date ( 'd-m-y' ) 
-			);
-			require __DIR__ . '/templates/inicio.php';
-		} else
-			
-			require __DIR__ . '/templates/verEmpleado.php';
-	}
-
 	
 	/**
 	 * Comprueba usuario y contraseña y en caso correcto establece la variable de sesion
@@ -278,5 +136,60 @@ class Controller {
 		$params = session_get_cookie_params();
 		setcookie(session_name(), '', 0, $params['path'], $params['domain'], $params['secure'], isset($params['httponly']));
 	}
+    
+    
+    private function checkCampos(){
+        $continuar = true;
+
+        if($_POST["nombre"]==""){
+            echo "Nombre en blanco\n";
+            $continuar = false;
+        }
+
+        if($_POST["elaboracion"]==""){
+            echo "Elaboracion en blanco\n";
+            $continuar = false;
+        }
+
+        if(count($_POST["ingredientes"])%2!=0){
+            echo "Ingredientes impares\n";
+            $continuar = false;
+        }
+
+        $ingreCorrecto = true;
+        foreach ($_POST["ingredientes"] as $cantIngre){
+            if($cantIngre==""){
+                $ingreCorrecto = false;
+            }
+        }
+        if(!$ingreCorrecto){
+            echo "Ingrediente en blanco\n";
+            $continuar = false;
+        }
+
+        if($_POST["dificultad"]==""){
+            echo "Dificultad en blanco\n";
+            $continuar = false;
+        }
+
+        if($_POST["tipoIngredientes"]==""){
+            echo "Tipo de ingredientes en blanco\n";
+            $continuar = false;
+        }
+
+        if($_POST["tipoReceta"]==""){
+            echo "Tipo de receta en blanco\n";
+            $continuar = false;
+        }
+
+        if($_POST["numCom"]<1){
+            echo "Número de comensales menor que 1\n";
+            $continuar = false;
+        }
+
+        return $continuar;
+    }
+    
+
 }
 ?>

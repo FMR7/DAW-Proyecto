@@ -226,32 +226,54 @@ class DB extends PDO {
     * Inserta una receta
     * Si se ha insertado correctamente la asocia con el usuario sino se elimina
     */
-    public function setReceta($user, $nombre, $ingredientes, $elaboracion, $dificultad, $numComensales){
+    public function setReceta($nombre, $elabo, $ingre, $diff, $tIngre, $numCom){
         try{
-            $query = "INSERT INTO `recetas` (`idReceta`, `nombre`, `ingredientes`, `elaboracion`, `dificultad`, `numComensales`) VALUES (NULL, :nombre, :ingredientes, :elaboracion, :dificultad, :numComensales)";
+            $query = "INSERT INTO `recetas` (`idReceta`, `nombre`, `ingredientes`, `elaboracion`, `dificultad`, `tipoIngredientes`, `numComensales`) VALUES (NULL, :nombre, :ingre, :elabo, :diff, :tipoIngre, :numCom)";
             $rs = $this->prepare($query);
             $rs->bindParam(':nombre', $nombre);
-            $rs->bindParam(':ingredientes', $ingredientes);
-            $rs->bindParam(':elaboracion', $elaboracion);
-            $rs->bindParam(':dificultad', $dificultad);
-            $rs->bindParam(':numComensales', $numComensales);
+            $rs->bindParam(':elabo', $elabo);
+            $rs->bindParam(':ingre', $ingre);
+            $rs->bindParam(':diff', $diff);
+            $rs->bindParam(':tipoIngre', $tIngre);
+            $rs->bindParam(':numCom', $numCom);
             
-            $inserted = $rs->execute();
-            $lastId = "SELECT LAST_INSERT_ID()";
-            if($inserted){
-                $stmt = $this->query($lastId);
-                $idReceta = $stmt->fetchAll ();
-                
-                return setRecetaUser($user, $idReceta);
-            }else{
-                delReceta($lastId);
-            }
-            return $inserted;
+            return $rs->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    
+    function lastInsertedId(){
+        try{
+            $stmt = $this->query("SELECT LAST_INSERT_ID()");
+            $idReceta = $stmt->fetchAll ();
+            
+            return $idReceta[0][0];
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
     }
 
+    
+    //Asocia tipos de receta a una receta
+    function setRecetaTipos($idReceta, $tipos){
+        $tipos = explode('#', $tipos);
+        foreach($tipos as $tipo){
+            try{
+                $query = "INSERT INTO recetas_tipos (idReceta, idTipo) VALUES (:idReceta, :tipo)";
+                $rs = $this->prepare($query);
+                $rs->bindParam(':idReceta', $idReceta);
+                $rs->bindParam(':tipo', $tipo);
+
+                $rs->execute();
+            }catch(PDOException $e){
+                echo "<p>Error: ".$e->getMessage();
+            }
+        }
+    }
+    
+    
     //Asocia una receta con un usuario
     function setRecetaUser($user, $idReceta){
         try{

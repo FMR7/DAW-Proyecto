@@ -203,6 +203,14 @@
             animacionRequerido($(".multiselect-native-select>div>button"));
         }
         
+        //Número comensales
+        var numCom = "";
+        if($("#lNumCom").val()>0){
+            numCom = $("#lNumCom").val();
+        }else{
+            animacionRequerido($("#numCom"));
+        }
+        
         var params = {
             "nombre" : nombre,
             "elaboracion" : elaboracion,
@@ -210,6 +218,7 @@
             "dificultad" : dificultad,
             "tipoIngredientes" : tipoIngredientes,
             "tipoReceta" : tipoReceta,
+            "numCom" : numCom
         };
         
         return params;
@@ -291,7 +300,7 @@
             <option value="0" selected>Dificultad de la elaboración</option>
             <?php 
             foreach ($params['dificultades'] as $dificultad){
-                echo "<option value".$dificultad['idDificultad'].">".$dificultad['dificultad']."</option>";
+                echo "<option value=".$dificultad['idDificultad'].">".$dificultad['dificultad']."</option>";
             }
             ?>
         </select>
@@ -320,7 +329,7 @@
     <div class="row" id="numCom">
         <label class="col-4 col-sm-3 col-lg-2 pt-1">Comensales</label>
         <input type="range" id="fNumCom" min="1" max="20" value="1" class="col-6 col-sm-7 col-lg-8 form-control slider">
-        <input type="number" id="lNumCom" class="col-2 border-0 text-center" value="1">
+        <input type="number" id="lNumCom" class="col-2 border-0 text-right" value="1">
     </div>
   
    

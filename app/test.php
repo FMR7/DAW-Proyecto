@@ -53,4 +53,42 @@ print_r($db->getTipoReceta());
 echo "<br><br>getLikes<br>";
 $db->GetInstance();
 print_r($db->getLikes(5));
+
+/*
+echo "<br><br>setReceta<br>";
+$db->GetInstance();
+print_r($db->setReceta("fernando", "Prueba insert", "Primero blah blah blah", "2#Pechugas;3#Tomates", 2, 1, "3#5#6", 4));
+*/
+
+/*WORKS
+echo "<br><br>setRecetaTipos<br>";
+$db->GetInstance();
+print_r($db->setRecetaTipos(9, "1#2#3#4#5"));
+*/
+
+/*WORKS
+echo "<br><br>setRecetaUser<br>";
+$db->GetInstance();
+print_r($db->setRecetaUser("fernando", 9));
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ?>

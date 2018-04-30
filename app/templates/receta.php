@@ -163,12 +163,12 @@
                 </thead>
                 <tbody>
                     <?php
-    $ingredientes = explode(";", $receta['ingredientes']);
-foreach ($ingredientes as $ingrediente){
-    $cntIng = explode("#", $ingrediente);
-    echo "<tr><td>".$cntIng[0]."</td>";
-    echo "<td>".@$cntIng[1]."</td></tr>";
-}
+                    $ingredientes = explode(";", $receta['ingredientes']);
+                    foreach ($ingredientes as $ingrediente){
+                        $cntIng = explode("#", $ingrediente);
+                        echo "<tr><td>".$cntIng[0]."</td>";
+                        echo "<td>".$cntIng[1]."</td></tr>";
+                    }
                     ?>
                 </tbody>
             </table>

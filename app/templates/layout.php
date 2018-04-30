@@ -42,7 +42,7 @@ $server=Config::$serverUrl;
                     </button>
                     <?php 
                     @session_start();
-                    $_SESSION['login'] = "test";
+                    $_SESSION['login'] = "fernando";
                     ?>
                     <div class="navbar order-sm-1">
                         <ul class="navbar-nav">
