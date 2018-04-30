@@ -1,0 +1,7 @@
+span.multiselect-native-select{width: 100%;}
+span.multiselect-native-select button{
+    justify-content: space-between;
+    display: flex;
+}
+.dropdown-toggle:after{display:none;}
+.multiselect{display: none;}

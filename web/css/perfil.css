@@ -1,0 +1,21 @@
+#user, #passOld{
+    border-radius: 16px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}#pass, #pass2{
+    border-radius: 0;
+}#submit, #email{
+    border-radius: 16px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+@media (max-width: 575.98px) {
+    #user, #passOld, #pass, #pass2, #email, #submit{
+        border-radius: 16px;
+    }
+    .col-form-label{padding-bottom: 0;}
+}
+#cambiarPass{
+    width: 100%;
+    padding: 0 15px;
+}

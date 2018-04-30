@@ -1,0 +1,9 @@
+RewriteEngine On
+
+RewriteRule    ^(\w+)/?$    /web/index.php?ctl=$1
+RewriteRule    ^(\w+)/(\w+)?$    /web/index.php?ctl=$1&id=$2
+RewriteRule    ^(\w+)/(\w+)/?$    /web/index.php?ctl=$1&id=$2
+
+
+DirectoryIndex /web/index.php?ctl=inicio
+Options -Indexes

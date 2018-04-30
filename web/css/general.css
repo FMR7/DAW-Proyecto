@@ -1,0 +1,21 @@
+.separador{border-bottom: 1px solid rgb(169, 169, 169);}
+        
+.rounded{border-radius: 16px !important;}
+
+.bt-0{
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}.bb-0{
+    border-bottom-left-radius:  0 !important;
+    border-bottom-right-radius: 0 !important;
+}.br-0{
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}.bl-0{
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+
+content{min-height: 350px;}
+#contenido{margin: 0 auto;}

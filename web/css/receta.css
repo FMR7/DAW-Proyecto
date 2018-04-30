@@ -1,0 +1,52 @@
+/*RECETAS*/
+td{text-align: right;}
+td+td{text-align: left;}
+#nav{
+    padding: 0;
+    border: 1px solid rgb(169, 169, 169);
+    border-bottom: 0;
+    border-radius: 16px;
+    border-bottom-left-radius:  0;
+    border-bottom-right-radius: 0;
+}.table thead th {
+    border-bottom: 0;
+}.table-responsive{padding: 0;}
+#receta{
+    border: 1px solid rgb(169, 169, 169);
+    border-radius: 16px;
+    height: 250px;
+}
+#elabo{
+    border: 0;
+    border-radius: 16px;
+    min-height: 248px;
+    max-height: 248px;
+}
+
+@media (min-width: 992px){
+    #elabo{
+        border-right: 1px solid rgb(169, 169, 169);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+}
+
+
+/*ESCRIBIR OPINIÓN*/
+#miOpinion>textarea{
+    border-radius: 16px;
+    min-height: 126px;
+    max-height: 126px;
+}
+#publicar{
+    height: 32px;
+    padding: 0 16px;
+}
+
+/*OPINIONES*/
+#opiniones{border-top: 1px solid rgb(169, 169, 169);}
+opinion{padding: 0 !important;}
+
+/*LIKES*/
+.liked{color: #28a745;}
+.disliked{color: #dc3545;}

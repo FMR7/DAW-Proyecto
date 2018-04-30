@@ -1,0 +1,60 @@
+.oi-minus{color: #dd0000;}
+.oi-plus{color: #00aa00;}
+
+nav, #receta, #diffElabo, #diffIngre, .multiselect{border: 1px solid rgb(169, 169, 169);}
+
+#nav{
+    padding: 0;
+    border-bottom: 0;
+    border-radius: 16px;
+    border-bottom-left-radius:  0;
+    border-bottom-right-radius: 0;
+}
+
+.table thead th {border-bottom: 0;}
+.table-responsive{padding: 0;}
+
+td{text-align: right;}
+td+td{text-align: left;}
+td+td+td{vertical-align: middle !important;}
+
+
+#receta{height: 250px;}
+#elabo{
+    border: 0;
+    min-height: 248px;
+    max-height: 248px;
+}
+
+#diffElabo, #diffIngre, .multiselect{
+    border-top: 0;
+    border-radius: 0;
+}
+
+.multiselect{border-bottom-left-radius: 16px;}
+
+#publicar{
+    height: 32px;
+    padding: 0 16px;
+    border-radius: 0;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+
+
+@media (min-width: 992px){
+    #elabo{
+        border-right: 1px solid rgb(169, 169, 169);
+    }
+
+    #diffIngre{
+        border-left: 0;
+        border-bottom-left-radius: 0;
+    }
+
+}
+
+@media (max-width: 575px){
+    .multiselect{border-bottom-left-radius: 0;}
+}
