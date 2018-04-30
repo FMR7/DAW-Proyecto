@@ -32,6 +32,8 @@ td+td+td{vertical-align: middle !important;}
 }
 
 #numCom{border-bottom-left-radius: 16px;}
+#numCom>label{padding-left: 12px;}
+#fNumCom{margin-top: 10px;}
 
 #publicar{
     height: 32px;

@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="../../web/css/bootstrap-multiselect.css" type="text/css"/>
 <link rel="stylesheet" href="../../web/css/multiSelect.css" type="text/css"/>
 <link rel="stylesheet" href="../../web/css/nueva.css" type="text/css"/>
+<link rel="stylesheet" href="../../web/css/slider.css" type="text/css"/>
 <style>
     .cantidad{
         padding-left: 0;
@@ -64,6 +65,26 @@
             $("#ingre").animate({ scrollTop: $("#ingre>table").height() }, 500);
         });
         
+        
+        $("#fNumCom").change(function() {
+            $("#lNumCom").val($(this).val());
+        });
+
+        $("#lNumCom").blur(function() {
+            if($(this).val() > 0){
+                $("#fNumCom").val($(this).val());
+                if($(this).val()<=$("#fNumCom").attr("max")){
+                    $("#fNumCom").trigger("change");
+                }
+            }else{
+                $("#fNumCom").val(1);
+                $("#fNumCom").trigger("change");
+            }
+        });
+
+
+        
+        
         //Publicar
         $("#publicar").click(function(){
             limpiarTabla();//Quita los ingredientes cuyos campos esten en blanco
@@ -74,6 +95,7 @@
             
             subir(params);
         });
+        
     }
     
     //Borra la fila salvo que sea la última
@@ -296,8 +318,8 @@
 
     
     <div class="row" id="numCom">
-        <label class="col-4 pl-2 mb-0">Comensales</label>
-        <input type="range" id="fNumCom" min="1" max="20" value="1" class="col-6 form-control slider">
+        <label class="col-4 col-sm-3 col-lg-2 pt-1">Comensales</label>
+        <input type="range" id="fNumCom" min="1" max="20" value="1" class="col-6 col-sm-7 col-lg-8 form-control slider">
         <input type="number" id="lNumCom" class="col-2 border-0 text-center" value="1">
     </div>
   
