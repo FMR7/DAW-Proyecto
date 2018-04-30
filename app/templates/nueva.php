@@ -47,12 +47,10 @@
         //Ingredientes
         //Borrar fila
         $(document).on('click', '.oi-minus', function() {//Click icono
-            console.log("Click icono");
             borraFila($(this).parent());
         });
 
         $(document).on('click', '.remove', function() {//Click td icono
-            console.log("Click td");
             borraFila($(this));
         });
 
@@ -79,11 +77,10 @@
     
     //Borra la fila salvo que sea la última
     function borraFila(evt){
-        console.log($("#ingre tbody tr").length);
         if($("#ingre tbody tr").length > 2){
             evt.parent().remove();
         }else{
-            console.log("Última fila");
+            //Última fila
         }
     }
     
@@ -98,7 +95,11 @@
                 }
             }
         }
-        $(".oi-plus").trigger("click");
+        
+        cantIngre = $("#ingre>table>tbody>tr>td>input");
+        if($(cantIngre).length == 0){
+            $(".oi-plus").trigger("click");
+        }
     }
     
     
