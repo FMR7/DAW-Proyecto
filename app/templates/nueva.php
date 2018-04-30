@@ -68,10 +68,11 @@
         $("#publicar").click(function(){
             limpiarTabla();//Quita los ingredientes cuyos campos esten en blanco
             
-            console.log(recogeCampos());
+            var params = recogeCampos();
+            console.log(params);
             
             
-            //subir();
+            subir(params);
         });
     }
     
@@ -91,7 +92,7 @@
         for(var i=0; i< cantIngre.length; i++) {
             if(i%2==0){
                 if(($(cantIngre[i]).val()=="")&&($(cantIngre[(i+1)]).val()=="")){
-                    $(cantIngre).parent().parent().remove();
+                    $(cantIngre[i]).parent().parent().remove();
                 }
             }
         }
@@ -134,7 +135,7 @@
         //Elaboracion
         var elaboracion = "";
         if($("#elabo").val()!=""){
-            nombre = $("#elabo").val();
+            elaboracion = $("#elabo").val();
         }else{
             animacionRequerido($("#elabo"));
         }
@@ -192,18 +193,18 @@
         return params;
     }
     
-    function subir(nombre, elaboracion, ingredientes, dificultad, tipoIngredientes, tipoReceta){
-        var params = recogeCampos();
+    function subir(params){
         $.ajax({
             data:  params,
-            url:   'subirReceta.php',
+            url:   'subir',
             type:  'post',
             beforeSend: function () {
                 //$("#resultado").html("Procesando, espere por favor...");
             },
             success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
                 //$("#resultado").html(response);
-                alert("Receta subida con éxito");
+                console.log("Receta subida con éxito");
+                console.log(response);
             }
         });
     }

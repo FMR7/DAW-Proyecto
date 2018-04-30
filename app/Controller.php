@@ -50,6 +50,15 @@ class Controller {
         );
 	    require __DIR__ . '/templates/nueva.php';
 	}
+    
+    
+    public function subirReceta() {
+        $model=DB::GetInstance();
+        $params = array (
+            
+        );
+	    require __DIR__ . '/templates/subirReceta.php';
+	}
 	
 	
 	public function receta() {

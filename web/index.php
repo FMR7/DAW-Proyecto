@@ -9,6 +9,7 @@ $map = array(
     'register'=>  array('controller' =>'Controller', 'action' =>'register'),
     'perfil'=>    array('controller' =>'Controller', 'action' =>'perfil'),
 	'nueva' =>    array('controller' =>'Controller', 'action' =>'nueva'),
+    'subir' =>    array('controller' =>'Controller', 'action' =>'subirReceta'),
     'receta' =>   array('controller' =>'Controller', 'action' =>'receta'),
     'notFound' => array('controller' =>'Controller', 'action' =>'notFound'),
     'admin' =>    array('controller' =>'Controller', 'action' =>'admin')
