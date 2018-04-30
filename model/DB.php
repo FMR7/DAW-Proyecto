@@ -222,9 +222,10 @@ class DB extends PDO {
     
     
     
-    
-    
-    //Insertar receta
+    /**
+    * Inserta una receta
+    * Si se ha insertado correctamente la asocia con el usuario sino se elimina
+    */
     public function setReceta($user, $nombre, $ingredientes, $elaboracion, $dificultad, $numComensales){
         try{
             $query = "INSERT INTO `recetas` (`idReceta`, `nombre`, `ingredientes`, `elaboracion`, `dificultad`, `numComensales`) VALUES (NULL, :nombre, :ingredientes, :elaboracion, :dificultad, :numComensales)";
@@ -236,22 +237,25 @@ class DB extends PDO {
             $rs->bindParam(':numComensales', $numComensales);
             
             $inserted = $rs->execute();
+            $lastId = "SELECT LAST_INSERT_ID()";
             if($inserted){
-                $lastId = "SELECT LAST_INSERT_ID()";
-                
                 $stmt = $this->query($lastId);
                 $idReceta = $stmt->fetchAll ();
                 
                 return setRecetaUser($user, $idReceta);
+            }else{
+                delReceta($lastId);
             }
             return $inserted;
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
     }
+
+    //Asocia una receta con un usuario
     function setRecetaUser($user, $idReceta){
         try{
-            $query = "INSERT INTO `usuario_recetas` (`username`, `idReceta`) VALUES (:user, :idReceta);";
+            $query = "INSERT INTO usuario_recetas (username, idReceta) VALUES (:user, :idReceta)";
             $rs = $this->prepare($query);
             $rs->bindParam(':user', $user);
             $rs->bindParam(':idReceta', $idReceta);
@@ -263,9 +267,41 @@ class DB extends PDO {
     }
     //Insertar receta FIN
 
+    
+    //Borra una receta
+    public function delReceta($user, $idReceta){
+        try{
+            $query = "DELETE FROM recetas WHERE idReceta=:idReceta";
+            $rs = $this->prepare($query);
+            $rs->bindParam(':idReceta', $idReceta);
+
+            $deleted = $rs->execute();
+            if($deleted){
+                return delRecetaUser($user, $idReceta);
+            }
+            return $deleted;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    //Borra la asociación de la receta con el usuario
+    function delRecetaUser($user, $idReceta){
+        try{
+            $query = "DELETE FROM usuario_recetas WHERE username=:user AND idReceta=:idReceta)";
+            $rs = $this->prepare($query);
+            $rs->bindParam(':user', $user);
+            $rs->bindParam(':idReceta', $idReceta);
+            
+            return $rs->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
 
     //INICIO
-    function getTipoDificultades(){
+    public function getTipoDificultades(){
         try{
             $query = "SELECT * FROM tipodificultades";
             $rs = $this->query ( $query );
@@ -274,7 +310,7 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
-    function getTipoIngredientes(){
+    public function getTipoIngredientes(){
         try{
             $query = "SELECT * FROM tipoingredientes";
             $rs = $this->query ( $query );
@@ -283,7 +319,7 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
-    function getTipoReceta(){
+    public function getTipoReceta(){
         try{
             $query = "SELECT * FROM tiporeceta";
             $rs = $this->query ( $query );
