@@ -3,7 +3,7 @@
 <!--COMUN CON inicio-->
 <link rel="stylesheet" href="../../web/css/bootstrap-multiselect.css" type="text/css"/>
 <link rel="stylesheet" href="../../web/css/multiSelect.css" type="text/css"/>
-<link rel="stylesheet" href="../../web/css/subirReceta.css" type="text/css"/>
+<link rel="stylesheet" href="../../web/css/nueva.css" type="text/css"/>
 <style>
     .cantidad{
         padding-left: 0;
@@ -294,7 +294,14 @@
         </select>
     </div>
 
-
+    
+    <div class="row" id="numCom">
+        <label class="col-4 pl-2 mb-0">Comensales</label>
+        <input type="range" id="fNumCom" min="1" max="20" value="1" class="col-6 form-control slider">
+        <input type="number" id="lNumCom" class="col-2 border-0 text-center" value="1">
+    </div>
+  
+   
     <div class="row">
         <button type="button" id="publicar" class="col-sm-6 col-md-4 offset-sm-6 offset-md-8 btn btn-lg btn-primary btn-block">Publicar</button>
     </div>
