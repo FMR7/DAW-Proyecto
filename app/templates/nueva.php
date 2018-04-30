@@ -47,11 +47,13 @@
         //Ingredientes
         //Borrar fila
         $(document).on('click', '.oi-minus', function() {//Click icono
-            $(this).parent().parent().remove();
+            console.log("Click icono");
+            borraFila($(this).parent());
         });
 
         $(document).on('click', '.remove', function() {//Click td icono
-            $(this).parent().remove();
+            console.log("Click td");
+            borraFila($(this));
         });
 
         //Añadir fila
@@ -75,6 +77,17 @@
         });
     }
     
+    //Borra la fila salvo que sea la última
+    function borraFila(evt){
+        console.log($("#ingre tbody tr").length);
+        if($("#ingre tbody tr").length > 2){
+            evt.parent().remove();
+        }else{
+            console.log("Última fila");
+        }
+    }
+    
+    
     //Quita los ingredientes cuyos campos esten en blanco
     function limpiarTabla(){
         var cantIngre = $("#ingre>table>tbody>tr>td>input");
@@ -85,6 +98,7 @@
                 }
             }
         }
+        $(".oi-plus").trigger("click");
     }
     
     
