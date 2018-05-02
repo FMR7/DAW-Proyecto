@@ -42,13 +42,13 @@ $server=Config::$serverUrl;
                     </button>
                     <?php 
                     @session_start();
-                    $_SESSION['login'] = "fernando";
+                    //$_SESSION['login'] = "fernando";
                     ?>
                     <div class="navbar order-sm-1">
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <?php 
-                                if (isset($_SESSION['login'])){
+                                if(@$_SESSION['login']!=""){
                                 ?>
                                 <a class="nav-item nav-link" href="<?php echo $server;?>logout">
                                     <span class="d-none d-sm-block">Cerrar sesión</span>

@@ -22,6 +22,20 @@ class Controller {
 	
 	
 	public function login() {
+        if((isset($_POST["user"]))&&(isset($_POST["pass"]))){
+            $model=DB::GetInstance();
+            
+            $user = $_POST["user"];//Quitar espacios
+            $pass = hash('sha512', $_POST["pass"]);
+            
+            $login=$model->getUser($user, $pass);
+            if($login){
+                $params = array ('user' => $user);
+            }else{
+                $params = array ('user' => "");
+            }
+        }
+        
 	    require __DIR__ . '/templates/login.php';
 	}
 	
@@ -55,7 +69,7 @@ class Controller {
     
     public function subirReceta() {
         if($this->checkCampos()){
-            echo "\nInsertar\n";
+            //echo "\nInsertar Controller\n";
             $nombre = ucfirst(strtolower(recogeTexto($_POST["nombre"])));
             $elabo  = recogeTexto($_POST["elaboracion"]);
             $ingre  = recogeArray($_POST["ingredientes"]);
@@ -73,16 +87,25 @@ class Controller {
                 $model->setRecetaTipos($idReceta, $tRece);
                 
                 //Asignar receta a usuario
-                $model->setRecetaUser($_POST["login"], $idReceta);
+                //$model->setRecetaUser($_POST["login"], $idReceta);
+                $model->setRecetaUser("fernando", $idReceta);
+                
+                //Redirecciona a la nueva receta
+                $params = array (
+                    'receta' => $model->getReceta($idReceta),
+                    'likes'  => $model->getLikes($idReceta)
+                );
+                
+                //return "true";
+                //require __DIR__ . '/templates/receta.php';
+                echo true;
             }else{
                 $model->delReceta($lastId);
             }
             
         }else{
-            echo "\nFaltan campos por rellenar\n";
+            //echo "\nFaltan campos por rellenar\n";
         }
-        
-	    //require __DIR__ . '/templates/subirReceta.php';
 	}
 	
 	

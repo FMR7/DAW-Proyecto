@@ -234,8 +234,11 @@
             },
             success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
                 //$("#resultado").html(response);
-                console.log("Receta subida con éxito");
-                console.log(response);
+                console.log("\""+response+"\"");
+                if(response==1){
+                    alert("Receta subida con éxito.");
+                    
+                }
             }
         });
     }
@@ -246,6 +249,10 @@
 
 <!--EL HTML VA AQUÍ-->
 <?php ob_start() ?>
+<?php 
+@session_start();
+if(@$_SESSION['login']!=""){
+?>
 <div id="contenido" class="col-12 col-md-8 content">
     <div class="row mt-3 mb-3">
         <input type="text" id="nombre" class="rounded form-control" placeholder="Nombre de la receta" required autofocus>
@@ -337,6 +344,11 @@
         <button type="button" id="publicar" class="col-sm-6 col-md-4 offset-sm-6 offset-md-8 btn btn-lg btn-primary btn-block">Publicar</button>
     </div>
 </div>
+<?php 
+}else{//Redireccionar al login
+    ?><script>window.location.replace("login");</script><?php
+}
+?>
 <?php $contenido = ob_get_clean() ?>
 
 <?php include 'layout.php' ?>

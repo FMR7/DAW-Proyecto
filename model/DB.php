@@ -192,20 +192,6 @@ class DB extends PDO {
     }
 
     
-    public function getUser($user, $pass){
-        try{
-            $query = "SELECT * FROM usuarios WHERE username=:username and password=:password";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':username', $user);
-            $rs->bindParam(':password', $pass);
-            $rs->execute();
-
-            return $rs->fetchAll ();
-        }catch(PDOException $e){
-            echo "<p>Error: ".$e->getMessage();
-        }
-    }
-
     //Devuelve las recetas de un usuario
     public function getRecetasUser($user){
         try{
@@ -350,8 +336,27 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
-    
     //INICIO FIN
+    
+    //LOGIN
+    public function getUser($user, $pass){
+        try{
+            $query = "SELECT * FROM usuarios WHERE username=:user AND password=:pass";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':pass', $pass);
+            $stmt->execute();
+            
+	        $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return true;
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    //LOGIN FIN
 
 
 }

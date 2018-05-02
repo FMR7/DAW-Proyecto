@@ -10,6 +10,10 @@
 
 <!--EL HTML VA AQUÍ-->
 <?php ob_start() ?>
+<?php 
+@session_start();
+if(@$_SESSION['login']!=""){
+?>
 <div id="contenido" class="col-md-8 col-lg-6 col-xl-6 content">
     <div class="row">
         <h1 class="h3 mb-4 pl-3 font-weight-normal">Perfil</h1>
@@ -57,6 +61,11 @@
     </div>
 
 </div>
+<?php 
+}else{//Redireccionar al login
+    ?><script>window.location.replace("login");</script><?php
+}
+?>
 <?php $contenido = ob_get_clean() ?>
 
 <?php include 'layout.php' ?>
