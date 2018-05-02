@@ -8,9 +8,9 @@ class DB extends PDO {
             parent::__construct('mysql:host=localhost;dbname=recetas', "root", "");
             parent::setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             parent::exec("set names utf8");
-        } catch ( PDOException $e ) {
+        } catch(PDOException $e){
             echo "<p>Error: No puede conectarse con la base de datos.</p>\n";
-            echo "<p>Error: " . $e->getMessage ();
+            echo "<p>Error: " . $e->getMessage();
         }
     }
 
@@ -27,23 +27,22 @@ class DB extends PDO {
     public function getRecetas(){        
         try {
             $query = "select r.idReceta, r.nombre, d.dificultad, ti.tipoIngrediente, r.numComensales from recetas r JOIN tipoIngredientes ti ON r.tipoIngredientes=ti.idTipoIngrediente JOIN tipodificultades d ON r.dificultad=d.idDificultad";
-            $stmt = $this->query ( $query );
-            return $stmt->fetchAll ();
-        } catch ( PDOException $e ) {
-            echo "<p>Error: " . $e->getMessage ();
+            $stmt = $this->query($query);
+            return $stmt->fetchAll();
+        } catch(PDOException $e){
+            echo "<p>Error: " . $e->getMessage();
         }
     }
 
 
     public function getReceta($idReceta){
         try{
-            //$query = "SELECT * FROM recetas WHERE idReceta=:idReceta";
             $query = "select r.nombre, r.elaboracion, r.ingredientes, d.dificultad, ti.tipoIngrediente, r.numComensales from recetas r JOIN tipoIngredientes ti ON r.tipoIngredientes=ti.idTipoIngrediente JOIN tipodificultades d ON r.dificultad=d.idDificultad WHERE r.idReceta=:idReceta";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':idReceta', $idReceta);
-            $rs->execute();
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
 
-            return $rs->fetchAll ();
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -52,20 +51,20 @@ class DB extends PDO {
     
     function getLikes($idReceta){
         try{
-            $query = "select COUNT(meGusta) as likes from opiniones WHERE idReceta=:idReceta AND meGusta=1";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':idReceta', $idReceta);
-            $rs->execute();
+            $queryLikes = "select COUNT(meGusta) as likes from opiniones WHERE idReceta=:idReceta AND meGusta=1";
+            $stmt = $this->prepare($queryLikes);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
 
-            $likes = $rs->fetchAll ();
+            $likes = $stmt->fetchAll();
             
             
-            $query2 = "select COUNT(meGusta) as disLikes from opiniones WHERE idReceta=:idReceta AND meGusta=0";
-            $rs = $this->prepare($query2);
-            $rs->bindParam(':idReceta', $idReceta);
-            $rs->execute();
+            $queryDislikes = "select COUNT(meGusta) as disLikes from opiniones WHERE idReceta=:idReceta AND meGusta=0";
+            $stmt = $this->prepare($queryDislikes);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
 
-            $disLikes = $rs->fetchAll ();
+            $disLikes = $stmt->fetchAll();
             
             
             $total = ['likes'=>$likes[0][0], 'disLikes'=>$disLikes[0][0]];
@@ -81,11 +80,11 @@ class DB extends PDO {
     public function getRecetasDif($dificultad){
         try{
             $query = "SELECT * FROM recetas WHERE dificultad=:dificultad";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':dificultad', $dificultad);
-            $rs->execute();
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':dificultad', $dificultad);
+            $stmt->execute();
 
-            return $rs->fetchAll ();
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -95,11 +94,11 @@ class DB extends PDO {
     public function getRecetasNumCom($numComensales){
         try{
             $query = "SELECT * FROM recetas WHERE numComensales=:numComensales";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':numComensales', $numComensales);
-            $rs->execute();
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':numComensales', $numComensales);
+            $stmt->execute();
 
-            return $rs->fetchAll ();
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -110,8 +109,8 @@ class DB extends PDO {
         $in = '('.implode(',', $tipo).')';
         try{
             $query = "SELECT r.idReceta, r.nombre FROM recetas r JOIN recetas_tipos rt ON r.idReceta=rt.idReceta JOIN tiporeceta tr ON tr.idTipo=rt.idTipo WHERE tr.idTipo IN $in GROUP BY r.idReceta";
-            $stmt = $this->query ( $query );
-            return $stmt->fetchAll ();
+            $stmt = $this->query($query);
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -121,12 +120,12 @@ class DB extends PDO {
     public function getRecetasDifNumCom($dificultad, $numComensales){
         try{
             $query = "SELECT * FROM recetas WHERE dificultad=:dificultad AND numComensales>=:numComensales";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':dificultad', $dificultad);
-            $rs->bindParam(':numComensales', $numComensales);
-            $rs->execute();
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':dificultad', $dificultad);
+            $stmt->bindParam(':numComensales', $numComensales);
+            $stmt->execute();
 
-            return $rs->fetchAll ();
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -137,10 +136,10 @@ class DB extends PDO {
         $in = '('.implode(',', $tipo).')';
         try{
             $query = "SELECT r.* FROM recetas r JOIN recetas_tipos rt ON r.idReceta=rt.receta JOIN tiporeceta tr ON tr.idTipo=rt.idTipo WHERE tr.idTipo IN $in AND dificultad=:dificultad GROUP BY r.idReceta";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':dificultad', $dificultad);
-            $rs->execute();
-            return $stmt->fetchAll ();
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':dificultad', $dificultad);
+            $stmt->execute();
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -151,10 +150,10 @@ class DB extends PDO {
         $in = '('.implode(',', $tipo).')';
         try{
             $query = "SELECT r.* FROM recetas r JOIN recetas_tipos rt ON r.idReceta=rt.receta JOIN tiporeceta tr ON tr.idTipo=rt.idTipo WHERE tr.idTipo IN $in AND numComensales=:numComensales GROUP BY r.idReceta";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':numComensales', $numComensales);
-            $rs->execute();
-            return $stmt->fetchAll ();
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':numComensales', $numComensales);
+            $stmt->execute();
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -165,11 +164,11 @@ class DB extends PDO {
         $in = '('.implode(',', $tipo).')';
         try{
             $query = "SELECT r.* FROM recetas r JOIN recetas_tipos rt ON r.idReceta=rt.receta JOIN tiporeceta tr ON tr.idTipo=rt.idTipo WHERE tr.idTipo IN $in AND dificultad=:dificultad AND numComensales=:numComensales GROUP BY r.idReceta";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':dificultad', $dificultad);
-            $rs->bindParam(':numComensales', $numComensales);
-            $rs->execute();
-            return $stmt->fetchAll ();
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':dificultad', $dificultad);
+            $stmt->bindParam(':numComensales', $numComensales);
+            $stmt->execute();
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -181,11 +180,11 @@ class DB extends PDO {
     public function getOpinionesRecetas($idReceta){
         try{
             $query = "SELECT o.username, o.comentario FROM opiniones o JOIN recetas r ON o.idReceta=r.idReceta WHERE r.idReceta=:idReceta";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':idReceta', $idReceta);
-            $rs->execute();
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
 
-            return $rs->fetchAll ();
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -196,11 +195,11 @@ class DB extends PDO {
     public function getRecetasUser($user){
         try{
             $query = "SELECT r.* FROM recetas r JOIN usuario_recetas ur ON r.idReceta=ur.idReceta JOIN usuarios u ON ur.username=u.username WHERE u.username=:username";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':username', $user);
-            $rs->execute();
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':username', $user);
+            $stmt->execute();
 
-            return $rs->fetchAll ();
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -214,16 +213,16 @@ class DB extends PDO {
     */
     public function setReceta($nombre, $elabo, $ingre, $diff, $tIngre, $numCom){
         try{
-            $query = "INSERT INTO `recetas` (`idReceta`, `nombre`, `ingredientes`, `elaboracion`, `dificultad`, `tipoIngredientes`, `numComensales`) VALUES (NULL, :nombre, :ingre, :elabo, :diff, :tipoIngre, :numCom)";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':nombre', $nombre);
-            $rs->bindParam(':elabo', $elabo);
-            $rs->bindParam(':ingre', $ingre);
-            $rs->bindParam(':diff', $diff);
-            $rs->bindParam(':tipoIngre', $tIngre);
-            $rs->bindParam(':numCom', $numCom);
+            $query = "INSERT INTO `recetas`(`idReceta`, `nombre`, `ingredientes`, `elaboracion`, `dificultad`, `tipoIngredientes`, `numComensales`) VALUES(NULL, :nombre, :ingre, :elabo, :diff, :tipoIngre, :numCom)";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':elabo', $elabo);
+            $stmt->bindParam(':ingre', $ingre);
+            $stmt->bindParam(':diff', $diff);
+            $stmt->bindParam(':tipoIngre', $tIngre);
+            $stmt->bindParam(':numCom', $numCom);
             
-            return $rs->execute();
+            return $stmt->execute();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -233,7 +232,7 @@ class DB extends PDO {
     function lastInsertedId(){
         try{
             $stmt = $this->query("SELECT LAST_INSERT_ID()");
-            $idReceta = $stmt->fetchAll ();
+            $idReceta = $stmt->fetchAll();
             
             return $idReceta[0][0];
         }catch(PDOException $e){
@@ -247,12 +246,12 @@ class DB extends PDO {
         $tipos = explode('#', $tipos);
         foreach($tipos as $tipo){
             try{
-                $query = "INSERT INTO recetas_tipos (idReceta, idTipo) VALUES (:idReceta, :tipo)";
-                $rs = $this->prepare($query);
-                $rs->bindParam(':idReceta', $idReceta);
-                $rs->bindParam(':tipo', $tipo);
+                $query = "INSERT INTO recetas_tipos(idReceta, idTipo) VALUES(:idReceta, :tipo)";
+                $stmt = $this->prepare($query);
+                $stmt->bindParam(':idReceta', $idReceta);
+                $stmt->bindParam(':tipo', $tipo);
 
-                $rs->execute();
+                $stmt->execute();
             }catch(PDOException $e){
                 echo "<p>Error: ".$e->getMessage();
             }
@@ -263,12 +262,12 @@ class DB extends PDO {
     //Asocia una receta con un usuario
     function setRecetaUser($user, $idReceta){
         try{
-            $query = "INSERT INTO usuario_recetas (username, idReceta) VALUES (:user, :idReceta)";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':user', $user);
-            $rs->bindParam(':idReceta', $idReceta);
+            $query = "INSERT INTO usuario_recetas(username, idReceta) VALUES(:user, :idReceta)";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':idReceta', $idReceta);
             
-            return $rs->execute();
+            return $stmt->execute();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -280,10 +279,10 @@ class DB extends PDO {
     public function delReceta($user, $idReceta){
         try{
             $query = "DELETE FROM recetas WHERE idReceta=:idReceta";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':idReceta', $idReceta);
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
 
-            $deleted = $rs->execute();
+            $deleted = $stmt->execute();
             if($deleted){
                 return delRecetaUser($user, $idReceta);
             }
@@ -297,11 +296,11 @@ class DB extends PDO {
     function delRecetaUser($user, $idReceta){
         try{
             $query = "DELETE FROM usuario_recetas WHERE username=:user AND idReceta=:idReceta)";
-            $rs = $this->prepare($query);
-            $rs->bindParam(':user', $user);
-            $rs->bindParam(':idReceta', $idReceta);
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':idReceta', $idReceta);
             
-            return $rs->execute();
+            return $stmt->execute();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -312,8 +311,8 @@ class DB extends PDO {
     public function getTipoDificultades(){
         try{
             $query = "SELECT * FROM tipodificultades";
-            $rs = $this->query ( $query );
-            return $rs->fetchAll ();
+            $stmt = $this->query($query);
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -321,8 +320,8 @@ class DB extends PDO {
     public function getTipoIngredientes(){
         try{
             $query = "SELECT * FROM tipoingredientes";
-            $rs = $this->query ( $query );
-            return $rs->fetchAll ();
+            $stmt = $this->query($query);
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
@@ -330,8 +329,8 @@ class DB extends PDO {
     public function getTipoReceta(){
         try{
             $query = "SELECT * FROM tiporeceta";
-            $rs = $this->query ( $query );
-            return $rs->fetchAll ();
+            $stmt = $this->query($query);
+            return $stmt->fetchAll();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
