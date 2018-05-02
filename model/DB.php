@@ -337,6 +337,8 @@ class DB extends PDO {
     }
     //INICIO FIN
     
+    
+    
     //LOGIN
     public function getUser($user, $pass){
         try{
@@ -356,6 +358,29 @@ class DB extends PDO {
         }
     }
     //LOGIN FIN
+    
+    
+    
+    //REGISTER
+    public function setUser($user, $email, $pass){
+        try{
+            $query = "INSERT  INTO `usuarios` (`username`, `password`, `email`, `emailConfirmed`) VALUES (:user, :pass, :email, '0')";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':pass', $pass);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            
+	        $rs = $stmt->fetchAll();
+            if($rs){
+                return true;
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    //REGISTER FIN
 
 
 }

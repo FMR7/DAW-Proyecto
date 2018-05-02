@@ -55,13 +55,13 @@ if(isset($params['user'])){//Recibe datos
 
 <!--EL HTML VA AQUÍ-->
 <?php ob_start() ?>
-<form id="contenido" class="col-md-6 form-signin" autocomplete="on">
+<form id="contenido" class="col-md-6 form-signin" autocomplete="on" action="register" method="post">
     <h1 class="h3 mb-3 pl-3 font-weight-normal">Registrarse</h1>
-    <input type="text" id="user" class="form-control" placeholder="Nombre de usuario" autocomplete="name" required autofocus>
-    <input type="email" id="email" class="form-control" placeholder="Correo electrónico" autocomplete="email" required>
-    <input type="password" id="pass" class="form-control" placeholder="Contraseña" autocomplete="off" required>
-    <input type="password" id="pass2" class="form-control" placeholder="Repita contraseña" autocomplete="off" required>
-    <button type="button" id="submit" class="btn btn-lg btn-primary btn-block">Registrarse</button>
+    <input type="text" name="user" class="form-control" placeholder="Nombre de usuario" autocomplete="name" required autofocus>
+    <input type="email" name="email" class="form-control" placeholder="Correo electrónico" autocomplete="email" required>
+    <input type="password" name="pass" class="form-control" placeholder="Contraseña" autocomplete="off" required>
+    <input type="password" name="pass2" class="form-control" placeholder="Repita contraseña" autocomplete="off" required>
+    <button type="submit" class="btn btn-lg btn-primary btn-block">Registrarse</button>
     <div id="avisoUser" class="text-center mt-2" style="display: none;">El nombre de usuario ya está en uso</div>
     <div id="avisoMail" class="text-center mt-2" style="display: none;">El correo electrónico ya está en uso</div>
     <div class="text-center mt-2">

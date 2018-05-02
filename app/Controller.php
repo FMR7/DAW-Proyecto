@@ -17,6 +17,36 @@ class Controller {
 	
 	
 	public function register() {
+        $datos = ["user", "email", "pass", "pass2"];
+        
+        $register = true;
+        foreach($datos as $dato){
+            if(!isset($_POST[$dato])){
+                $register = false;
+                break;
+            }
+        }
+        
+        
+        if($register){//Insertar usuario
+            if($_POST["pass"]===$_POST["pass2"]){ //Ambas contraseñas deben de ser iguales
+                echo "REGISTRADO CON ÉXITO";
+
+                $model=DB::GetInstance();
+                //Inserta usuario
+                $insertado = $model->setUser($_POST["user"], $_POST["email"], hash('sha512', $_POST["pass"]));
+
+                /*if($insertado){
+
+                }else{//Usuario o email ya en uso
+
+                }*/
+
+                //Envía email confirmación
+                
+            }
+        }
+        
 	    require __DIR__ . '/templates/register.php';
 	}
 	
