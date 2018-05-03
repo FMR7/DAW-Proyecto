@@ -17,7 +17,7 @@ class Controller {
 	
 	
 	public function register() {
-        $datos = ["user", "email", "pass", "pass2"];
+        $datos = ["user", "email", "pass1", "pass2"];
         
         $register = true;
         foreach($datos as $dato){
@@ -27,23 +27,49 @@ class Controller {
             }
         }
         
+        if($register){
+            $params = array (
+                'user'  => $_POST["user"],
+                'email'     => $_POST["email"],
+                'errorUser' => "El nombre de usuario ya está en uso",
+                'errorMail' => "El email ya está en uso",
+                'errorCode' => 0
+            );
+            
+            $model=DB::GetInstance();
+
+            $existsUser  = $model->existsUser($_POST["user"]);
+            $existsEmail = $model->existsEmail($_POST["email"]);
+
+            if($existsUser){//El usuario ya está en uso
+                $params['errorCode'] = 1;
+                $register = false;
+            }if($existsEmail){//El email ya está en uso
+                $params['errorCode'] = $params['errorCode'] + 2;
+                $register = false;
+            }
+            
+            /*
+            errorCode = 0 --Usuario y email correctos
+            errorCode = 1 --Usuario en uso, email correcto
+            errorCode = 2 --Usuario correcto, email en uso
+            errorCode = 3 --Usuario y email en uso
+            */
+            
+        }
         
         if($register){//Insertar usuario
-            if($_POST["pass"]===$_POST["pass2"]){ //Ambas contraseñas deben de ser iguales
-                echo "REGISTRADO CON ÉXITO";
-
-                $model=DB::GetInstance();
-                //Inserta usuario
-                $insertado = $model->setUser($_POST["user"], $_POST["email"], hash('sha512', $_POST["pass"]));
-
-                /*if($insertado){
-
-                }else{//Usuario o email ya en uso
-
-                }*/
-
-                //Envía email confirmación
+            if($_POST["pass1"]===$_POST["pass2"]){ //Ambas contraseñas deben de ser iguales
                 
+
+                //Inserta usuario
+                $insertado = $model->setUser($_POST["user"], $_POST["email"], hash('sha512', $_POST["pass1"]));
+                
+                if($insertado){
+                    //Envía email confirmación
+                    
+                    require __DIR__ . '/templates/login.php';
+                }
             }
         }
         
@@ -59,10 +85,11 @@ class Controller {
             $pass = hash('sha512', $_POST["pass"]);
             
             $login=$model->getUser($user, $pass);
+            @session_start();
             if($login){
-                $params = array ('user' => $user);
+                $_SESSION['login'] = $user;
             }else{
-                $params = array ('user' => "");
+                $_SESSION['login'] = "";
             }
         }
         
@@ -117,8 +144,8 @@ class Controller {
                 $model->setRecetaTipos($idReceta, $tRece);
                 
                 //Asignar receta a usuario
-                //$model->setRecetaUser($_POST["login"], $idReceta);
-                $model->setRecetaUser("fernando", $idReceta);
+                @session_start();
+                $model->setRecetaUser($_SESSION['login'], $idReceta);
                 
                 //Redirecciona a la nueva receta
                 $params = array (

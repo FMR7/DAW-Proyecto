@@ -1,11 +1,8 @@
 <?php 
 $aviso = false;
-if(isset($params['user'])){//Recibe datos
-    if($params['user']!=""){//Usuario correcto
-        //Iniciar sesion
-        @session_start();
-        $_SESSION['login'] = $params['user'];
-        
+@session_start();
+if(isset($_SESSION['login'])){//Recibe datos
+    if($_SESSION['login']!=""){//Usuario correcto
         //Redireccionar a inicio
         ?><script>window.location.replace("inicio");</script><?php
     }else{//Usuario incorrecto
@@ -37,9 +34,9 @@ if(isset($params['user'])){//Recibe datos
 <?php ob_start() ?>
 <form id="contenido" class="col-md-6 form-signin" autocomplete="on" action="login" method="post">
     <h1 class="h3 mb-3 pl-3 font-weight-normal">Identificarse</h1>
-    <input type="text" id="user" name="user" class="form-control" placeholder="Nombre de usuario" autocomplete="username" required autofocus>
-    <input type="password" id="pass" name="pass" class="form-control" placeholder="Contraseña" autocomplete="off" required>
-    <button type="submit" id="submit" class="btn btn-lg btn-primary btn-block">Acceder</button>
+    <input type="text" name="user" class="form-control" placeholder="Nombre de usuario" autocomplete="username" required autofocus>
+    <input type="password" name="pass" class="form-control" placeholder="Contraseña" autocomplete="off" required>
+    <button type="submit" class="btn btn-lg btn-primary btn-block">Acceder</button>
     <div id="aviso" class="text-center mt-2" style="display: none;">Usuario o contraseña incorrectos</div>
     <div class="text-center mt-2">
         ¿Aún no tienes cuenta? 

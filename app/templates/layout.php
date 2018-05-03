@@ -42,26 +42,34 @@ $server=Config::$serverUrl;
                     </button>
                     <?php 
                     @session_start();
-                    //$_SESSION['login'] = "fernando";
                     ?>
                     <div class="navbar order-sm-1">
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <?php 
-                                if(@$_SESSION['login']!=""){
-                                ?>
-                                <a class="nav-item nav-link" href="<?php echo $server;?>logout">
-                                    <span class="d-none d-sm-block">Cerrar sesión</span>
-                                    <span class="d-block d-sm-none oi oi-account-logout"></span>
-                                </a>
-                                <?php 
+                                if(isset($_SESSION['login'])){
+                                    if($_SESSION['login']!=""){
+                                        ?>
+                                        <a class="nav-item nav-link" href="<?php echo $server;?>logout">
+                                            <span class="d-none d-sm-block">Cerrar sesión</span>
+                                            <span class="d-block d-sm-none oi oi-account-logout"></span>
+                                        </a>
+                                        <?php 
+                                    }else{
+                                        ?>
+                                        <a class="nav-item nav-link" href="<?php echo $server;?>login">
+                                            <span class="d-none d-sm-block">Identificarse</span>
+                                            <span class="d-block d-sm-none oi oi-account-login"></span>
+                                        </a>
+                                        <?php 
+                                    }
                                 }else{
-                                ?>
-                                <a class="nav-item nav-link" href="<?php echo $server;?>login">
-                                    <span class="d-none d-sm-block">Identificarse</span>
-                                    <span class="d-block d-sm-none oi oi-account-login"></span>
-                                </a>
-                                <?php 
+                                    ?>
+                                    <a class="nav-item nav-link" href="<?php echo $server;?>login">
+                                        <span class="d-none d-sm-block">Identificarse</span>
+                                        <span class="d-block d-sm-none oi oi-account-login"></span>
+                                    </a>
+                                    <?php 
                                 }
                                 ?>
                             </li>
@@ -76,14 +84,16 @@ $server=Config::$serverUrl;
 
                             <?php
                             if (isset($_SESSION['login'])){
-                            ?>
-                            <li class="nav-item">
-                                <a class="nav-item nav-link" href="<?php echo $server;?>nueva">Subir receta</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-item nav-link" href="<?php echo $server;?>perfil">Ver perfil</a>
-                            </li>
-                            <?php 
+                                if($_SESSION['login']!=""){
+                                    ?>
+                                    <li class="nav-item">
+                                        <a class="nav-item nav-link" href="<?php echo $server;?>nueva">Subir receta</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-item nav-link" href="<?php echo $server;?>perfil">Ver perfil</a>
+                                    </li>
+                                    <?php 
+                                }
                             }
                             ?>
                         </ul>

@@ -369,10 +369,24 @@ class DB extends PDO {
             $stmt->bindParam(':user', $user);
             $stmt->bindParam(':pass', $pass);
             $stmt->bindParam(':email', $email);
+
+            return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    //REGISTER FIN
+
+    
+    public function existsUser($user){
+        try{
+            $query = "SELECT username FROM usuarios WHERE username=:user";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
             $stmt->execute();
             
 	        $rs = $stmt->fetchAll();
-            if($rs){
+            if(count($rs)==1){
                 return true;
             }
             return false;
@@ -380,8 +394,24 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
-    //REGISTER FIN
-
+    
+    
+    public function existsEmail($email){
+        try{
+            $query = "SELECT email FROM usuarios WHERE email=:email";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            
+	        $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return true;
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
 
 }
 ?>
