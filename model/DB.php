@@ -356,6 +356,39 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
+    
+    
+    public function getPass($user){
+        try{
+            $query = "SELECT password FROM usuarios WHERE username=:user";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->execute();
+            
+	        $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return $rs[0][0];
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    
+    public function setPass($user, $pass){
+        try{
+            $query = "UPDATE usuarios SET password = :pass WHERE username=:user";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':pass', $pass);
+            $stmt->execute();
+            
+	        return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
     //PERFIL FIN
     
     

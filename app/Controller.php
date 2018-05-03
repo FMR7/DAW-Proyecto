@@ -61,7 +61,7 @@ class Controller {
                     //Iniciar sesión
                     $this->openSession($_POST["user"]);
                     
-                    require __DIR__ . '/templates/login.php';
+                    require __DIR__ . '/templates/inicio.php';
                 }
             }
         }
@@ -78,11 +78,10 @@ class Controller {
             $pass = hash('sha512', $_POST["pass"]);
             
             $login=$model->getUser($user, $pass);
-            @session_start();
             if($login){
-                $_SESSION['login'] = $user;
+                $this->openSession($user);
             }else{
-                $_SESSION['login'] = "";
+                $this->closeSession();
             }
         }
         
@@ -105,12 +104,54 @@ class Controller {
         $model=DB::GetInstance();
         $datos = $model->getProfile($this->getSession());
         $params = array (
-            'user' => $datos['username'],
+            'user'  => $datos['username'],
             'email' => $datos['email']
         );
+        
+        
+        $campos = ["passOld", "pass1", "pass2"];
+        
+        $changePass = true;
+        foreach($campos as $dato){
+            if(!isset($_POST[$dato])){
+                $changePass = false;
+                break;
+            }
+        }
+        
+        if($changePass){
+            foreach($campos as $dato){
+                if($_POST[$dato]==""){
+                    $changePass = false;
+                    break;
+                }
+            }
+            
+            if($_POST["pass1"]!==$_POST["pass2"]){
+                $changePass = false;
+            }
+        }
+        
+        
+        if($changePass){
+            $oldPass = hash('sha512', $_POST["passOld"]);
+            $currentPass = strtolower($model->getPass($this->getSession()));
+            if($oldPass==$currentPass){
+                //Cambiar contraseña
+                $newPass = hash('sha512', $_POST["pass1"]);
+                $cambiada = $model->setPass($this->getSession(), $newPass);
+                if($cambiada){
+                    $params['cambiada'] = "si";
+                }
+            }else{
+                $params['errorPassOld'] = "La contraseña antigua no coincide";
+            }
+        }
+        
+        
 	    require __DIR__ . '/templates/perfil.php';
 	}
-	
+    
 	
 	public function nueva() {
         $model=DB::GetInstance();
@@ -124,41 +165,47 @@ class Controller {
     
     
     public function subirReceta() {
-        if($this->checkCampos()){
-            $nombre = ucfirst(mb_strtolower(recogeTexto($_POST["nombre"])));
-            $elabo  = recogeTexto($_POST["elaboracion"]);
-            $ingre  = recogeArray($_POST["ingredientes"]);
-            $diff   = recogeNumero($_POST["dificultad"]);
-            $tIngre = recogeNumero($_POST["tipoIngredientes"]);
-            $tRece  = recogetipoRece($_POST["tipoReceta"]);
-            $numCom = recogeNumero($_POST["numCom"]);
+        @session_start();
+        if(isset($_SESSION['login'])){
+            if($_SESSION['login']!=""){
             
-            $model=DB::GetInstance();
-            $inserted = $model->setReceta($nombre, $elabo, $ingre, $diff, $tIngre, $numCom);
-            if($inserted){
-                $idReceta = $model->lastInsertedId();
-                
-                //Asignar tipos a receta
-                $model->setRecetaTipos($idReceta, $tRece);
-                
-                //Asignar receta a usuario
-                @session_start();
-                $model->setRecetaUser($_SESSION['login'], $idReceta);
-                
-                //Redirecciona a la nueva receta
-                $params = array (
-                    'receta' => $model->getReceta($idReceta),
-                    'likes'  => $model->getLikes($idReceta)
-                );
-                
-                echo true."#".$idReceta;
-            }else{
-                $model->delReceta($lastId);
+                if($this->checkCampos()){
+                    $nombre = ucfirst(mb_strtolower(recogeTexto($_POST["nombre"])));
+                    $elabo  = recogeTexto($_POST["elaboracion"]);
+                    $ingre  = recogeArray($_POST["ingredientes"]);
+                    $diff   = recogeNumero($_POST["dificultad"]);
+                    $tIngre = recogeNumero($_POST["tipoIngredientes"]);
+                    $tRece  = recogetipoRece($_POST["tipoReceta"]);
+                    $numCom = recogeNumero($_POST["numCom"]);
+
+                    $model=DB::GetInstance();
+                    $inserted = $model->setReceta($nombre, $elabo, $ingre, $diff, $tIngre, $numCom);
+                    if($inserted){
+                        $idReceta = $model->lastInsertedId();
+
+                        //Asignar tipos a receta
+                        $model->setRecetaTipos($idReceta, $tRece);
+
+                        //Asignar receta a usuario
+                        $model->setRecetaUser($this->getSession(), $idReceta);
+
+                        //Redirecciona a la nueva receta
+                        $params = array (
+                            'receta' => $model->getReceta($idReceta),
+                            'likes'  => $model->getLikes($idReceta)
+                        );
+
+                        echo true."#".$idReceta;
+                    }else{
+                        $model->delReceta($lastId);
+                    }
+                    return true;
+                }else{//Faltan campos por rellenar;
+                    
+                }
             }
-            
-        }else{
-            //echo "\nFaltan campos por rellenar\n";
         }
+        $this->inicio();
 	}
 	
 	
@@ -182,7 +229,7 @@ class Controller {
     //Devuelve el nombre de usuario de la sesión actual
     public function getSession(){
         @session_start();
-        return $_SESSION['login'];
+        return @$_SESSION['login'];
 	}
     
 	

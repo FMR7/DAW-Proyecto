@@ -5,7 +5,36 @@
 
 <!--EL JS VA AQUÍ-->
 <?php ob_start() ?>
+<?php 
+    if(isset($params['errorPassOld'])){
+        ?>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#avisoPassOld").show();
+            });
+        </script>
+        <?php
+    }if(isset($params['cambiada'])){
+        ?>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#avisoCambiada").show();
+            });
+        </script>
+        <?php
+    }
+?>
 
+<script type="text/javascript">
+    $("#cambiarPass").submit(function(evt){
+        //Contraseña mínimo 6 chars
+        
+        if(!($("#pass1").val()===$("#pass2").val())){
+            $("#avisoPass").show();
+            evt.preventDefault();
+        }
+    });
+</script>
 <?php $js = ob_get_clean() ?>
 
 <!--EL HTML VA AQUÍ-->
@@ -38,25 +67,29 @@ if(@$_SESSION['login']!=""){
     </div>
 
     <div class="row">
-        <form id="cambiarPass" class="content">
+        <form id="cambiarPass" class="content" action="perfil" method="post">
             <div class="row">
                 <label class="col-sm-7 col-md-6 col-form-label" for="passOld">Contraseña antigua:</label>
-                <input class="col-sm-5 col-md-6 form-control" type="password" id="passOld">
+                <input class="col-sm-5 col-md-6 form-control" type="password" name="passOld" required>
             </div>
 
             <div class="row">
                 <label class="col-sm-7 col-md-6 col-form-label" for="pass">Nueva contraseña:</label>
-                <input class="col-sm-5 col-md-6 form-control" type="password" id="pass">
+                <input class="col-sm-5 col-md-6 form-control" type="password" name="pass1" id="pass1" required>
             </div>
 
             <div class="row">
                 <label class="col-sm-7 col-md-6 col-form-label" for="pass2">Repite nueva contraseña:</label>
-                <input class="col-sm-5 col-md-6 form-control" type="password" id="pass2">
+                <input class="col-sm-5 col-md-6 form-control" type="password" name="pass2" id="pass2" required>
             </div>
 
             <div class="row">
-                <button type="button" id="submit" class="col-sm-5 col-md-6 offset-sm-7 offset-md-6 my-2 my-sm-0 btn btn-lg btn-primary btn-block">Cambiar</button>
+                <button type="submit" class="col-sm-5 col-md-6 offset-sm-7 offset-md-6 my-2 my-sm-0 btn btn-lg btn-primary btn-block">Cambiar</button>
             </div>
+            
+            <div id="avisoPassOld" class="text-center mt-2" style="display: none;">La contraseña antigua no coincide</div>
+            <div id="avisoPass" class="text-center mt-2" style="display: none;">Las contraseñas deben coincidir</div>
+            <div id="avisoCambiada" class="text-center mt-2" style="display: none;">Contraseña cambiada con éxito</div>
         </form>
     </div>
 
