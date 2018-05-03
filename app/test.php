@@ -52,7 +52,7 @@ print_r($db->getTipoReceta());
 
 echo "<br><br>getLikes<br>";
 $db->GetInstance();
-print_r($db->getLikes(5));
+print_r($db->getLikes(1));
 
 /*
 echo "<br><br>setReceta<br>";
@@ -76,6 +76,10 @@ echo "<br><br>getProfile<br>";
 $db->GetInstance();
 print_r($db->getProfile("fernando"));
 
+
+echo "<br><br>getPass<br>";
+$db->GetInstance();
+print_r($db->getPass("fernando"));
 
 
 

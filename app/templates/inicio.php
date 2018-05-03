@@ -1,5 +1,6 @@
 <!--EL CSS VA AQUÍ-->
 <?php ob_start() ?>
+<!--COMUN CON nueva-->
 <link rel="stylesheet" href="../../web/css/bootstrap-multiselect.css" type="text/css"/>
 <link rel="stylesheet" href="../../web/css/multiSelect.css" type="text/css"/>
 <link rel="stylesheet" href="../../web/css/inicio.css" type="text/css"/>

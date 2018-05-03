@@ -3,7 +3,6 @@
 <link rel="stylesheet" href="../../web/css/loginAndRegister.css">
 <?php $css = ob_get_clean() ?>
 
-
 <!--EL JS VA AQUÍ-->
 <?php ob_start() ?>
 <?php 

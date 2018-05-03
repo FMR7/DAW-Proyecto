@@ -37,13 +37,6 @@
             }
         });
 
-        function cambia(){
-            $("#goIngre").toggleClass("active");
-            $("#goElabo").toggleClass("active");
-            $("#ingre").toggleClass("d-none");
-            $("#elabo").toggleClass("d-none");
-        }
-
 
         //Ingredientes
         //Borrar fila
@@ -55,6 +48,7 @@
             borraFila($(this));
         });
 
+        
         //Añadir fila
         $(document).on('click', '.oi-plus', function() {
             var fila = "<tr><td><input type=\"text\" class=\"cantidad rounded form-control text-center\" autofocus></td><td><input type=\"text\" class=\"ingrediente rounded form-control\" autofocus></td><td class=\"remove\"><span class=\"oi oi-minus\" title=\"Remove\" aria-hidden=\"true\"></span></td></tr>";
@@ -82,8 +76,6 @@
             }
         });
 
-
-        
         
         //Publicar
         $("#publicar").click(function(){
@@ -95,8 +87,16 @@
             
             subir(params);
         });
-        
     }
+    
+    
+    function cambia(){
+        $("#goIngre").toggleClass("active");
+        $("#goElabo").toggleClass("active");
+        $("#ingre").toggleClass("d-none");
+        $("#elabo").toggleClass("d-none");
+    }
+    
     
     //Borra la fila salvo que sea la última
     function borraFila(evt){
@@ -143,6 +143,7 @@
             campo.removeAttr('style');
         }, 1600);
     }
+    
     
     //Comprueba y recoge los campos, si están en blanco da un aviso visual
     function recogeCampos(){
@@ -348,6 +349,8 @@ if(isset($_SESSION['login'])){
     }else{//Redireccionar al login
         ?><script>window.location.replace("login");</script><?php
     }
+}else{//Redireccionar al login
+    ?><script>window.location.replace("login");</script><?php
 }
 ?>
 <?php $contenido = ob_get_clean() ?>
