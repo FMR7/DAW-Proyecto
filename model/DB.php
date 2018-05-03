@@ -207,10 +207,7 @@ class DB extends PDO {
     
     
     
-    /**
-    * Inserta una receta
-    * Si se ha insertado correctamente la asocia con el usuario sino se elimina
-    */
+    //INSERTAR RECETA
     public function setReceta($nombre, $elabo, $ingre, $diff, $tIngre, $numCom){
         try{
             $query = "INSERT INTO `recetas`(`idReceta`, `nombre`, `ingredientes`, `elaboracion`, `dificultad`, `tipoIngredientes`, `numComensales`) VALUES(NULL, :nombre, :ingre, :elabo, :diff, :tipoIngre, :numCom)";
@@ -228,8 +225,8 @@ class DB extends PDO {
         }
     }
     
-    
-    function lastInsertedId(){
+    //Devuelve el último ID insertado
+    public function lastInsertedId(){
         try{
             $stmt = $this->query("SELECT LAST_INSERT_ID()");
             $idReceta = $stmt->fetchAll();
@@ -242,7 +239,7 @@ class DB extends PDO {
 
     
     //Asocia tipos de receta a una receta
-    function setRecetaTipos($idReceta, $tipos){
+    public function setRecetaTipos($idReceta, $tipos){
         $tipos = explode('#', $tipos);
         foreach($tipos as $tipo){
             try{
@@ -260,7 +257,7 @@ class DB extends PDO {
     
     
     //Asocia una receta con un usuario
-    function setRecetaUser($user, $idReceta){
+    public function setRecetaUser($user, $idReceta){
         try{
             $query = "INSERT INTO usuario_recetas(username, idReceta) VALUES(:user, :idReceta)";
             $stmt = $this->prepare($query);
@@ -272,10 +269,11 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
-    //Insertar receta FIN
+    //INSERTAR RECETA FIN
 
     
-    //Borra una receta
+    
+    //BORRAR RECETA
     public function delReceta($user, $idReceta){
         try{
             $query = "DELETE FROM recetas WHERE idReceta=:idReceta";
@@ -305,8 +303,10 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
-    
+    //BORRAR RECETA FIN
 
+    
+    
     //INICIO
     public function getTipoDificultades(){
         try{
@@ -338,6 +338,7 @@ class DB extends PDO {
     //INICIO FIN
     
     
+    
     //PERFIL
     public function getProfile($user){
         try{
@@ -356,6 +357,7 @@ class DB extends PDO {
         }
     }
     //PERFIL FIN
+    
     
     
     //LOGIN
@@ -380,6 +382,7 @@ class DB extends PDO {
     
     
     
+    
     //REGISTER
     public function setUser($user, $email, $pass){
         try{
@@ -396,6 +399,7 @@ class DB extends PDO {
     }
     //REGISTER FIN
 
+    
     
     public function existsUser($user){
         try{

@@ -125,7 +125,6 @@ class Controller {
     
     public function subirReceta() {
         if($this->checkCampos()){
-            //echo "\nInsertar Controller\n";
             $nombre = ucfirst(strtolower(recogeTexto($_POST["nombre"])));
             $elabo  = recogeTexto($_POST["elaboracion"]);
             $ingre  = recogeArray($_POST["ingredientes"]);
@@ -152,8 +151,6 @@ class Controller {
                     'likes'  => $model->getLikes($idReceta)
                 );
                 
-                //return "true";
-                //require __DIR__ . '/templates/receta.php';
                 echo true;
             }else{
                 $model->delReceta($lastId);
@@ -175,21 +172,21 @@ class Controller {
 	}
 	
 	
+    //Inicia una sesión
 	public function openSession($user){
         @session_start();
         $_SESSION['login'] = $user;
 	}
 	
     
+    //Devuelve el nombre de usuario de la sesión actual
     public function getSession(){
         @session_start();
         return $_SESSION['login'];
 	}
     
 	
-	/**
-	 * Cierra la sesion de forma segura y borra la cookie
-	 */
+    //Cierra la sesion de forma segura y borra la cookie
 	public function closeSession(){
 		//Destruir sesión
 		session_start();
