@@ -30,10 +30,7 @@ class Controller {
         if($register){
             $params = array (
                 'user'  => $_POST["user"],
-                'email'     => $_POST["email"],
-                'errorUser' => "El nombre de usuario ya está en uso",
-                'errorMail' => "El email ya está en uso",
-                'errorCode' => 0
+                'email' => $_POST["email"]
             );
             
             $model=DB::GetInstance();
@@ -42,31 +39,27 @@ class Controller {
             $existsEmail = $model->existsEmail($_POST["email"]);
 
             if($existsUser){//El usuario ya está en uso
-                $params['errorCode'] = 1;
+                $params['errorUser'] = "El nombre de usuario ya está en uso";
                 $register = false;
             }if($existsEmail){//El email ya está en uso
-                $params['errorCode'] = $params['errorCode'] + 2;
+                $params['errorMail'] = "El email ya está en uso";
                 $register = false;
             }
             
-            /*
-            errorCode = 0 --Usuario y email correctos
-            errorCode = 1 --Usuario en uso, email correcto
-            errorCode = 2 --Usuario correcto, email en uso
-            errorCode = 3 --Usuario y email en uso
-            */
             
         }
         
         if($register){//Insertar usuario
             if($_POST["pass1"]===$_POST["pass2"]){ //Ambas contraseñas deben de ser iguales
                 
-
                 //Inserta usuario
                 $insertado = $model->setUser($_POST["user"], $_POST["email"], hash('sha512', $_POST["pass1"]));
                 
                 if($insertado){
                     //Envía email confirmación
+                    
+                    //Iniciar sesión
+                    $this->openSession($_POST["user"]);
                     
                     require __DIR__ . '/templates/login.php';
                 }
@@ -179,27 +172,9 @@ class Controller {
 	/**
 	 * Comprueba usuario y contraseña y en caso correcto establece la variable de sesion
 	 */
-	public function openSession(){
-		$params = array (
-				'user' => '',
-				'fecha' => date ( 'd-m-y' )
-		);
-		
-		$user = recoge("user");
-		$pass = hash('sha256', recoge("pass"));
-		
-		$params['user'] = $user;
-
-
-		$m = new DB();
-		$valido = $m->checkUser($user, $pass);
-		
-		if ($valido){
-			session_start();
-			$_SESSION['login'] = 1;
-		}
-		
-		require __DIR__ . '/templates/inicio.php';
+	public function openSession($user){
+        @session_start();
+        $_SESSION['login'] = $user;
 	}
 	
 	

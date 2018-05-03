@@ -1,11 +1,3 @@
-<?php 
-$aviso = false;
-if(isset($params)){//Recibe datos
-    $aviso = $params['errorCode'];
-}
-?>
-
-
 <!--EL CSS VA AQUÍ-->
 <?php ob_start() ?>
 <link rel="stylesheet" href="../../web/css/loginAndRegister.css">
@@ -15,8 +7,7 @@ if(isset($params)){//Recibe datos
 <!--EL JS VA AQUÍ-->
 <?php ob_start() ?>
 <?php 
-switch ($aviso){
-    case 1:
+    if(isset($params['errorUser'])){
         ?>
         <script type="text/javascript">
             $(document).ready(function() {
@@ -24,8 +15,7 @@ switch ($aviso){
             });
         </script>
         <?php
-        break;
-    case 2:
+    }if(isset($params['errorMail'])){
         ?>
         <script type="text/javascript">
             $(document).ready(function() {
@@ -33,27 +23,13 @@ switch ($aviso){
             });
         </script>
         <?php
-        break;
-    case 3:
-        ?>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $("#avisoUser").show();
-                $("#avisoMail").show();
-            });
-        </script>
-        <?php
-        break;
+    }
 ?>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#avisoUser").show();
-    });
-</script>
-<?php } ?>
 
 <script type="text/javascript">
     $("#contenido").submit(function(evt){
+        //Contraseña mínimo 6 chars
+        
         if(!($("#pass1").val()===$("#pass2").val())){
             $("#avisoPass").show();
             evt.preventDefault();
