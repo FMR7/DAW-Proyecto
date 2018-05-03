@@ -102,6 +102,12 @@ class Controller {
 	
 	
 	public function perfil() {
+        $model=DB::GetInstance();
+        $datos = $model->getProfile($this->getSession());
+        $params = array (
+            'user' => $datos['username'],
+            'email' => $datos['email']
+        );
 	    require __DIR__ . '/templates/perfil.php';
 	}
 	
@@ -169,14 +175,17 @@ class Controller {
 	}
 	
 	
-	/**
-	 * Comprueba usuario y contraseña y en caso correcto establece la variable de sesion
-	 */
 	public function openSession($user){
         @session_start();
         $_SESSION['login'] = $user;
 	}
 	
+    
+    public function getSession(){
+        @session_start();
+        return $_SESSION['login'];
+	}
+    
 	
 	/**
 	 * Cierra la sesion de forma segura y borra la cookie

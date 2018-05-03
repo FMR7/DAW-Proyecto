@@ -49,7 +49,7 @@ class DB extends PDO {
     }
 
     
-    function getLikes($idReceta){
+    public function getLikes($idReceta){
         try{
             $queryLikes = "select COUNT(meGusta) as likes from opiniones WHERE idReceta=:idReceta AND meGusta=1";
             $stmt = $this->prepare($queryLikes);
@@ -337,6 +337,25 @@ class DB extends PDO {
     }
     //INICIO FIN
     
+    
+    //PERFIL
+    public function getProfile($user){
+        try{
+            $query = "SELECT username, email FROM usuarios WHERE username=:user";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->execute();
+            
+	        $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return $rs[0];
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    //PERFIL FIN
     
     
     //LOGIN

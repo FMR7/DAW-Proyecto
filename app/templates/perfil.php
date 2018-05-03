@@ -25,12 +25,12 @@ if(@$_SESSION['login']!=""){
 
     <div class="row">
         <label class="col-sm-7 col-md-6 col-form-label" for="user">Nombre de usuario:</label>
-        <input class="col-sm-5 col-md-6 form-control" type="text" id="user" readonly>
+        <input class="col-sm-5 col-md-6 form-control" type="text" id="user" readonly value="<?php echo @$params['user']; ?>">
     </div>
 
     <div class="row">
         <label class="col-sm-7 col-md-6 col-form-label" for="email">Dirección de correo:</label>
-        <input class="col-sm-5 col-md-6 form-control" type="email" id="email" readonly>
+        <input class="col-sm-5 col-md-6 form-control" type="email" id="email" readonly value="<?php echo @$params['email']; ?>">
     </div>
 
     <div class="row">

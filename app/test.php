@@ -72,6 +72,12 @@ $db->GetInstance();
 print_r($db->setRecetaUser("fernando", 9));
 */
 
+echo "<br><br>getProfile<br>";
+$db->GetInstance();
+print_r($db->getProfile("fernando"));
+
+
+
 
 
 
