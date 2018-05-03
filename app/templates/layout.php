@@ -90,7 +90,10 @@ $server=Config::$serverUrl;
                                         <a class="nav-item nav-link" href="<?php echo $server;?>nueva">Subir receta</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-item nav-link" href="<?php echo $server;?>perfil">Ver perfil</a>
+                                        <a class="nav-item nav-link" href="<?php echo $server;?>perfil">Mi perfil</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-item nav-link" href="<?php echo $server;?>recetas">Mis recetas</a>
                                     </li>
                                     <?php 
                                 }
