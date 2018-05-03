@@ -229,15 +229,14 @@
             data:  params,
             url:   'subir',
             type:  'post',
-            beforeSend: function () {
-                //$("#resultado").html("Procesando, espere por favor...");
+            beforeSend: function(){
+                
             },
-            success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
-                //$("#resultado").html(response);
-                console.log("\""+response+"\"");
-                if(response==1){
-                    alert("Receta subida con éxito.");
-                    
+            success: function(response){
+                var insertada = response.split("#")[0];
+                var idReceta  = response.split("#")[1];
+                if(insertada==1){
+                    window.location.replace("receta/"+idReceta);
                 }
             }
         });

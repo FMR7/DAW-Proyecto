@@ -125,7 +125,7 @@ class Controller {
     
     public function subirReceta() {
         if($this->checkCampos()){
-            $nombre = ucfirst(strtolower(recogeTexto($_POST["nombre"])));
+            $nombre = ucfirst(mb_strtolower(recogeTexto($_POST["nombre"])));
             $elabo  = recogeTexto($_POST["elaboracion"]);
             $ingre  = recogeArray($_POST["ingredientes"]);
             $diff   = recogeNumero($_POST["dificultad"]);
@@ -151,7 +151,7 @@ class Controller {
                     'likes'  => $model->getLikes($idReceta)
                 );
                 
-                echo true;
+                echo true."#".$idReceta;
             }else{
                 $model->delReceta($lastId);
             }
