@@ -152,6 +152,16 @@ class Controller {
 	    require __DIR__ . '/templates/perfil.php';
 	}
     
+    
+    public function misRecetas(){
+        $model=DB::GetInstance();
+        $params = array (
+            'recetas' => $model->getRecetasUser($this->getSession())
+        );
+        
+        require __DIR__ . '/templates/misRecetas.php';
+    }
+    
 	
 	public function nueva() {
         $model=DB::GetInstance();
@@ -162,6 +172,15 @@ class Controller {
         );
 	    require __DIR__ . '/templates/nueva.php';
 	}
+    
+    
+    public function editar(){
+        $model=DB::GetInstance();
+        $params = array (
+            'receta' => $model->getReceta(@$_GET['id'])
+        );
+        require __DIR__ . '/templates/editar.php';
+    }
     
     
     public function subirReceta() {

@@ -3,16 +3,18 @@
 require_once __DIR__ . '/../app/Controller.php';
 
 $map = array(
-	'inicio'=>    array('controller' =>'Controller', 'action' =>'inicio'),
-    'login'=>     array('controller' =>'Controller', 'action' =>'login'),
-    'logout'=>    array('controller' =>'Controller', 'action' =>'logout'),
-    'register'=>  array('controller' =>'Controller', 'action' =>'register'),
-    'perfil'=>    array('controller' =>'Controller', 'action' =>'perfil'),
-	'nueva' =>    array('controller' =>'Controller', 'action' =>'nueva'),
-    'subir' =>    array('controller' =>'Controller', 'action' =>'subirReceta'),
-    'receta' =>   array('controller' =>'Controller', 'action' =>'receta'),
+	'inicio'   => array('controller' =>'Controller', 'action' =>'inicio'),
+    'login'    => array('controller' =>'Controller', 'action' =>'login'),
+    'logout'   => array('controller' =>'Controller', 'action' =>'logout'),
+    'register' => array('controller' =>'Controller', 'action' =>'register'),
+    'perfil'   => array('controller' =>'Controller', 'action' =>'perfil'),
+    'recetas'  => array('controller' =>'Controller', 'action' =>'misRecetas'),
+	'nueva'    => array('controller' =>'Controller', 'action' =>'nueva'),
+    'editar'   => array('controller' =>'Controller', 'action' =>'editar'),
+    'subir'    => array('controller' =>'Controller', 'action' =>'subirReceta'),
+    'receta'   => array('controller' =>'Controller', 'action' =>'receta'),
     'notFound' => array('controller' =>'Controller', 'action' =>'notFound'),
-    'admin' =>    array('controller' =>'Controller', 'action' =>'admin')
+    'admin'    => array('controller' =>'Controller', 'action' =>'admin')
 );
 
 if (isset($_GET['ctl'])) {

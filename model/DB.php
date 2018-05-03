@@ -33,8 +33,8 @@ class DB extends PDO {
             echo "<p>Error: " . $e->getMessage();
         }
     }
-
-
+    
+    
     public function getReceta($idReceta){
         try{
             $query = "select r.nombre, r.elaboracion, r.ingredientes, d.dificultad, ti.tipoIngrediente, r.numComensales from recetas r JOIN tipoIngredientes ti ON r.tipoIngredientes=ti.idTipoIngrediente JOIN tipodificultades d ON r.dificultad=d.idDificultad WHERE r.idReceta=:idReceta";
@@ -194,7 +194,7 @@ class DB extends PDO {
     //Devuelve las recetas de un usuario
     public function getRecetasUser($user){
         try{
-            $query = "SELECT r.* FROM recetas r JOIN usuario_recetas ur ON r.idReceta=ur.idReceta JOIN usuarios u ON ur.username=u.username WHERE u.username=:username";
+            $query = "select r.idReceta, r.nombre, d.dificultad, ti.tipoIngrediente, r.numComensales from recetas r JOIN tipoIngredientes ti ON r.tipoIngredientes=ti.idTipoIngrediente JOIN tipodificultades d ON r.dificultad=d.idDificultad JOIN usuario_recetas ur ON r.idReceta=ur.idReceta JOIN usuarios u ON ur.username=u.username WHERE u.username=:username";
             $stmt = $this->prepare($query);
             $stmt->bindParam(':username', $user);
             $stmt->execute();
