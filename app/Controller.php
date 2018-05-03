@@ -176,9 +176,16 @@ class Controller {
     
     public function editar(){
         $model=DB::GetInstance();
-        $params = array (
-            'receta' => $model->getReceta(@$_GET['id'])
-        );
+        $recetaPropia = $model->isFromUser(@$_GET['id'], $this->getSession());
+        if($recetaPropia){
+            $params = array (
+                'receta' => $model->getReceta(@$_GET['id']),
+                'dificultades' => $model->getTipoDificultades(),
+                'ingredientes' => $model->getTipoIngredientes(),
+                'tiposReceta'  => $model->getTipoReceta()
+            );
+        }
+        
         require __DIR__ . '/templates/editar.php';
     }
     

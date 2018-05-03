@@ -253,99 +253,115 @@
 @session_start();
 if(isset($_SESSION['login'])){
     if($_SESSION['login']!=""){
-    ?>
-    <div id="contenido" class="col-12 col-md-8 content">
-        <div class="row mt-3 mb-3">
-            <input type="text" id="nombre" class="rounded form-control" placeholder="Nombre de la receta" required autofocus>
-        </div>
+        $receta = $params['receta'][0];
+        ?>
+        <div id="contenido" class="col-12 col-md-8 content">
+            <div class="row mt-3 mb-3">
+                <input type="text" id="nombre" class="rounded form-control" placeholder="Nombre de la receta" required autofocus value="<?php echo $receta['nombre'] ?>">
+            </div>
 
-        <div class="row">
-            <nav id="nav" class="col-12 nav nav-pills nav-fill">
-                <a id="goElabo" class="rounded bb-0 col-12 col-md-6 nav-item nav-link active d-lg-none">Elaboración</a>
-                <a id="goIngre" class="rounded bb-0 col-12 col-md-6 nav-item nav-link d-lg-none">Ingredientes</a>
+            <div class="row">
+                <nav id="nav" class="col-12 nav nav-pills nav-fill">
+                    <a id="goElabo" class="rounded bb-0 col-12 col-md-6 nav-item nav-link active d-lg-none">Elaboración</a>
+                    <a id="goIngre" class="rounded bb-0 col-12 col-md-6 nav-item nav-link d-lg-none">Ingredientes</a>
 
-                <a id="goElaboLg" class="rounded bb-0 br-0 col-12 col-md-6 nav-item nav-link active d-none d-lg-block">Elaboración</a>
-                <a id="goIngreLg" class="rounded bb-0 bl-0 col-12 col-md-6 nav-item nav-link active d-none d-lg-block">Ingredientes</a>
-            </nav>
-        </div>
+                    <a id="goElaboLg" class="rounded bb-0 br-0 col-12 col-md-6 nav-item nav-link active d-none d-lg-block">Elaboración</a>
+                    <a id="goIngreLg" class="rounded bb-0 bl-0 col-12 col-md-6 nav-item nav-link active d-none d-lg-block">Ingredientes</a>
+                </nav>
+            </div>
 
-        <div class="row" id="receta">
-            <textarea id="elabo" class="col-12 col-lg-6 d-lg-block" name="" id="" rows="10" placeholder="Primero encendemos el horno. Despúes..." required></textarea>
+            <div class="row" id="receta">
+                <textarea id="elabo" class="col-12 col-lg-6 d-lg-block" name="" id="" rows="10" placeholder="Primero encendemos el horno. Despúes..." required><?php echo $receta['elaboracion'] ?></textarea>
 
-            <div id="ingre" class="col-12 col-lg-6 table-responsive d-none d-lg-block">
-                <table class="table table-responsive">
-                    <thead>
-                        <tr>
-                            <th class="text-center d-none d-sm-block">Cantidad</th>
-                            <th style="width: 20px;" class="text-right d-sm-none">Cnt.</th>
-                            <th style="width: 60%;">Ingrediente</th>
-                            <th style="width: 10px;"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="text" class="cantidad rounded form-control text-center" placeholder="2" required autofocus></td>
-                            <td><input type="text" class="ingrediente rounded form-control" placeholder="Tomates" required autofocus></td>
-                            <td class="remove"><span class="oi oi-minus" title="Remove" aria-hidden="true"></span></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" class="cantidad rounded form-control text-center" placeholder="150g" autofocus></td>
-                            <td><input type="text" class="ingrediente rounded form-control" placeholder="Harina" autofocus></td>
-                            <td class="remove"><span class="oi oi-minus" title="Borrar fila" aria-hidden="true"></span></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td><span class="oi oi-plus" title="Añadir fila" aria-hidden="true"></span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div id="ingre" class="col-12 col-lg-6 table-responsive d-none d-lg-block">
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th class="text-center d-none d-sm-block">Cantidad</th>
+                                <th style="width: 20px;" class="text-right d-sm-none">Cnt.</th>
+                                <th style="width: 60%;">Ingrediente</th>
+                                <th style="width: 10px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $ingredientes = explode(";", $receta['ingredientes']);
+                            foreach ($ingredientes as $ingrediente){
+                                $cntIng = explode("#", $ingrediente);
+
+                                echo "<tr>";
+                                echo "<td><input type=\"text\" class=\"cantidad rounded form-control text-center\" placeholder=\"2\" required autofocus value=\"$cntIng[0]\"></td>";
+                                echo "<td><input type=\"text\" class=\"ingrediente rounded form-control\" placeholder=\"Tomates\" required autofocus value=\"$cntIng[1]\"></td>";
+                                echo "<td class=\"remove\"><span class=\"oi oi-minus\" title=\"Remove\" aria-hidden=\"true\"></span></td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td><span class="oi oi-plus" title="Añadir fila" aria-hidden="true"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <select class="col-lg-6 custom-select" id="diffElabo">
+                    <option value="0" selected>Dificultad de la elaboración</option>
+                    <?php 
+                    foreach ($params['dificultades'] as $dificultad){
+                        if($receta['dificultad']==$dificultad['dificultad']){
+                            echo "<option value=".$dificultad['idDificultad']." selected>".$dificultad['dificultad']."</option>";
+                        }else{
+                            echo "<option value=".$dificultad['idDificultad'].">".$dificultad['dificultad']."</option>";
+                        }
+                    }
+                    ?>
+                </select>
+
+                <select class="col-lg-6 custom-select" id="diffIngre">
+                    <option value="0" selected>Ingredientes</option>
+                    <?php 
+                    foreach ($params['ingredientes'] as $ingredientes){
+                        if($receta['tipoIngrediente']==$ingredientes['tipoIngrediente']){
+                            echo "<option value=".$ingredientes['idTipoIngrediente']." selected>".$ingredientes['tipoIngrediente']."</option>";
+                        }else{
+                            echo "<option value=".$ingredientes['idTipoIngrediente'].">".$ingredientes['tipoIngrediente']."</option>";
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <div class="row">
+                <select class="multiselect" id="tipoReceta" multiple="multiple">
+                    <?php 
+                    foreach ($params['tiposReceta'] as $tipoReceta){
+                        echo "<option value=".$tipoReceta['idTipo'].">".$tipoReceta['tipo']."</option>";
+                        /*if($receta['tipo']==$tipoReceta['tipo']){
+                            echo "<option value=".$tipoReceta['idTipo']." selected>".$tipoReceta['tipo']."</option>";
+                        }else{
+                            echo "<option value=".$tipoReceta['idTipo'].">".$tipoReceta['tipo']."</option>";
+                        }*/
+                    }
+                    ?>
+                </select>
+            </div>
+
+
+            <div class="row" id="numCom">
+                <label class="col-4 col-sm-3 col-lg-2 pt-1">Comensales</label>
+                <input type="range" id="fNumCom" min="1" max="20" value="1" class="col-6 col-sm-7 col-lg-8 form-control slider">
+                <input type="number" id="lNumCom" class="col-2 border-0 text-right" value="1">
+            </div>
+
+
+            <div class="row">
+                <button type="button" id="publicar" class="col-sm-6 col-md-4 offset-sm-6 offset-md-8 btn btn-lg btn-primary btn-block">Actualizar</button>
             </div>
         </div>
-
-        <div class="row">
-            <select class="col-lg-6 custom-select" id="diffElabo">
-                <option value="0" selected>Dificultad de la elaboración</option>
-                <?php 
-                foreach ($params['dificultades'] as $dificultad){
-                    echo "<option value=".$dificultad['idDificultad'].">".$dificultad['dificultad']."</option>";
-                }
-                ?>
-            </select>
-
-            <select class="col-lg-6 custom-select" id="diffIngre">
-                <option value="0" selected>Ingredientes</option>
-                <?php 
-                foreach ($params['ingredientes'] as $ingredientes){
-                    echo "<option value=".$ingredientes['idTipoIngrediente'].">".$ingredientes['tipoIngrediente']."</option>";
-                }
-                ?>
-            </select>
-        </div>
-
-        <div class="row">
-            <select class="multiselect" id="tipoReceta" multiple="multiple">
-                <?php 
-                foreach ($params['tiposReceta'] as $tipoReceta){
-                    echo "<option value=".$tipoReceta['idTipo'].">".$tipoReceta['tipo']."</option>";
-                }
-                ?>
-            </select>
-        </div>
-
-
-        <div class="row" id="numCom">
-            <label class="col-4 col-sm-3 col-lg-2 pt-1">Comensales</label>
-            <input type="range" id="fNumCom" min="1" max="20" value="1" class="col-6 col-sm-7 col-lg-8 form-control slider">
-            <input type="number" id="lNumCom" class="col-2 border-0 text-right" value="1">
-        </div>
-
-
-        <div class="row">
-            <button type="button" id="publicar" class="col-sm-6 col-md-4 offset-sm-6 offset-md-8 btn btn-lg btn-primary btn-block">Actualizar</button>
-        </div>
-    </div>
-    <?php 
+        <?php 
     }else{//Redireccionar al login
         ?><script>window.location.replace("login");</script><?php
     }

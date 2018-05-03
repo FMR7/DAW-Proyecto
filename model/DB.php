@@ -469,5 +469,24 @@ class DB extends PDO {
         }
     }
 
+    
+    //Devuelve si la receta es del usuario
+    public function isFromUser($idReceta, $user){
+        try{
+            $query = "SELECT ur.username, r.* FROM recetas r JOIN usuario_recetas ur ON ur.idReceta=r.idReceta WHERE ur.username=:user and ur.idReceta=:idReceta";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
+            
+	        $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return true;
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
 }
 ?>
