@@ -47,7 +47,7 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
-
+    
     
     public function getLikes($idReceta){
         try{
@@ -74,6 +74,19 @@ class DB extends PDO {
         }
     }
     
+    
+    public function getTiposReceta($idReceta){
+        try{
+            $query = "SELECT r.idReceta, tr.tipo FROM recetas r JOIN recetas_tipos rt ON r.idReceta=rt.idReceta JOIN tiporeceta tr ON tr.idTipo=rt.idTipo WHERE r.idReceta=:idReceta";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
     
     //BUSQUEDAS SIMPLES Y COMBINADAS
     //ESTA POR VER

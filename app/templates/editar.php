@@ -339,10 +339,14 @@ if(isset($_SESSION['login'])){
                     <?php 
                     foreach ($params['tiposReceta'] as $tipoReceta){
                         echo "<option value=".$tipoReceta['idTipo'].">".$tipoReceta['tipo']."</option>";
-                        /*if($receta['tipo']==$tipoReceta['tipo']){
-                            echo "<option value=".$tipoReceta['idTipo']." selected>".$tipoReceta['tipo']."</option>";
-                        }else{
-                            echo "<option value=".$tipoReceta['idTipo'].">".$tipoReceta['tipo']."</option>";
+                        
+                        //Carga los tipos marcados
+                        /*foreach ($params['recetaTipos'] as $tipo){
+                            if($tipo['tipo']==$tipoReceta['tipo']){
+                                echo "<option value=".$tipoReceta['idTipo']." selected>".$tipoReceta['tipo']."</option>";
+                            }else{
+                                echo "<option value=".$tipoReceta['idTipo'].">".$tipoReceta['tipo']."</option>";
+                            }
                         }*/
                     }
                     ?>

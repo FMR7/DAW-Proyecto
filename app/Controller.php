@@ -180,6 +180,7 @@ class Controller {
         if($recetaPropia){
             $params = array (
                 'receta' => $model->getReceta(@$_GET['id']),
+                'recetaTipos'  => $model->getTiposReceta(@$_GET['id']),
                 'dificultades' => $model->getTipoDificultades(),
                 'ingredientes' => $model->getTipoIngredientes(),
                 'tiposReceta'  => $model->getTipoReceta()
