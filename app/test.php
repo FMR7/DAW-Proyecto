@@ -82,7 +82,40 @@ $db->GetInstance();
 print_r($db->getPass("fernando"));
 
 
+echo "<br><br>getRecetasUser<br>";
+$db->GetInstance();
+print_r($db->getRecetasUser("paco"));
 
+
+echo "<br><br>getTiposReceta<br>";
+$db->GetInstance();
+print_r($db->getTiposReceta(1));
+
+
+echo "<br><br>setLike<br>";
+$db->GetInstance();
+print_r($db->setLike(1, "fernando", 1));
+
+
+echo "<br><br>setComment<br>";
+$db->GetInstance();
+print_r($db->setComment(1, "fernando", "Muy buena"));
+
+
+echo "<br><br>getComments<br>";
+$db->GetInstance();
+$comments = $db->getComments(1);
+print_r($comments);
+
+
+echo "<br><br>filtrarComment<br>";
+$user = "fernando";
+for($i=0; $i<count($comments); $i++){
+    if($comments[$i]['username']==$user){
+        unset($comments[$i]);
+    }
+}
+print_r($comments);
 
 
 
