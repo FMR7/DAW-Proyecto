@@ -338,16 +338,20 @@ if(isset($_SESSION['login'])){
                 <select class="multiselect" id="tipoReceta" multiple="multiple">
                     <?php 
                     foreach ($params['tiposReceta'] as $tipoReceta){
-                        echo "<option value=".$tipoReceta['idTipo'].">".$tipoReceta['tipo']."</option>";
+                        $selected = false;
                         
-                        //Carga los tipos marcados
-                        /*foreach ($params['recetaTipos'] as $tipo){
+                        foreach ($params['recetaTipos'] as $tipo){
                             if($tipo['tipo']==$tipoReceta['tipo']){
-                                echo "<option value=".$tipoReceta['idTipo']." selected>".$tipoReceta['tipo']."</option>";
-                            }else{
-                                echo "<option value=".$tipoReceta['idTipo'].">".$tipoReceta['tipo']."</option>";
+                                $selected = true;
+                                break;
                             }
-                        }*/
+                        }
+                        
+                        if($selected){ //Carga los tipos marcados
+                            echo "<option value=".$tipoReceta['idTipo']." selected>".$tipoReceta['tipo']."</option>";
+                        }else{
+                            echo "<option value=".$tipoReceta['idTipo'].">".$tipoReceta['tipo']."</option>";
+                        }
                     }
                     ?>
                 </select>
