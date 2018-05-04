@@ -34,9 +34,9 @@ if(isset($_SESSION['login'])){//Recibe datos
 <?php ob_start() ?>
 <form id="contenido" class="col-md-6 form-signin" autocomplete="on" action="login" method="post">
     <h1 class="h3 mb-3 pl-3 font-weight-normal">Identificarse</h1>
-    <input type="text" name="user" class="form-control" placeholder="Nombre de usuario" autocomplete="username" required autofocus>
-    <input type="password" name="pass" class="form-control" placeholder="Contraseña" autocomplete="off" required>
-    <button type="submit" class="btn btn-lg btn-primary btn-block">Acceder</button>
+    <input id="user" type="text" name="user" class="form-control" placeholder="Nombre de usuario" autocomplete="username" required autofocus>
+    <input id="pass" type="password" name="pass" class="form-control" placeholder="Contraseña" autocomplete="off" required>
+    <button id="submit" type="submit" class="btn btn-lg btn-primary btn-block">Acceder</button>
     <div id="aviso" class="text-center mt-2" style="display: none;">Usuario o contraseña incorrectos</div>
     <div class="text-center mt-2">
         ¿Aún no tienes cuenta? 
