@@ -207,7 +207,7 @@
 
     <div class="row mt-5 d-none d-lg-block">
         <nav id="nav" class="col-12 nav nav-pills nav-fill">
-            <a id="verOpiLg" class="bb-0 col-12 nav-item nav-link active">Comentarios</a>
+            <a id="verOpiLg" class="rounded bb-0 col-12 nav-item nav-link active">Comentarios</a>
         </nav>
     </div>
 
