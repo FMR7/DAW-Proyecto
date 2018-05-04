@@ -287,12 +287,21 @@ class Controller {
 	
 	
 	public function receta() {
-        $model=DB::GetInstance();
-        $params = array (
-            'receta' => $model->getReceta(@$_GET['id']),
-            'likes'  => $model->getLikes(@$_GET['id'])
-        );
-	    require __DIR__ . '/templates/receta.php';
+        if(isset($_GET['id'])){
+            $model=DB::GetInstance();
+            if($model->existsReceta($_GET['id'])){
+                $params = array (
+                    'receta'   => $model->getReceta(@$_GET['id']),
+                    'likes'    => $model->getLikes(@$_GET['id']),
+                    'comments' => $model->getComments(@$_GET['id']),
+                );
+                require __DIR__ . '/templates/receta.php';
+            }else{
+                echo "<script>window.location.replace(\"../inicio\");</script>";
+            }
+        }else{
+            echo "<script>window.location.replace(\"../inicio\");</script>";
+        }
 	}
 	
 	
