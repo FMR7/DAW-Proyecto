@@ -49,32 +49,6 @@ class DB extends PDO {
     }
     
     
-    public function getLikes($idReceta){
-        try{
-            $queryLikes = "select COUNT(meGusta) as likes from opiniones WHERE idReceta=:idReceta AND meGusta=1";
-            $stmt = $this->prepare($queryLikes);
-            $stmt->bindParam(':idReceta', $idReceta);
-            $stmt->execute();
-
-            $likes = $stmt->fetchAll();
-            
-            
-            $queryDislikes = "select COUNT(meGusta) as disLikes from opiniones WHERE idReceta=:idReceta AND meGusta=0";
-            $stmt = $this->prepare($queryDislikes);
-            $stmt->bindParam(':idReceta', $idReceta);
-            $stmt->execute();
-
-            $disLikes = $stmt->fetchAll();
-            
-            
-            $total = ['likes'=>$likes[0][0], 'disLikes'=>$disLikes[0][0]];
-            return $total;
-        }catch(PDOException $e){
-            echo "<p>Error: ".$e->getMessage();
-        }
-    }
-    
-    
     public function getTiposReceta($idReceta){
         try{
             $query = "SELECT r.idReceta, tr.tipo FROM recetas r JOIN recetas_tipos rt ON r.idReceta=rt.idReceta JOIN tiporeceta tr ON tr.idTipo=rt.idTipo WHERE r.idReceta=:idReceta";
@@ -219,11 +193,81 @@ class DB extends PDO {
     }
     
     
+    //RECETA
+    public function setLike($idReceta, $user, $like){
+        try{
+            $query = "INSERT INTO opiniones(idReceta, username, meGusta) VALUES(:idReceta, :user, :meGusta) ON DUPLICATE KEY UPDATE meGusta=:meGusta";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':meGusta', $like);
+            
+            return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function setComment($idReceta, $user, $comment){
+        try{
+            $query = "INSERT INTO opiniones(idReceta, username, comentario) VALUES(:idReceta, :user, :comment) ON DUPLICATE KEY UPDATE comentario=:comment";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':comment', $comment);
+            
+            return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function getLikes($idReceta){
+        try{
+            $queryLikes = "select COUNT(meGusta) as likes from opiniones WHERE idReceta=:idReceta AND meGusta=1";
+            $stmt = $this->prepare($queryLikes);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
+
+            $likes = $stmt->fetchAll();
+            
+            
+            $queryDislikes = "select COUNT(meGusta) as disLikes from opiniones WHERE idReceta=:idReceta AND meGusta=0";
+            $stmt = $this->prepare($queryDislikes);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
+
+            $disLikes = $stmt->fetchAll();
+            
+            
+            $total = ['likes'=>$likes[0][0], 'disLikes'=>$disLikes[0][0]];
+            return $total;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function getComments($idReceta){
+        try{
+            $query = "SELECT username, comentario FROM opiniones WHERE idReceta=:idReceta";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
+            $rs = $stmt->fetchAll();
+            
+            
+            return $rs;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    //RECETA FIN
+    
     
     //INSERTAR RECETA
     public function setReceta($nombre, $elabo, $ingre, $diff, $tIngre, $numCom){
         try{
-            $query = "INSERT INTO `recetas`(`idReceta`, `nombre`, `ingredientes`, `elaboracion`, `dificultad`, `tipoIngredientes`, `numComensales`) VALUES(NULL, :nombre, :ingre, :elabo, :diff, :tipoIngre, :numCom)";
+            $query = "INSERT INTO recetas (idReceta, nombre, ingredientes, elaboracion, dificultad, tipoIngredientes, numComensales) VALUES(NULL, :nombre, :ingre, :elabo, :diff, :tipoIngre, :numCom)";
             $stmt = $this->prepare($query);
             $stmt->bindParam(':nombre', $nombre);
             $stmt->bindParam(':elabo', $elabo);
@@ -386,7 +430,6 @@ class DB extends PDO {
         }
     }
     
-    
     public function getPass($user){
         try{
             $query = "SELECT password FROM usuarios WHERE username=:user";
@@ -403,7 +446,6 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
-    
     
     public function setPass($user, $pass){
         try{
@@ -462,6 +504,22 @@ class DB extends PDO {
     //REGISTER FIN
 
     
+    public function existsReceta($idReceta){
+        try{
+            $query = "SELECT nombre FROM recetas WHERE idReceta=:idReceta";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
+            
+	        $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return true;
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
     
     public function existsUser($user){
         try{
@@ -480,7 +538,6 @@ class DB extends PDO {
         }
     }
     
-    
     public function existsEmail($email){
         try{
             $query = "SELECT email FROM usuarios WHERE email=:email";
@@ -498,7 +555,6 @@ class DB extends PDO {
         }
     }
 
-    
     //Devuelve si la receta es del usuario
     public function isFromUser($idReceta, $user){
         try{
