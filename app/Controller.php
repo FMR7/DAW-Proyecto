@@ -296,6 +296,11 @@ class Controller {
 	}
 	
 	
+    public function notFound(){
+        require __DIR__ . '/templates/404.php';
+    }
+    
+    
     //Inicia una sesión
 	public function openSession($user){
         @session_start();
