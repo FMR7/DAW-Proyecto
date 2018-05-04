@@ -13,84 +13,84 @@
         evtComents();
 
         likesUpdate();
-
-        function evtLikes(){
-            //Click Like
-            $(".oi-thumb-up").click(function() {
-                var likes = parseInt($("#likes").text(), 10);
-                $(".oi-thumb-up").toggleClass("liked");
-                if($(".oi-thumb-up").hasClass("liked")){
-                    likes++;
-                    if($(".oi-thumb-down").hasClass("disliked")){
-                        $(".oi-thumb-down").trigger( "click" );
-                    }
-                }else{
-                    likes--;
-                }
-
-                $("#likes").text(likes);
-                likesUpdate();
-                //AJAX UPDATE OPINION
-
-            });
-
-
-            //Click Dislike
-            $(".oi-thumb-down").click(function() {
-                var dislikes = parseInt($("#dislikes").text(), 10);
-                $(".oi-thumb-down").toggleClass("disliked");
-                if($(".oi-thumb-down").hasClass("disliked")){
-                    dislikes++;
-                    if($(".oi-thumb-up").hasClass("liked")){
-                        $(".oi-thumb-up").trigger( "click" );
-                    }
-                }else{
-                    dislikes--;
-                }
-
-                $("#dislikes").text(dislikes);
-                likesUpdate();
-                //AJAX UPDATE OPINION
-
-            });
-
-
-        }
-        function evtReceta(){
-            evtCrea("#goIngre");
-            evtCrea("#goElabo");
-
-
-            function evtCrea(str){
-                $(str).click(function() {
-                    if(!($(str).hasClass("active"))){
-                        $("#goIngre").toggleClass("active");
-                        $("#goElabo").toggleClass("active");
-                        $("#ingre").toggleClass("d-none");
-                        $("#elabo").toggleClass("d-none");
-                    }
-                });
-            }
-        }
-        function evtComents(){
-            evtCrea("#verOpi");
-            evtCrea("#opinar");
-
-
-            function evtCrea(str){
-                $(str).click(function() {
-                    if(!($(str).hasClass("active"))){
-                        $("#verOpi").toggleClass("active");
-                        $("#opinar").toggleClass("active");
-                        $("#miOpinion").toggleClass("d-none");
-                        $("#opiniones").toggleClass("d-none");
-                    }
-                });
-            }
-        }
-
+        
+        $(".separador").last().hide();
     });
+    
+    function evtLikes(){
+        //Click Like
+        $(".oi-thumb-up").click(function() {
+            var likes = parseInt($("#likes").text(), 10);
+            $(".oi-thumb-up").toggleClass("liked");
+            if($(".oi-thumb-up").hasClass("liked")){
+                likes++;
+                if($(".oi-thumb-down").hasClass("disliked")){
+                    $(".oi-thumb-down").trigger( "click" );
+                }
+            }else{
+                likes--;
+            }
 
+            $("#likes").text(likes);
+            likesUpdate();
+            //AJAX UPDATE OPINION
+
+        });
+
+
+        //Click Dislike
+        $(".oi-thumb-down").click(function() {
+            var dislikes = parseInt($("#dislikes").text(), 10);
+            $(".oi-thumb-down").toggleClass("disliked");
+            if($(".oi-thumb-down").hasClass("disliked")){
+                dislikes++;
+                if($(".oi-thumb-up").hasClass("liked")){
+                    $(".oi-thumb-up").trigger( "click" );
+                }
+            }else{
+                dislikes--;
+            }
+
+            $("#dislikes").text(dislikes);
+            likesUpdate();
+            //AJAX UPDATE OPINION
+
+        });
+
+
+    }
+    function evtReceta(){
+        evtCrea("#goIngre");
+        evtCrea("#goElabo");
+
+
+        function evtCrea(str){
+            $(str).click(function() {
+                if(!($(str).hasClass("active"))){
+                    $("#goIngre").toggleClass("active");
+                    $("#goElabo").toggleClass("active");
+                    $("#ingre").toggleClass("d-none");
+                    $("#elabo").toggleClass("d-none");
+                }
+            });
+        }
+    }
+    function evtComents(){
+        evtCrea("#verOpi");
+        evtCrea("#opinar");
+
+
+        function evtCrea(str){
+            $(str).click(function() {
+                if(!($(str).hasClass("active"))){
+                    $("#verOpi").toggleClass("active");
+                    $("#opinar").toggleClass("active");
+                    $("#miOpinion").toggleClass("d-none");
+                    $("#opiniones").toggleClass("d-none");
+                }
+            });
+        }
+    }
 
     //Actualiza las barras que muestran la proporción de likes
     function likesUpdate(){
@@ -187,7 +187,20 @@
 
 
     <div class="row mb-5 d-lg-block" id="miOpinion">
-        <textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."></textarea>
+        <?php 
+        @session_start();
+        if(isset($_SESSION['login'])){
+            if($_SESSION['login']!=""){
+        ?>
+        <textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."><?php echo $params['myComment']; ?></textarea>
+        <?php 
+            }else{
+                ?><textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
+            }
+        }else{
+            ?><textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
+        }
+        ?>
         <button type="button" id="publicar" class="col-4 offset-8 btn btn-lg btn-primary btn-block">Publicar</button>
     </div>
 
@@ -199,24 +212,28 @@
     </div>
 
     <div class="row mb-5 pt-3 d-none d-lg-block" id="opiniones">
-        <opinion class="col-12 content">
-            <h5 class="col-12">Usuario146</h5>
-            <p class="col-12 text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur nemo quae labore tenetur illum voluptates nesciunt nostrum alias culpa vero commodi, magni mollitia consequatur nam temporibus eaque ea velit aliquid?</p>
-        </opinion>
-
-        <div class="separador col-8 offset-2 mb-3 mt-3"></div>
-
-        <opinion class="col-12 content">
-            <h5 class="col-12">Usuario386</h5>
-            <p class="col-12 text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur nemo quae labore tenetur illum voluptates nesciunt nostrum alias culpa vero commodi, magni mollitia consequatur nam temporibus eaque ea velit aliquid?</p>
-        </opinion>
-
-        <div class="separador col-8 offset-2 mb-3 mt-3"></div>
-
-        <opinion class="col-12 content">
-            <h5 class="col-12">Usuario164</h5>
-            <p class="col-12 text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur nemo quae labore tenetur illum voluptates nesciunt nostrum alias culpa vero commodi, magni mollitia consequatur nam temporibus eaque ea velit aliquid?</p>
-        </opinion>
+        <?php 
+        foreach($params['comments'] as $comment){
+            if($comment['comentario']!=null){
+                ?>
+                
+                <opinion class="col-12 content">
+                    <h5 class="col-12"><?php 
+                        if($comment['username']==null){
+                            echo "Anónimo";
+                        }else{
+                            echo $comment['username'];
+                        }
+                    ?></h5>
+                    <p class="col-12 text-justify"><?php echo $comment['comentario'] ?></p>
+                </opinion>
+                
+                <div class="separador col-8 offset-2 mb-3 mt-3"></div>
+                
+                <?php
+            }
+        }
+        ?>
     </div>
 </div>
 <?php $contenido = ob_get_clean() ?>

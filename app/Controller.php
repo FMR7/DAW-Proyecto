@@ -290,10 +290,23 @@ class Controller {
         if(isset($_GET['id'])){
             $model=DB::GetInstance();
             if($model->existsReceta($_GET['id'])){
+                $comments = $model->getComments($_GET['id']);
+                $myComment = null;
+                
+                //Quitar comentario propio de la lista de comentarios y cargarlo en otra variable
+                $user = $this->getSession();
+                for($i=0; $i<count($comments); $i++){
+                    if(($comments[$i]['username']==$user)&&($user!=null)){
+                        $myComment = $comments[$i]['comentario'];
+                        unset($comments[$i]);
+                    }
+                }
+                
                 $params = array (
-                    'receta'   => $model->getReceta(@$_GET['id']),
-                    'likes'    => $model->getLikes(@$_GET['id']),
-                    'comments' => $model->getComments(@$_GET['id']),
+                    'receta'   => $model->getReceta($_GET['id']),
+                    'likes'    => $model->getLikes($_GET['id']),
+                    'comments' => $comments,
+                    'myComment'=> $myComment
                 );
                 require __DIR__ . '/templates/receta.php';
             }else{
