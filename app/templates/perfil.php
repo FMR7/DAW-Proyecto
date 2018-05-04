@@ -70,21 +70,21 @@ if(@$_SESSION['login']!=""){
         <form id="cambiarPass" class="content" action="perfil" method="post">
             <div class="row">
                 <label class="col-sm-7 col-md-6 col-form-label" for="passOld">Contraseña antigua:</label>
-                <input class="col-sm-5 col-md-6 form-control" type="password" name="passOld" required>
+                <input class="col-sm-5 col-md-6 form-control" type="password" id="passOld" name="passOld" required>
             </div>
 
             <div class="row">
                 <label class="col-sm-7 col-md-6 col-form-label" for="pass">Nueva contraseña:</label>
-                <input class="col-sm-5 col-md-6 form-control" type="password" name="pass1" id="pass1" required>
+                <input class="col-sm-5 col-md-6 form-control" type="password" id="pass" name="pass1" id="pass1" required>
             </div>
 
             <div class="row">
                 <label class="col-sm-7 col-md-6 col-form-label" for="pass2">Repite nueva contraseña:</label>
-                <input class="col-sm-5 col-md-6 form-control" type="password" name="pass2" id="pass2" required>
+                <input class="col-sm-5 col-md-6 form-control" type="password" id="pass2" name="pass2" id="pass2" required>
             </div>
 
             <div class="row">
-                <button type="submit" class="col-sm-5 col-md-6 offset-sm-7 offset-md-6 my-2 my-sm-0 btn btn-lg btn-primary btn-block">Cambiar</button>
+                <button type="submit" id="submit" class="col-sm-5 col-md-6 offset-sm-7 offset-md-6 my-2 my-sm-0 btn btn-lg btn-primary btn-block">Cambiar</button>
             </div>
             
             <div id="avisoPassOld" class="text-center mt-2" style="display: none;">La contraseña antigua no coincide</div>
