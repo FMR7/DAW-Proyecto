@@ -163,6 +163,8 @@ $server=Config::$serverUrl;
 
                     if(url == "register"){//Marca register como login
                         $('ul.navbar-nav a[href="login"]').addClass('active');
+                    }if(url == "logout"){//Redirecciona a inicio
+                        window.location.replace("inicio");
                     }
                 }
             </script>

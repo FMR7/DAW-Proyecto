@@ -234,6 +234,8 @@ class Controller {
                     
                 }
             }
+        }else{
+            echo "<script>window.location.replace(\"inicio\");</script>";
         }
     }
     
@@ -278,6 +280,8 @@ class Controller {
                     
                 }
             }
+        }else{
+            echo "<script>window.location.replace(\"inicio\");</script>";
         }
 	}
 	
