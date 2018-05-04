@@ -179,7 +179,8 @@ class Controller {
         $recetaPropia = $model->isFromUser(@$_GET['id'], $this->getSession());
         if($recetaPropia){
             $params = array (
-                'receta' => $model->getReceta(@$_GET['id']),
+                'idReceta'     => @$_GET['id'],
+                'receta'       => $model->getReceta(@$_GET['id']),
                 'recetaTipos'  => $model->getTiposReceta(@$_GET['id']),
                 'dificultades' => $model->getTipoDificultades(),
                 'ingredientes' => $model->getTipoIngredientes(),
@@ -188,6 +189,52 @@ class Controller {
         }
         
         require __DIR__ . '/templates/editar.php';
+    }
+    
+    
+    public function actualizar(){
+        @session_start();
+        if(isset($_SESSION['login'])){
+            if($_SESSION['login']!=""){
+            
+                if($this->checkCampos()){
+                    $id     = recogeNumero($_POST["idReceta"]);
+                    $nombre = ucfirst(mb_strtolower(recogeTexto($_POST["nombre"])));
+                    $elabo  = recogeTexto($_POST["elaboracion"]);
+                    $ingre  = recogeArray($_POST["ingredientes"]);
+                    $diff   = recogeNumero($_POST["dificultad"]);
+                    $tIngre = recogeNumero($_POST["tipoIngredientes"]);
+                    $tRece  = recogetipoRece($_POST["tipoReceta"]);
+                    $numCom = recogeNumero($_POST["numCom"]);
+
+                    
+                    $model=DB::GetInstance();
+                    
+                    //Comprobar si la receta es del usuario
+                    if($model->isFromUser($id, $this->getSession())){
+                        $updated = $model->updateReceta($id, $nombre, $elabo, $ingre, $diff, $tIngre, $numCom);
+                        if($updated){
+                            //Quitar tipos a receta
+                            $model->delRecetaTipos($id);
+                            
+                            //Asignar tipos a receta
+                            $model->setRecetaTipos($id, $tRece);
+
+                            //Redirecciona a la nueva receta
+                            $params = array (
+                                'receta' => $model->getReceta($id),
+                                'likes'  => $model->getLikes($id)
+                            );
+
+                            echo true."#".$id;
+                        }
+                    }
+                    echo false;
+                }else{//Faltan campos por rellenar;
+                    
+                }
+            }
+        }
     }
     
     
@@ -225,14 +272,13 @@ class Controller {
                         echo true."#".$idReceta;
                     }else{
                         $model->delReceta($lastId);
+                        echo false;
                     }
-                    return true;
                 }else{//Faltan campos por rellenar;
                     
                 }
             }
         }
-        $this->inicio();
 	}
 	
 	

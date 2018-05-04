@@ -85,7 +85,7 @@
             console.log(params);
             
             
-            subir(params);
+            actualizar(params);
         });
     }
     
@@ -147,6 +147,9 @@
     
     //Comprueba y recoge los campos, si están en blanco da un aviso visual
     function recogeCampos(){
+        //ID Receta
+        var id = <?php echo $params['idReceta'] ?>;
+        
         //Nombre
         var nombre = "";
         if($("#nombre").val()!=""){
@@ -213,31 +216,33 @@
         }
         
         var params = {
-            "nombre" : nombre,
-            "elaboracion" : elaboracion,
-            "ingredientes" : ingredientes,
-            "dificultad" : dificultad,
+            "idReceta"         : id,
+            "nombre"           : nombre,
+            "elaboracion"      : elaboracion,
+            "ingredientes"     : ingredientes,
+            "dificultad"       : dificultad,
             "tipoIngredientes" : tipoIngredientes,
-            "tipoReceta" : tipoReceta,
-            "numCom" : numCom
+            "tipoReceta"       : tipoReceta,
+            "numCom"           : numCom
         };
         
         return params;
     }
     
-    function subir(params){
+    function actualizar(params){
         $.ajax({
             data:  params,
-            url:   'subir',
+            url:   '../actualizar',
             type:  'post',
             beforeSend: function(){
                 
             },
             success: function(response){
-                var insertada = response.split("#")[0];
-                var idReceta  = response.split("#")[1];
-                if(insertada==1){
-                    window.location.replace("receta/"+idReceta);
+                var actualizada = response.split("#")[0];
+                var idReceta    = response.split("#")[1];
+                if(actualizada==1){
+                    //window.location.replace("../receta/"+idReceta);
+                    window.location.replace("../recetas");
                 }
             }
         });

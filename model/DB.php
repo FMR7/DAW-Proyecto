@@ -250,7 +250,6 @@ class DB extends PDO {
         }
     }
 
-    
     //Asocia tipos de receta a una receta
     public function setRecetaTipos($idReceta, $tipos){
         $tipos = explode('#', $tipos);
@@ -267,7 +266,6 @@ class DB extends PDO {
             }
         }
     }
-    
     
     //Asocia una receta con un usuario
     public function setRecetaUser($user, $idReceta){
@@ -286,6 +284,29 @@ class DB extends PDO {
 
     
     
+    //ACTUALIZAR RECETA
+    public function updateReceta($idReceta, $nombre, $elabo, $ingre, $diff, $tIngre, $numCom){
+        try{
+            $query = "UPDATE recetas SET nombre=:nombre, elaboracion=:elabo, ingredientes=:ingre, dificultad=:diff, tipoIngredientes=:tipoIngre, numComensales=:numCom WHERE idReceta=:idReceta";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':elabo', $elabo);
+            $stmt->bindParam(':ingre', $ingre);
+            $stmt->bindParam(':diff', $diff);
+            $stmt->bindParam(':tipoIngre', $tIngre);
+            $stmt->bindParam(':numCom', $numCom);
+            
+
+            return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    //ACTUALIZAR RECETA FIN
+    
+    
+    
     //BORRAR RECETA
     public function delReceta($user, $idReceta){
         try{
@@ -293,24 +314,19 @@ class DB extends PDO {
             $stmt = $this->prepare($query);
             $stmt->bindParam(':idReceta', $idReceta);
 
-            $deleted = $stmt->execute();
-            if($deleted){
-                return delRecetaUser($user, $idReceta);
-            }
-            return $deleted;
+            return $stmt->execute();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
     }
     
-    //Borra la asociación de la receta con el usuario
-    function delRecetaUser($user, $idReceta){
+    //Borra la asociación de la receta con sus tipos
+    public function delRecetaTipos($idReceta){
         try{
-            $query = "DELETE FROM usuario_recetas WHERE username=:user AND idReceta=:idReceta)";
+            $query = "DELETE FROM recetas_tipos WHERE idReceta=:idReceta";
             $stmt = $this->prepare($query);
-            $stmt->bindParam(':user', $user);
             $stmt->bindParam(':idReceta', $idReceta);
-            
+
             return $stmt->execute();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
