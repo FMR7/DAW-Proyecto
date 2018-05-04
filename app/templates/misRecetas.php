@@ -2,6 +2,9 @@
 <?php ob_start() ?>
 <link rel="stylesheet" href="../../web/css/perfil.css" type="text/css"/>
 <link rel="stylesheet" href="../../web/css/inicio.css" type="text/css"/>
+<style>
+    #contenido, #tablaDiv{padding: 0;}
+</style>
 <?php $css = ob_get_clean() ?>
 
 <!--EL JS VA AQUÍ-->
@@ -68,8 +71,8 @@
 @session_start();
 if(@$_SESSION['login']!=""){
 ?>
-<div id="contenido" class="col-md-8 col-lg-6 col-xl-6 content">
-    <div id="tablaDiv" class="col-md-9">
+<div id="contenido" class="col-12 col-lg-10 col-xl-8">
+    <div id="tablaDiv">
         <table id="tabla" class="table table-striped table-hover table-responsive">
             <thead>
                 <tr>
