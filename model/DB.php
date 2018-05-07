@@ -239,7 +239,7 @@ class DB extends PDO {
     
     public function getLikes($idReceta){
         try{
-            $queryLikes = "select COUNT(meGusta) as likes from opiniones WHERE idReceta=:idReceta AND meGusta=1";
+            $queryLikes = "select COUNT(meGusta) as likes from opiniones WHERE idReceta=:idReceta AND meGusta=2";
             $stmt = $this->prepare($queryLikes);
             $stmt->bindParam(':idReceta', $idReceta);
             $stmt->execute();
@@ -247,7 +247,7 @@ class DB extends PDO {
             $likes = $stmt->fetchAll();
             
             
-            $queryDislikes = "select COUNT(meGusta) as disLikes from opiniones WHERE idReceta=:idReceta AND meGusta=0";
+            $queryDislikes = "select COUNT(meGusta) as disLikes from opiniones WHERE idReceta=:idReceta AND meGusta=1";
             $stmt = $this->prepare($queryDislikes);
             $stmt->bindParam(':idReceta', $idReceta);
             $stmt->execute();

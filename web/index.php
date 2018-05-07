@@ -15,6 +15,7 @@ $map = array(
     'editar'     => array('controller' =>'Controller', 'action' =>'editar'),
     'actualizar' => array('controller' =>'Controller', 'action' =>'actualizar'),
     'receta'     => array('controller' =>'Controller', 'action' =>'receta'),
+    'like'       => array('controller' =>'Controller', 'action' =>'setLike'),
     'notFound'   => array('controller' =>'Controller', 'action' =>'notFound'),
     'admin'      => array('controller' =>'Controller', 'action' =>'admin')
 );

@@ -334,6 +334,7 @@ class Controller {
                 }
                 
                 $params = array (
+                    'idReceta' => $_GET['id'],
                     'receta'   => $model->getReceta($_GET['id']),
                     'likes'    => $model->getLikes($_GET['id']),
                     'myLike'   => $myLike,
@@ -349,6 +350,46 @@ class Controller {
         }
 	}
 	
+    
+    public function setLike(){
+        @session_start();
+        if(isset($_SESSION['login'])){
+            if($_SESSION['login']!=""){
+                if(isset($_POST['idReceta'])){
+                    $model=DB::GetInstance();
+                    $inserted=false;
+
+                    if(isset($_POST['like'])){
+                        switch($_POST['like']){
+                        case 2:
+                            $inserted = $model->setLike(@$_POST['idReceta'], $this->getSession(), 2);
+                            break;
+                        case 1:
+                            $inserted = $model->setLike(@$_POST['idReceta'], $this->getSession(), 1);
+                            break;
+                        default:
+                            $inserted = $model->setLike(@$_POST['idReceta'], $this->getSession(), 0);
+                    }
+                    }else{
+                        $inserted = $model->setLike(@$_POST['idReceta'], $this->getSession(), 0);
+                    }
+                    
+                    if($inserted){
+                        echo true;
+                    }else{
+                        echo false;
+                    }
+                }else{//Llamada forzada
+                    echo "<script>window.location.replace(\"inicio\");</script>";
+                }
+            }else{//Sin sesión
+                echo "<script>window.location.replace(\"inicio\");</script>";
+            }
+        }else{//Sin sesión
+            echo 0;
+        }
+    }
+    
 	
     public function notFound(){
         require __DIR__ . '/templates/404.php';

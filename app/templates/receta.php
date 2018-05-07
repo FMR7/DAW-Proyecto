@@ -1,14 +1,23 @@
 <!--EL CSS VA AQUÍ-->
 <?php ob_start() ?>
 <link rel="stylesheet" href="../../web/css/receta.css"/>
+<link rel="stylesheet" href="../../web/css/jquery-confirm.min.css"/>
 <?php $css = ob_get_clean() ?>
 
 
 <!--EL JS VA AQUÍ-->
 <?php ob_start() ?>
+<script type="text/javascript" src="../../web/js/jquery-confirm.min.js"></script>
 <script type="text/javascript">
     $( document ).ready(function() {
-        evtLikes();
+        <?php 
+        if((isset($_SESSION['login']))&&(@$_SESSION['login']!="")){
+            echo "evtLikes();";
+        }else{
+            echo "evtLikesNoSession();";
+        }
+        ?>
+        
         evtReceta();
         evtComents();
 
@@ -20,12 +29,12 @@
         $myLike = $params['myLike'];
         if($myLike!=null){
             switch($myLike){
-                case 1:
+                case 2:
                     ?>
                     $(".oi-thumb-up").toggleClass("liked");
                     <?php 
                     break;
-                case 0:
+                case 1:
                     ?>
                     $(".oi-thumb-down").toggleClass("disliked");
                     <?php 
@@ -35,6 +44,28 @@
         ?>
     });
     
+    function evtLikesNoSession(){
+        //Click Like or Dislike
+        $(".oi-thumb-up, .oi-thumb-down").click(function() {
+            $.confirm({
+                columnClass: 'medium',
+                type: 'orange',
+                title: 'Identifícate',
+                content: 'Necesitas estar identificado para poder dar me gusta',
+                buttons: {
+                    Identificarme: {
+                        btnClass: 'btn-blue',
+                        action:  function () {
+                            window.location.replace("../login");
+                        }
+                    },
+                    cancelar: function () {
+
+                    }
+                }
+            });
+        });
+    }
     function evtLikes(){
         //Click Like
         $(".oi-thumb-up").click(function() {
@@ -45,14 +76,14 @@
                 if($(".oi-thumb-down").hasClass("disliked")){
                     $(".oi-thumb-down").trigger( "click" );
                 }
+                setLike(2);
             }else{
                 likes--;
+                setLike(0);
             }
 
             $("#likes").text(likes);
             likesUpdate();
-            //AJAX UPDATE OPINION
-
         });
 
 
@@ -65,17 +96,15 @@
                 if($(".oi-thumb-up").hasClass("liked")){
                     $(".oi-thumb-up").trigger( "click" );
                 }
+                setLike(1);
             }else{
                 dislikes--;
+                setLike(0);
             }
 
             $("#dislikes").text(dislikes);
             likesUpdate();
-            //AJAX UPDATE OPINION
-
         });
-
-
     }
     function evtReceta(){
         evtCrea("#goIngre");
@@ -125,7 +154,20 @@
 
         $("#dislikesBar").width(dislikesBar+"%");
         $("#dislikesBar").attr("aria-valuenow", dislikesBar);
-
+    }
+    
+    
+    function setLike(like){
+        var params = {
+            "idReceta": 1,
+            "like" : like
+        }
+        
+        $.ajax({
+            data:  params,
+            url:   '../like',
+            type:  'post'
+        });
     }
 </script>
 <?php $js = ob_get_clean() ?>
