@@ -164,17 +164,24 @@ class Controller {
     
     
     public function borrarReceta(){
-        $id = recogeNumero($_POST["idReceta"]);
-        
-        $model=DB::GetInstance();
-        $recetaPropia = $model->isFromUser($id, $this->getSession());
-        if($recetaPropia){
-            $borrada = $model->delReceta($id);
-            if($borrada){
-                echo true;
-            }else{
-                echo false;
+        @session_start();
+        if(isset($_SESSION['login'])){
+            if($_SESSION['login']!=""){
+                $id = recogeNumero($_POST["idReceta"]);
+
+                $model=DB::GetInstance();
+                $recetaPropia = $model->isFromUser($id, $this->getSession());
+                if($recetaPropia){
+                    $borrada = $model->delReceta($id);
+                    if($borrada){
+                        echo true;
+                    }else{
+                        echo false;
+                    }
+                }
             }
+        }else{
+            echo "<script>window.location.replace(\"inicio\");</script>";
         }
     }
     
@@ -247,10 +254,10 @@ class Controller {
                     }
                     echo false;
                 }else{//Faltan campos por rellenar;
-                    
+                    echo "<script>window.location.replace(\"inicio\");</script>";
                 }
             }
-        }else{
+        }else{//Sin sesión
             echo "<script>window.location.replace(\"inicio\");</script>";
         }
     }
@@ -293,10 +300,10 @@ class Controller {
                         echo false;
                     }
                 }else{//Faltan campos por rellenar;
-                    
+                    echo "<script>window.location.replace(\"inicio\");</script>";
                 }
             }
-        }else{
+        }else{//Sin sesión
             echo "<script>window.location.replace(\"inicio\");</script>";
         }
 	}
@@ -369,49 +376,44 @@ class Controller {
     private function checkCampos(){
         $continuar = true;
 
-        if($_POST["nombre"]==""){
-            echo "Nombre en blanco\n";
+        if(@$_POST["nombre"]==""){
             $continuar = false;
         }
 
-        if($_POST["elaboracion"]==""){
-            echo "Elaboracion en blanco\n";
+        if(@$_POST["elaboracion"]==""){
             $continuar = false;
         }
 
-        if(count($_POST["ingredientes"])%2!=0){
-            echo "Ingredientes impares\n";
+        if(@count(@$_POST["ingredientes"])%2!=0){
             $continuar = false;
         }
 
         $ingreCorrecto = true;
-        foreach ($_POST["ingredientes"] as $cantIngre){
+        if(isset($_POST["ingredientes"])){
+            foreach ($_POST["ingredientes"] as $cantIngre){
             if($cantIngre==""){
                 $ingreCorrecto = false;
             }
         }
-        if(!$ingreCorrecto){
-            echo "Ingrediente en blanco\n";
+            if(!$ingreCorrecto){
+                $continuar = false;
+            }
+        }
+        
+
+        if(@$_POST["dificultad"]==""){
             $continuar = false;
         }
 
-        if($_POST["dificultad"]==""){
-            echo "Dificultad en blanco\n";
+        if(@$_POST["tipoIngredientes"]==""){
             $continuar = false;
         }
 
-        if($_POST["tipoIngredientes"]==""){
-            echo "Tipo de ingredientes en blanco\n";
+        if(@$_POST["tipoReceta"]==""){
             $continuar = false;
         }
 
-        if($_POST["tipoReceta"]==""){
-            echo "Tipo de receta en blanco\n";
-            $continuar = false;
-        }
-
-        if($_POST["numCom"]<1){
-            echo "Número de comensales menor que 1\n";
+        if(@$_POST["numCom"]<1){
             $continuar = false;
         }
 

@@ -1,7 +1,20 @@
+<?php 
+$aviso = false;
+@session_start();
+if(isset($_SESSION['login'])){//Recibe datos
+    if($_SESSION['login']!=""){//Usuario correcto
+        //Redireccionar a inicio
+        ?><script>window.location.replace("inicio");</script><?php
+    }
+}
+?>
+
+
 <!--EL CSS VA AQUÍ-->
 <?php ob_start() ?>
 <link rel="stylesheet" href="../../web/css/loginAndRegister.css">
 <?php $css = ob_get_clean() ?>
+
 
 <!--EL JS VA AQUÍ-->
 <?php ob_start() ?>
