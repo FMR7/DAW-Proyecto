@@ -39,10 +39,10 @@ class Controller {
             $existsEmail = $model->existsEmail($_POST["email"]);
 
             if($existsUser){//El usuario ya está en uso
-                $params['errorUser'] = "El nombre de usuario ya está en uso";
+                $params['errorUser'] = 1;
                 $register = false;
             }if($existsEmail){//El email ya está en uso
-                $params['errorMail'] = "El email ya está en uso";
+                $params['errorMail'] = 1;
                 $register = false;
             }
             

@@ -5,9 +5,9 @@ if(isset($_SESSION['login'])){//Recibe datos
     if($_SESSION['login']!=""){//Usuario correcto
         //Redireccionar a inicio
         ?><script>window.location.replace("inicio");</script><?php
-    }else{//Usuario incorrecto
-        $aviso = true;
     }
+}if((isset($_POST['user']))||(isset($_POST['pass'])){//Usuario incorrecto
+    $aviso = true;
 }
 ?>
 
