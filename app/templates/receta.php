@@ -2,6 +2,12 @@
 <?php ob_start() ?>
 <link rel="stylesheet" href="../../web/css/receta.css"/>
 <link rel="stylesheet" href="../../web/css/jquery-confirm.min.css"/>
+<link rel="stylesheet" href="../../web/css/nueva.css"/>
+<style type="text/css">
+@media (min-width: 575px){
+    #miOpinion textarea{border-bottom-left-radius: 16px;}
+}
+</style>
 <?php $css = ob_get_clean() ?>
 
 
@@ -247,23 +253,29 @@
 
 
     <div class="row mb-5 d-lg-block" id="miOpinion">
-        <?php 
-        @session_start();
-        if(isset($_SESSION['login'])){
-            if($_SESSION['login']!=""){
-        ?>
-        <textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."><?php echo $params['myComment']; ?></textarea>
-        <?php 
-            }else{
-                ?><textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
-            }
-        }else{
-            ?><textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
-        }
-        ?>
-        <button type="button" id="publicar" class="col-4 offset-8 btn btn-lg btn-primary btn-block">Publicar</button>
-    </div>
+        <div class="col-12 content">
+            <div class="row">
+                <?php 
+                @session_start();
+                if(isset($_SESSION['login'])){
+                    if($_SESSION['login']!=""){
+                ?>
+                <textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."><?php echo $params['myComment']; ?></textarea>
+                <?php 
+                    }else{
+                        ?><textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
+                    }
+                }else{
+                    ?><textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
+                }
+                ?>
+            </div>
 
+            <div class="row">
+                <button type="button" id="publicar" class="col-sm-6 col-md-4 offset-sm-6 offset-md-8 btn btn-lg btn-primary btn-block">Publicar</button>
+            </div>
+        </div>
+    </div>
 
     <div class="row mt-5 d-none d-lg-block">
         <nav id="nav" class="col-12 nav nav-pills nav-fill">
