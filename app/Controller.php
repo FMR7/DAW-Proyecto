@@ -220,7 +220,7 @@ class Controller {
         if(isset($_SESSION['login'])){
             if($_SESSION['login']!=""){
             
-                if($this->checkCampos()){
+                if(checkCampos()){
                     $id     = recogeNumero($_POST["idReceta"]);
                     $nombre = ucfirst(mb_strtolower(recogeTexto($_POST["nombre"])));
                     $elabo  = recogeTexto($_POST["elaboracion"]);
@@ -268,7 +268,7 @@ class Controller {
         if(isset($_SESSION['login'])){
             if($_SESSION['login']!=""){
             
-                if($this->checkCampos()){
+                if(checkCampos()){
                     $nombre = ucfirst(mb_strtolower(recogeTexto($_POST["nombre"])));
                     $elabo  = recogeTexto($_POST["elaboracion"]);
                     $ingre  = recogeArray($_POST["ingredientes"]);
@@ -313,21 +313,30 @@ class Controller {
         if(isset($_GET['id'])){
             $model=DB::GetInstance();
             if($model->existsReceta($_GET['id'])){
-                $comments = $model->getComments($_GET['id']);
-                $myComment = null;
-                
-                //Quitar comentario propio de la lista de comentarios y cargarlo en otra variable
                 $user = $this->getSession();
-                for($i=0; $i<count($comments); $i++){
-                    if(($comments[$i]['username']==$user)&&($user!=null)){
-                        $myComment = $comments[$i]['comentario'];
-                        unset($comments[$i]);
+                
+                $myLike = null;
+                $myComment = null;
+                $comments = $model->getComments($_GET['id']);
+                
+                if((isset($user))&&(@$user!="")){
+                    //Cargar like propio
+                    $myLike = $model->getLike($_GET['id'], $user);
+                    
+
+                    //Quitar comentario propio de la lista de comentarios y cargarlo en otra variable
+                    for($i=0; $i<count($comments); $i++){
+                        if(($comments[$i]['username']==$user)&&($user!=null)){
+                            $myComment = $comments[$i]['comentario'];
+                            unset($comments[$i]);
+                        }
                     }
                 }
                 
                 $params = array (
                     'receta'   => $model->getReceta($_GET['id']),
                     'likes'    => $model->getLikes($_GET['id']),
+                    'myLike'   => $myLike,
                     'comments' => $comments,
                     'myComment'=> $myComment
                 );
@@ -373,52 +382,7 @@ class Controller {
 	}
     
     
-    private function checkCampos(){
-        $continuar = true;
-
-        if(@$_POST["nombre"]==""){
-            $continuar = false;
-        }
-
-        if(@$_POST["elaboracion"]==""){
-            $continuar = false;
-        }
-
-        if(@count(@$_POST["ingredientes"])%2!=0){
-            $continuar = false;
-        }
-
-        $ingreCorrecto = true;
-        if(isset($_POST["ingredientes"])){
-            foreach ($_POST["ingredientes"] as $cantIngre){
-            if($cantIngre==""){
-                $ingreCorrecto = false;
-            }
-        }
-            if(!$ingreCorrecto){
-                $continuar = false;
-            }
-        }
-        
-
-        if(@$_POST["dificultad"]==""){
-            $continuar = false;
-        }
-
-        if(@$_POST["tipoIngredientes"]==""){
-            $continuar = false;
-        }
-
-        if(@$_POST["tipoReceta"]==""){
-            $continuar = false;
-        }
-
-        if(@$_POST["numCom"]<1){
-            $continuar = false;
-        }
-
-        return $continuar;
-    }
+    
     
 
 }
