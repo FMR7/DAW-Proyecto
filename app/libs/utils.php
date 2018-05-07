@@ -73,4 +73,28 @@ function checkCampos(){
     return $continuar;
 }
 
+//Inicia una sesión
+function openSession($user){
+    @session_start();
+    $_SESSION['login'] = $user;
+}
+
+//Devuelve el nombre de usuario de la sesión actual
+function getSession(){
+    @session_start();
+    return @$_SESSION['login'];
+}
+
+//Cierra la sesion de forma segura y borra la cookie
+function closeSession(){
+    //Destruir sesión
+    session_start();
+    session_destroy();
+    unset($_SESSION);
+
+    //Borrar cookie sesión
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', 0, $params['path'], $params['domain'], $params['secure'], isset($params['httponly']));
+}
+
 ?>

@@ -59,7 +59,7 @@ class Controller {
                     //Envía email confirmación
                     
                     //Iniciar sesión
-                    $this->openSession($_POST["user"]);
+                    openSession($_POST["user"]);
                     
                     require __DIR__ . '/templates/inicio.php';
                 }
@@ -79,9 +79,9 @@ class Controller {
             
             $login=$model->getUser($user, $pass);
             if($login){
-                $this->openSession($user);
+                openSession($user);
             }else{
-                $this->closeSession();
+                closeSession();
             }
         }
         
@@ -90,7 +90,7 @@ class Controller {
 	
 	
 	public function logout() {
-        $this->closeSession();
+        closeSession();
         
         $model=DB::GetInstance();
         $params = array (
@@ -102,7 +102,7 @@ class Controller {
 	
 	public function perfil() {
         $model=DB::GetInstance();
-        $datos = $model->getProfile($this->getSession());
+        $datos = $model->getProfile(getSession());
         $params = array (
             'user'  => $datos['username'],
             'email' => $datos['email']
@@ -135,11 +135,11 @@ class Controller {
         
         if($changePass){
             $oldPass = hash('sha512', $_POST["passOld"]);
-            $currentPass = strtolower($model->getPass($this->getSession()));
+            $currentPass = strtolower($model->getPass(getSession()));
             if($oldPass==$currentPass){
                 //Cambiar contraseña
                 $newPass = hash('sha512', $_POST["pass1"]);
-                $cambiada = $model->setPass($this->getSession(), $newPass);
+                $cambiada = $model->setPass(getSession(), $newPass);
                 if($cambiada){
                     $params['cambiada'] = "si";
                 }
@@ -156,7 +156,7 @@ class Controller {
     public function misRecetas(){
         $model=DB::GetInstance();
         $params = array (
-            'recetas' => $model->getRecetasUser($this->getSession())
+            'recetas' => $model->getRecetasUser(getSession())
         );
         
         require __DIR__ . '/templates/misRecetas.php';
@@ -170,7 +170,7 @@ class Controller {
                 $id = recogeNumero($_POST["idReceta"]);
 
                 $model=DB::GetInstance();
-                $recetaPropia = $model->isFromUser($id, $this->getSession());
+                $recetaPropia = $model->isFromUser($id, getSession());
                 if($recetaPropia){
                     $borrada = $model->delReceta($id);
                     if($borrada){
@@ -199,7 +199,7 @@ class Controller {
     
     public function editar(){
         $model=DB::GetInstance();
-        $recetaPropia = $model->isFromUser(@$_GET['id'], $this->getSession());
+        $recetaPropia = $model->isFromUser(@$_GET['id'], getSession());
         if($recetaPropia){
             $params = array (
                 'idReceta'     => @$_GET['id'],
@@ -234,7 +234,7 @@ class Controller {
                     $model=DB::GetInstance();
                     
                     //Comprobar si la receta es del usuario
-                    if($model->isFromUser($id, $this->getSession())){
+                    if($model->isFromUser($id, getSession())){
                         $updated = $model->updateReceta($id, $nombre, $elabo, $ingre, $diff, $tIngre, $numCom);
                         if($updated){
                             //Quitar tipos a receta
@@ -286,7 +286,7 @@ class Controller {
                         $model->setRecetaTipos($idReceta, $tRece);
 
                         //Asignar receta a usuario
-                        $model->setRecetaUser($this->getSession(), $idReceta);
+                        $model->setRecetaUser(getSession(), $idReceta);
 
                         //Redirecciona a la nueva receta
                         $params = array (
@@ -313,7 +313,7 @@ class Controller {
         if(isset($_GET['id'])){
             $model=DB::GetInstance();
             if($model->existsReceta($_GET['id'])){
-                $user = $this->getSession();
+                $user = getSession();
                 
                 $myLike = null;
                 $myComment = null;
@@ -362,16 +362,16 @@ class Controller {
                     if(isset($_POST['like'])){
                         switch($_POST['like']){
                         case 2:
-                            $inserted = $model->setLike(@$_POST['idReceta'], $this->getSession(), 2);
+                            $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 2);
                             break;
                         case 1:
-                            $inserted = $model->setLike(@$_POST['idReceta'], $this->getSession(), 1);
+                            $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 1);
                             break;
                         default:
-                            $inserted = $model->setLike(@$_POST['idReceta'], $this->getSession(), 0);
+                            $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 0);
                     }
                     }else{
-                        $inserted = $model->setLike(@$_POST['idReceta'], $this->getSession(), 0);
+                        $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 0);
                     }
                     
                     if($inserted){
@@ -395,36 +395,5 @@ class Controller {
         require __DIR__ . '/templates/404.php';
     }
     
-    
-    //Inicia una sesión
-	public function openSession($user){
-        @session_start();
-        $_SESSION['login'] = $user;
-	}
-	
-    
-    //Devuelve el nombre de usuario de la sesión actual
-    public function getSession(){
-        @session_start();
-        return @$_SESSION['login'];
-	}
-    
-	
-    //Cierra la sesion de forma segura y borra la cookie
-	public function closeSession(){
-		//Destruir sesión
-		session_start();
-		session_destroy();
-		unset($_SESSION);
-		
-		//Borrar cookie sesión
-		$params = session_get_cookie_params();
-		setcookie(session_name(), '', 0, $params['path'], $params['domain'], $params['secure'], isset($params['httponly']));
-	}
-    
-    
-    
-    
-
 }
 ?>
