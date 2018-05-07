@@ -91,16 +91,16 @@ echo "<br><br>getTiposReceta<br>";
 $db->GetInstance();
 print_r($db->getTiposReceta(1));
 
-
+/*
 echo "<br><br>setLike<br>";
 $db->GetInstance();
 print_r($db->setLike(1, "fernando", 1));
-
-
+*/
+/*
 echo "<br><br>setComment<br>";
 $db->GetInstance();
 print_r($db->setComment(1, "fernando", "Muy buena"));
-
+*/
 
 echo "<br><br>getComments<br>";
 $db->GetInstance();
@@ -117,6 +117,11 @@ for($i=0; $i<count($comments); $i++){
 }
 print_r($comments);
 
+
+echo "<br><br>getLike<br>";
+$db->GetInstance();
+$like = $db->getLike(1, "fernando");
+print_r($like);
 
 
 

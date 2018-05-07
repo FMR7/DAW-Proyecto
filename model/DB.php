@@ -208,6 +208,21 @@ class DB extends PDO {
         }
     }
     
+    public function getLike($idReceta, $user){
+        try{
+            $query = "SELECT meGusta FROM opiniones WHERE idReceta=:idReceta AND username=:user";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->bindParam(':user', $user);
+            $stmt->execute();
+            $rs = $stmt->fetchAll();
+            
+            return $rs[0][0];
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
     public function setComment($idReceta, $user, $comment){
         try{
             $query = "INSERT INTO opiniones(idReceta, username, comentario) VALUES(:idReceta, :user, :comment) ON DUPLICATE KEY UPDATE comentario=:comment";

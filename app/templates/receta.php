@@ -15,6 +15,24 @@
         likesUpdate();
         
         $(".separador").last().hide();
+        
+        <?php 
+        $myLike = $params['myLike'];
+        if($myLike!=null){
+            switch($myLike){
+                case 1:
+                    ?>
+                    $(".oi-thumb-up").toggleClass("liked");
+                    <?php 
+                    break;
+                case 0:
+                    ?>
+                    $(".oi-thumb-down").toggleClass("disliked");
+                    <?php 
+                    break;
+            }
+        }
+        ?>
     });
     
     function evtLikes(){
