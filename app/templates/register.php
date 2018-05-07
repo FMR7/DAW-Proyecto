@@ -29,7 +29,7 @@
     $("#contenido").submit(function(evt){
         //Contraseña mínimo 6 chars
         
-        if(!($("#pass1").val()===$("#pass2").val())){
+        if(!($("#pass").val()===$("#pass2").val())){
             $("#avisoPass").show();
             evt.preventDefault();
         }
