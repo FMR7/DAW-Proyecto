@@ -475,6 +475,19 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
+    
+    public function getFavs($user){
+        try{
+            $query = "select r.idReceta, r.nombre, d.dificultad, ti.tipoIngrediente, r.numComensales from recetas r JOIN tipoIngredientes ti ON r.tipoIngredientes=ti.idTipoIngrediente JOIN tipodificultades d ON r.dificultad=d.idDificultad JOIN opiniones o ON o.idReceta=r.idReceta WHERE o.meGusta=2 AND o.username=:username";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':username', $user);
+            $stmt->execute();
+
+            return $stmt->fetchAll();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
     //PERFIL FIN
     
     

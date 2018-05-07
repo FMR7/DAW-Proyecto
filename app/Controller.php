@@ -101,11 +101,13 @@ class Controller {
 	
 	
 	public function perfil() {
-        $model=DB::GetInstance();
+        $model =DB::GetInstance();
         $datos = $model->getProfile(getSession());
+        $favs  = $model->getFavs(getSession());
         $params = array (
-            'user'  => $datos['username'],
-            'email' => $datos['email']
+            'user'   => $datos['username'],
+            'email'  => $datos['email'],
+            'recetas'=> $favs
         );
         
         
