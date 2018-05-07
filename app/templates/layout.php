@@ -8,15 +8,15 @@ $server=Config::$serverUrl;
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="stylesheet" type="text/css" href="../../web/bootstrap-4.1.0/css/bootstrap.min.css"/>
-        <link href="../../web/images/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../web/bootstrap-4.1.0/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../web/images/open-iconic/font/css/open-iconic-bootstrap.css">
 
         <?php 
         echo @$css;
         ?>
 
-        <link href="../../web/css/general.css" rel="stylesheet">
-        <link href="../../web/css/flechaVolver.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../web/css/general.css" >
+        <link rel="stylesheet" href="../../web/css/flechaVolver.css">
 
         <style>
             #menu{
@@ -120,7 +120,7 @@ $server=Config::$serverUrl;
                 Proyecto de Grado Superior en Desarrollo de Aplicaciones Web<br>
                 Fernando Marín Ramis
             </div>
-            <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+            <script type="text/javascript" src="../../web/js/jquery-3.3.1.min.js"></script>
             <script type="text/javascript" src="../../web/js/popper.min.js"></script>
             <script type="text/javascript" src="../../web/bootstrap-4.1.0/js/bootstrap.js"></script>
 

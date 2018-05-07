@@ -1,6 +1,6 @@
 <!--EL CSS VA AQUÍ-->
 <?php ob_start() ?>
-<link rel="stylesheet" href="../../web/css/perfil.css" type="text/css"/>
+<link rel="stylesheet" href="../../web/css/perfil.css"/>
 <?php $css = ob_get_clean() ?>
 
 <!--EL JS VA AQUÍ-->

@@ -1,10 +1,10 @@
 <!--EL CSS VA AQUÍ-->
 <?php ob_start() ?>
 <!--COMUN CON inicio-->
-<link rel="stylesheet" href="../../web/css/bootstrap-multiselect.css" type="text/css"/>
-<link rel="stylesheet" href="../../web/css/multiSelect.css" type="text/css"/>
-<link rel="stylesheet" href="../../web/css/nueva.css" type="text/css"/>
-<link rel="stylesheet" href="../../web/css/slider.css" type="text/css"/>
+<link rel="stylesheet" href="../../web/css/bootstrap-multiselect.css"/>
+<link rel="stylesheet" href="../../web/css/multiSelect.css"/>
+<link rel="stylesheet" href="../../web/css/nueva.css"/>
+<link rel="stylesheet" href="../../web/css/slider.css"/>
 <style>
     .cantidad{
         padding-left: 0;
