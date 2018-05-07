@@ -352,7 +352,7 @@ class DB extends PDO {
     
     
     //BORRAR RECETA
-    public function delReceta($user, $idReceta){
+    public function delReceta($idReceta){
         try{
             $query = "DELETE FROM recetas WHERE idReceta=:idReceta";
             $stmt = $this->prepare($query);

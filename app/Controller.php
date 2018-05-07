@@ -162,6 +162,22 @@ class Controller {
         require __DIR__ . '/templates/misRecetas.php';
     }
     
+    
+    public function borrarReceta(){
+        $id = recogeNumero($_POST["idReceta"]);
+        
+        $model=DB::GetInstance();
+        $recetaPropia = $model->isFromUser($id, $this->getSession());
+        if($recetaPropia){
+            $borrada = $model->delReceta($id);
+            if($borrada){
+                echo true;
+            }else{
+                echo false;
+            }
+        }
+    }
+    
 	
 	public function nueva() {
         $model=DB::GetInstance();
