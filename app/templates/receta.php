@@ -150,10 +150,14 @@
         var likes = parseInt($("#likes").text(), 10);
         var dislikes = parseInt($("#dislikes").text(), 10);
         var total = likes + dislikes;
-
-        var likesBar = Math.round(100*likes/total);
-        var dislikesBar = Math.round(100*dislikes/total);
-
+        
+        var likesBar = 0;
+        var dislikesBar = 0;
+        
+        if((likes!=0)||(dislikes!=0)){
+            likesBar = Math.round(100*likes/total);
+            dislikesBar = Math.round(100*dislikes/total);
+        }
 
         $("#likesBar").width(likesBar+"%");
         $("#likesBar").attr("aria-valuenow", likesBar);
