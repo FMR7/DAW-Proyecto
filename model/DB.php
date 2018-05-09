@@ -535,6 +535,50 @@ class DB extends PDO {
     //REGISTER FIN
 
     
+    //CONFIRMAR EMAIL
+    public function setTokenEmail($user, $token){
+        try{
+            $query = "INSERT INTO confirmemail (username, tokenEmail) VALUES (:user, :token)";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':token', $token);
+
+            return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function activarCuenta($username){
+        try{
+            $query = "UPDATE usuarios SET emailConfirmed=1 WHERE username=:username";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':username', $username);
+
+            return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function getUserFromToken($token){
+        try{
+            $query = "SELECT u.username FROM usuarios u JOIN confirmEmail ce ON u.username=ce.username WHERE ce.tokenEmail=:token";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':token', $token);
+            $stmt->execute();
+            
+            $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return $rs;
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    //CONFIRMAR EMAIL FIN
+    
     public function existsReceta($idReceta){
         try{
             $query = "SELECT nombre FROM recetas WHERE idReceta=:idReceta";

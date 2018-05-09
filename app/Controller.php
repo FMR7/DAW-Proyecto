@@ -56,10 +56,14 @@ class Controller {
                 $insertado = $model->setUser($_POST["user"], $_POST["email"], hash('sha512', $_POST["pass1"]));
                 
                 if($insertado){
-                    //Envía email confirmación
-                    
                     //Iniciar sesión
                     openSession($_POST["user"]);
+                    
+                    //Inserta un token para la cofirmación del email
+                    $tokenInsertado = $this->setTokenEmail(getSession());
+                    if($tokenInsertado){ //Envía email confirmación
+                        
+                    }
                     
                     require __DIR__ . '/templates/inicio.php';
                 }
@@ -431,5 +435,21 @@ class Controller {
         require __DIR__ . '/templates/404.php';
     }
     
+    
+    public function setTokenEmail($user){
+        $token = hash('sha512', uniqid(rand(), TRUE));
+        $model=DB::GetInstance();
+        return $model->setTokenEmail($user, $token);
+    }
+    
+    
+    public function confirmarCuenta(){
+        $token = strip_tags($_GET['token']);
+        if(isToken($token)){ //Activar cuenta
+            $activada=false;
+            $model=DB::GetInstance();
+            $activada = $model->activarCuenta($token);
+        }
+    }
 }
 ?>
