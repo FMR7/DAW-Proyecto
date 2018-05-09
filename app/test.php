@@ -120,7 +120,7 @@ print_r($comments);
 
 echo "<br><br>getLike<br>";
 $db->GetInstance();
-$like = $db->getLike(1, "fernando");
+$like = $db->getLike(28, "fernando");
 print_r($like);
 
 

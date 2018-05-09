@@ -217,7 +217,10 @@ class DB extends PDO {
             $stmt->execute();
             $rs = $stmt->fetchAll();
             
-            return $rs[0][0];
+            if(count($rs)==1){
+                return $rs[0][0];
+            }
+            return false;
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
