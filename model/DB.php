@@ -433,7 +433,7 @@ class DB extends PDO {
     //PERFIL
     public function getProfile($user){
         try{
-            $query = "SELECT username, email FROM usuarios WHERE username=:user";
+            $query = "SELECT username, email, emailConfirmed FROM usuarios WHERE username=:user";
             $stmt = $this->prepare($query);
             $stmt->bindParam(':user', $user);
             $stmt->execute();

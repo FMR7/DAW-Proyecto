@@ -105,9 +105,10 @@ class Controller {
         $datos = $model->getProfile(getSession());
         $favs  = $model->getFavs(getSession());
         $params = array (
-            'user'   => $datos['username'],
-            'email'  => $datos['email'],
-            'recetas'=> $favs
+            'user'           => $datos['username'],
+            'email'          => $datos['email'],
+            'emailConfirmed' => $datos['emailConfirmed'],
+            'recetas'        => $favs
         );
         
         

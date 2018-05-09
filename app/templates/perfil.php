@@ -101,7 +101,16 @@
 <?php 
 @session_start();
 if(@$_SESSION['login']!=""){
+    if(@$params['emailConfirmed']==0){
+        ?>
+        <div class="col-12 mb-3 bg-warning rounded text-justify">
+            Aún no has confirmado tu dirección de correo. Si no has recibido el correo de cofirmación haz click <u><a href="#">aquí</a></u>.
+        </div>
+        <?php 
+    }
 ?>
+
+
 <div id="contenido" class="col-12 content">
     <div class="row border rounded bb-0">
         <nav id="nav" class="col-12 nav nav-pills nav-fill px-0">
