@@ -330,6 +330,7 @@ class Controller {
                     for($i=0; $i<count($comments); $i++){
                         if(($comments[$i]['username']==$user)&&($user!=null)){
                             $myComment = $comments[$i]['comentario'];
+                            $myComment = str_replace('<br />', '', $myComment);;
                             unset($comments[$i]);
                         }
                     }
@@ -363,15 +364,15 @@ class Controller {
 
                     if(isset($_POST['like'])){
                         switch($_POST['like']){
-                        case 2:
-                            $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 2);
-                            break;
-                        case 1:
-                            $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 1);
-                            break;
-                        default:
-                            $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 0);
-                    }
+                            case 2:
+                                $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 2);
+                                break;
+                            case 1:
+                                $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 1);
+                                break;
+                            default:
+                                $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 0);
+                        }
                     }else{
                         $inserted = $model->setLike(@$_POST['idReceta'], getSession(), 0);
                     }
@@ -388,11 +389,43 @@ class Controller {
                 echo "<script>window.location.replace(\"inicio\");</script>";
             }
         }else{//Sin sesión
-            echo 0;
+            echo "<script>window.location.replace(\"inicio\");</script>";
         }
     }
     
-	
+	public function setComment(){
+        @session_start();
+        if(isset($_SESSION['login'])){
+            if($_SESSION['login']!=""){
+                if((isset($_POST['idReceta']))&&(isset($_POST["comment"]))){
+                    $model=DB::GetInstance();
+                    $inserted=false;
+                    
+                    $id = recogeNumero($_POST["idReceta"]);
+                    
+                    $comment = recogeComentario($_POST["comment"]);
+
+                    
+                    if(isset($_POST['comment'])){
+                        $inserted = $model->setComment($id, getSession(), $comment);
+                    }
+                    
+                    if($inserted){
+                        echo true;
+                    }else{
+                        echo false;
+                    }
+                }else{//Llamada forzada
+                    echo "<script>window.location.replace(\"inicio\");</script>";
+                }
+            }else{//Sin sesión
+                echo "<script>window.location.replace(\"inicio\");</script>";
+            }
+        }else{//Sin sesión
+            echo "<script>window.location.replace(\"inicio\");</script>";
+        }
+    }
+    
     public function notFound(){
         require __DIR__ . '/templates/404.php';
     }

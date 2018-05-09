@@ -8,6 +8,27 @@ function recogeNumero($campo){
     return preg_replace("/[^0-9]/", "", strip_tags($campo));
 }
 
+function recogeComentario($comment){
+    //Quita etiquetas HTML y PHP
+    $comment = strip_tags($comment);
+
+    //Quita los saltos de linea extra dejando solo uno
+    $comment = preg_replace("/[\r\n]+/", "\n", $comment);
+
+    //Deja solo un espacio si hay dos o más seguidos y quita las tabulaciones
+    $comment = preg_replace(array('/\s{2,}/', '/[\t]/'), ' ', $comment);
+
+    //Quita los espacios del principio y del final
+    $comment = nl2br(trim($comment, " "));
+
+    //Quita los saltos de linea en blanco del final
+    $comment = rtrim($comment);
+
+    //Limitar comentario a 280
+    $comment = mb_substr($comment,0,280);
+    
+    return $comment;
+}
 
 function recogetipoRece($campo){
     return preg_replace("/[^0-9#]/", "", strip_tags($campo));

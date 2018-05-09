@@ -19,8 +19,10 @@
         <?php 
         if((isset($_SESSION['login']))&&(@$_SESSION['login']!="")){
             echo "evtLikes();";
+            echo "evtComment();";
         }else{
             echo "evtLikesNoSession();";
+            echo "evtCommentNoSession();";
         }
         ?>
         
@@ -112,6 +114,40 @@
             likesUpdate();
         });
     }
+    
+    function evtCommentNoSession(){
+        //Click Publicar
+        $("#publicar").click(function() {
+            $.confirm({
+                columnClass: 'medium',
+                type: 'orange',
+                title: 'Identifícate',
+                content: 'Necesitas estar identificado para poder dejar un comentario',
+                buttons: {
+                    Identificarme: {
+                        btnClass: 'btn-blue',
+                        action:  function () {
+                            window.location.replace("../login");
+                        }
+                    },
+                    cancelar: function () {
+
+                    }
+                }
+            });
+        });
+    }
+    function evtComment(){
+        //Click Publicar
+        $("#publicar").click(function() {
+            var comment = $("#comentario").val();
+            console.log(comment);
+            setComment(comment);
+        });
+    }
+    
+    
+    
     function evtReceta(){
         evtCrea("#goIngre");
         evtCrea("#goElabo");
@@ -176,6 +212,19 @@
         $.ajax({
             data:  params,
             url:   '../like',
+            type:  'post'
+        });
+    }
+    
+    function setComment(comment){
+        var params = {
+            "idReceta": <?php echo $params['idReceta'] ?>,
+            "comment" : comment
+        }
+        
+        $.ajax({
+            data:  params,
+            url:   '../comment',
             type:  'post'
         });
     }
@@ -264,13 +313,13 @@
                 if(isset($_SESSION['login'])){
                     if($_SESSION['login']!=""){
                 ?>
-                <textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."><?php echo $params['myComment']; ?></textarea>
+                <textarea class="col-12 text-justify bt-0" id="comentario" rows="5" placeholder="Escribe aquí tu comentario."><?php echo $params['myComment']; ?></textarea>
                 <?php 
                     }else{
-                        ?><textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
+                        ?><textarea class="col-12 text-justify bt-0" id="comentario" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
                     }
                 }else{
-                    ?><textarea class="col-12 text-justify bt-0" name="miOpinion" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
+                    ?><textarea class="col-12 text-justify bt-0" id="comentario" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
                 }
                 ?>
             </div>
