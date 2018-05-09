@@ -165,7 +165,7 @@
     
     function setLike(like){
         var params = {
-            "idReceta": 1,
+            "idReceta": <?php echo $params['idReceta'] ?>,
             "like" : like
         }
         
