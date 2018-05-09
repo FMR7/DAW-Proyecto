@@ -4,9 +4,13 @@
 <link rel="stylesheet" href="../../web/css/jquery-confirm.min.css"/>
 <link rel="stylesheet" href="../../web/css/nueva.css"/>
 <style type="text/css">
-@media (min-width: 575px){
-    #miOpinion textarea{border-bottom-left-radius: 16px;}
-}
+    @media (min-width: 575px){
+        /*#miOpinion textarea{border-bottom-left-radius: 16px;}*/
+        #miOpinion .bloque{border-bottom-left-radius: 16px;}
+        
+    }
+    #miOpinion textarea{border: 0;}
+    #miOpinion .bloque{border: 1px solid rgb(169, 169, 169);}
 </style>
 <?php $css = ob_get_clean() ?>
 
@@ -50,6 +54,23 @@
             }
         }
         ?>
+        
+        
+        
+        
+        $("#comentario").keyup(function(){
+            var chars = $(this).val().length;
+            if(chars>280){
+                $("#chars").css("color", "#dc3545");
+                $("#publicar").prop('disabled', true);
+            }else{
+                $("#chars").css("color", "");
+                $("#publicar").prop('disabled', false);
+            }
+            $("#chars").text(chars+"/280");
+        });
+        
+        $("#comentario").trigger("keyup");
     });
     
     function evtLikesNoSession(){
@@ -117,7 +138,7 @@
     
     function evtCommentNoSession(){
         //Click Publicar
-        $("#publicar").click(function() {
+        $("#publicar").click(function(){
             $.confirm({
                 columnClass: 'medium',
                 type: 'orange',
@@ -139,7 +160,7 @@
     }
     function evtComment(){
         //Click Publicar
-        $("#publicar").click(function() {
+        $("#publicar").click(function(){
             var comment = $("#comentario").val();
             console.log(comment);
             setComment(comment);
@@ -307,14 +328,14 @@
 
     <div class="row mb-5 d-lg-block" id="miOpinion">
         <div class="col-12 content">
-            <div class="row">
+            <div class="row bloque">
                 <?php 
                 @session_start();
                 if(isset($_SESSION['login'])){
                     if($_SESSION['login']!=""){
-                ?>
-                <textarea class="col-12 text-justify bt-0" id="comentario" rows="5" placeholder="Escribe aquí tu comentario."><?php echo $params['myComment']; ?></textarea>
-                <?php 
+                        ?>
+                        <textarea class="col-12 text-justify bt-0" id="comentario" rows="5" placeholder="Escribe aquí tu comentario."><?php echo $params['myComment']; ?></textarea>
+                        <?php 
                     }else{
                         ?><textarea class="col-12 text-justify bt-0" id="comentario" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
                     }
@@ -322,10 +343,23 @@
                     ?><textarea class="col-12 text-justify bt-0" id="comentario" rows="5" placeholder="Escribe aquí tu comentario."></textarea><?php
                 }
                 ?>
+                <div id="chars" class="col-12 text-right">0/280</div>
             </div>
+            
+            
 
             <div class="row">
-                <button type="button" id="publicar" class="col-sm-6 col-md-4 offset-sm-6 offset-md-8 btn btn-lg btn-primary btn-block">Publicar</button>
+                <?php 
+                if(mb_strlen($params['myComment'])>0){
+                    ?>
+                    <button type="button" id="publicar" class="col-sm-6 col-md-4 offset-sm-6 offset-md-8 btn btn-lg btn-primary btn-block">Actualizar</button>
+                    <?php 
+                }else{
+                    ?>
+                    <button type="button" id="publicar" class="col-sm-6 col-md-4 offset-sm-6 offset-md-8 btn btn-lg btn-primary btn-block">Publicar</button>
+                    <?php 
+                }
+                ?>
             </div>
         </div>
     </div>

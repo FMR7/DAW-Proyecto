@@ -28,6 +28,7 @@ $server=Config::$serverUrl;
                 height: 80px;
                 border-top: 1px solid rgb(169, 169, 169);
             }
+            textarea{resize: none;}
         </style>
 
         <title>Cocina y Comparte</title>
