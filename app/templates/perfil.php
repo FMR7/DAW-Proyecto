@@ -11,6 +11,7 @@
         }
     }
     #submit{margin-bottom: 0 !important;}
+    #tabla{white-space: nowrap;}
 </style>
 <?php $css = ob_get_clean() ?>
 
@@ -163,7 +164,7 @@ if(@$_SESSION['login']!=""){
                     <tr>
                         <th class="w-100 nombre">Nombre</th>
                         <th class="d-none d-sm-table-cell dif">Dificultad</th>
-                        <th class="d-sm-none dif">Dif.</th>
+                        <th class="d-sm-none dif text-center">Dif.</th>
                         <th class="d-none d-sm-table-cell ing">Ingredientes</th>
                         <th class="d-sm-none ing">Ing.</th>
                         <th class="d-none d-sm-table-cell com">Comensales</th>
