@@ -444,11 +444,26 @@ class Controller {
     
     
     public function confirmarCuenta(){
-        $token = strip_tags($_GET['token']);
-        if(isToken($token)){ //Activar cuenta
-            $activada=false;
+        if(isset($_GET['id'])){
+            $token = strip_tags($_GET['id']);
             $model=DB::GetInstance();
-            $activada = $model->activarCuenta($token);
+            if($model->isToken($token)){ //Activar cuenta
+                $activada=false;
+                $username = $model->getUserFromToken($token);
+                $activada = $model->activarCuenta($username);
+                if($activada){
+                    echo "Activada";
+                    
+                    //Borrar token
+                    $model->deleteToken($username);
+                }else{
+                    echo "No activada";
+                }
+            }else{
+                echo "No es un token válido";
+            }
+        }else{
+            echo "Se debe especificar un token";
         }
     }
 }

@@ -570,9 +570,38 @@ class DB extends PDO {
             
             $rs = $stmt->fetchAll();
             if(count($rs)==1){
-                return $rs;
+                return $rs[0]['username'];
             }
             return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function isToken($token){
+        try{
+            $query = "SELECT username FROM confirmEmail WHERE tokenEmail=:token";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':token', $token);
+            $stmt->execute();
+            
+            $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return true;
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function deleteToken($username){
+        try{
+            $query = "DELETE FROM confirmEmail WHERE username=:username";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':username', $username);
+            
+            return $stmt->execute();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
         }
