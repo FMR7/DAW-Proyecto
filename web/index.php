@@ -7,6 +7,7 @@ $map = array(
     'login'      => array('controller' =>'Controller', 'action' =>'login'),
     'logout'     => array('controller' =>'Controller', 'action' =>'logout'),
     'register'   => array('controller' =>'Controller', 'action' =>'register'),
+    'recuperar'  => array('controller' =>'Controller', 'action' =>'recover'),
     'perfil'     => array('controller' =>'Controller', 'action' =>'perfil'),
     'confirmar'  => array('controller' =>'Controller', 'action' =>'confirmarCuenta'),
     'recetas'    => array('controller' =>'Controller', 'action' =>'misRecetas'),

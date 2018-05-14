@@ -620,6 +620,24 @@ class DB extends PDO {
             return $stmt->execute();
         }catch(PDOException $e){
             echo "<p>Error: ".$e->getMessage();
+            echo "!!!".$user."---".$token;
+        }
+    }
+    
+    public function getUserFromEmail($email){
+        try{
+            $query = "SELECT username FROM usuarios WHERE email=:email";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+
+            $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return $rs[0]['username'];
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
         }
     }
     

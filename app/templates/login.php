@@ -39,6 +39,10 @@ if(isset($_SESSION['login'])){//Recibe datos
     <button id="submit" type="submit" class="btn btn-lg btn-primary btn-block">Acceder</button>
     <div id="aviso" class="text-center mt-2" style="display: none;">Usuario o contraseña incorrectos</div>
     <div class="text-center mt-2">
+        Haz click 
+        <a href="recuperar">aquí</a> para reestablecer tu contraseña
+    </div>
+    <div class="text-center mt-2">
         ¿Aún no tienes cuenta? 
         <a href="register">Regístrate</a>
     </div>

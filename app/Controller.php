@@ -103,6 +103,38 @@ class Controller {
 	    require __DIR__ . '/templates/inicio.php';
 	}
 	
+    
+    public function recover(){
+        $model=DB::GetInstance();
+        
+        $changePass = true;
+        if(!isset($_POST["email"])){
+            $changePass = false;
+        }else{
+            if($_POST["email"]==""){
+                $changePass = false;
+            }else{
+                $existsEmail = $model->existsEmail($_POST["email"]);
+                if(!$existsEmail){//El email no existe
+                    $params['errorMail'] = 1;
+                    $changePass = false;
+                }
+            }
+        }
+        
+        if($changePass){
+            //Inserta un token para la recuperación de la cuenta
+            $tokenInsertado = $this->setTokenForget($_POST["email"]);
+            if($tokenInsertado){ //Envía email reestablecimiento cuenta
+                //Enviar mail
+                
+            }
+            
+            $params['enviado'] = "si";
+        }
+        
+        require __DIR__ . '/templates/recover.php';
+    }
 	
 	public function perfil() {
         $model =DB::GetInstance();
@@ -440,6 +472,13 @@ class Controller {
         $token = hash('sha512', uniqid(rand(), TRUE));
         $model=DB::GetInstance();
         return $model->setTokenEmail($user, $token);
+    }
+    
+    public function setTokenForget($email){
+        $token = hash('sha512', uniqid(rand(), TRUE));
+        $model=DB::GetInstance();
+        $user = $model->getUserFromEmail($email);
+        return $model->setTokenForget($user, $token);
     }
     
     
