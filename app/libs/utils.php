@@ -109,7 +109,7 @@ function getSession(){
 //Cierra la sesion de forma segura y borra la cookie
 function closeSession(){
     //Destruir sesión
-    session_start();
+    @session_start();
     session_destroy();
     unset($_SESSION);
 

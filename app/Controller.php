@@ -491,19 +491,54 @@ class Controller {
                 $username = $model->getUserFromTokenEmail($token);
                 $activada = $model->activarCuenta($username);
                 if($activada){
-                    echo "Activada";
-                    
-                    //Borrar token
                     $model->deleteTokenEmail($username);
-                }else{
-                    echo "No activada";
                 }
             }else{
-                echo "No es un token válido";
+                echo "<script>window.location.replace(\"../inicio\");</script>";
             }
         }else{
-            echo "Se debe especificar un token";
+            echo "<script>window.location.replace(\"inicio\");</script>";
         }
     }
+    
+    
+    public function cambiarPass(){
+        $model=DB::GetInstance();
+        
+        @session_start();
+        if(isset($_SESSION['login'])){
+            if($_SESSION['login']!=""){
+                if((isset($_POST["pass1"]))&&(isset($_POST["pass2"]))){
+                    if(($_POST["pass1"]!="")&&($_POST["pass2"]!="")){
+                        if($_POST["pass1"]==$_POST["pass2"]){
+                            $newPass = hash('sha512', $_POST["pass1"]);
+                            $cambiada = $model->setPass(getSession(), $newPass);
+                            if($cambiada){
+                                $model->deleteTokenForget(getSession());
+                                closeSession();
+                                echo "<script>window.location.replace(\"../login\");</script>";
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            if(isset($_GET['id'])){
+                $token = strip_tags($_GET['id']);
+                if($model->isTokenForget($token)){ //Reestablecer contraseña
+                    $username = $model->getUserFromTokenForget($token);
+                    openSession($username);
+                    $params['token'] = $_GET['id'];
+                    require __DIR__ . '/templates/changePass.php';
+                }else{
+                    echo "<script>window.location.replace(\"../inicio\");</script>";
+                }
+            }else{
+                echo "<script>window.location.replace(\"inicio\");</script>";
+            }
+        }
+   }
+                           
+                           
 }
 ?>
