@@ -447,15 +447,15 @@ class Controller {
         if(isset($_GET['id'])){
             $token = strip_tags($_GET['id']);
             $model=DB::GetInstance();
-            if($model->isToken($token)){ //Activar cuenta
+            if($model->isTokenEmail($token)){ //Activar cuenta
                 $activada=false;
-                $username = $model->getUserFromToken($token);
+                $username = $model->getUserFromTokenEmail($token);
                 $activada = $model->activarCuenta($username);
                 if($activada){
                     echo "Activada";
                     
                     //Borrar token
-                    $model->deleteToken($username);
+                    $model->deleteTokenEmail($username);
                 }else{
                     echo "No activada";
                 }

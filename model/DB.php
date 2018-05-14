@@ -538,7 +538,7 @@ class DB extends PDO {
     //CONFIRMAR EMAIL
     public function setTokenEmail($user, $token){
         try{
-            $query = "INSERT INTO confirmemail (username, tokenEmail) VALUES (:user, :token)";
+            $query = "INSERT INTO confirmemail (username, tokenEmail) VALUES (:user, :token) ON DUPLICATE KEY UPDATE tokenEmail=:token";
             $stmt = $this->prepare($query);
             $stmt->bindParam(':user', $user);
             $stmt->bindParam(':token', $token);
@@ -561,7 +561,7 @@ class DB extends PDO {
         }
     }
     
-    public function getUserFromToken($token){
+    public function getUserFromTokenEmail($token){
         try{
             $query = "SELECT u.username FROM usuarios u JOIN confirmEmail ce ON u.username=ce.username WHERE ce.tokenEmail=:token";
             $stmt = $this->prepare($query);
@@ -578,7 +578,7 @@ class DB extends PDO {
         }
     }
     
-    public function isToken($token){
+    public function isTokenEmail($token){
         try{
             $query = "SELECT username FROM confirmEmail WHERE tokenEmail=:token";
             $stmt = $this->prepare($query);
@@ -595,7 +595,7 @@ class DB extends PDO {
         }
     }
     
-    public function deleteToken($username){
+    public function deleteTokenEmail($username){
         try{
             $query = "DELETE FROM confirmEmail WHERE username=:username";
             $stmt = $this->prepare($query);
@@ -607,6 +607,69 @@ class DB extends PDO {
         }
     }
     //CONFIRMAR EMAIL FIN
+    
+    
+    //RECUPERAR CONTRASEÑA
+    public function setTokenForget($user, $token){
+        try{
+            $query = "INSERT INTO forgetPass (username, tokenPass) VALUES (:user, :token) ON DUPLICATE KEY UPDATE tokenPass=:token";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':token', $token);
+
+            return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function getUserFromTokenForget($token){
+        try{
+            $query = "SELECT u.username FROM usuarios u JOIN forgetPass fp ON u.username=fp.username WHERE fp.tokenPass=:token";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':token', $token);
+            $stmt->execute();
+            
+            $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return $rs[0]['username'];
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function isTokenForget($token){
+        try{
+            $query = "SELECT username FROM forgetPass WHERE tokenPass=:token";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':token', $token);
+            $stmt->execute();
+            
+            $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return true;
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function deleteTokenForget($username){
+        try{
+            $query = "DELETE FROM forgetPass WHERE username=:username";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':username', $username);
+            
+            return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    //RECUPERAR CONTRASEÑA FIN
+    
     
     public function existsReceta($idReceta){
         try{
