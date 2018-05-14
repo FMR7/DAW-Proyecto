@@ -2,6 +2,7 @@
 <?php ob_start() ?>
 <link rel="stylesheet" href="../../web/css/perfil.css"/>
 <link rel="stylesheet" href="../../web/css/inicio.css"/>
+<link rel="stylesheet" href="../../web/css/jquery-confirm.min.css"/>
 <style type="text/css">
     @media (min-width: 992px){
         #perfil{padding-right: 25px !important;}
@@ -17,6 +18,7 @@
 
 <!--EL JS VA AQUÍ-->
 <?php ob_start() ?>
+<script type="text/javascript" src="../../web/js/jquery-confirm.min.js"></script>
 <script type="text/javascript" src="../../web/js/general.js"></script>
 <?php 
     if(isset($params['errorPassOld'])){
@@ -84,8 +86,82 @@
                 evt.preventDefault();
             }
         });
+        
+        $("#borrarUsuario").click(function(){
+            msgBorrarReceta();
+        });
     }
     
+    function msgBorrarReceta(){
+        $.confirm({
+            columnClass: 'medium',
+            type: 'blue',
+            title: 'Borrar cuenta',
+            content: 'Introduzca su contraseña para borrar la cuenta<br>'+
+            '<form action="" class="formName mt-2">' +
+            '<div class="form-group">' +
+            '<input type="password" placeholder="Contraseña" class="pass form-control" required />' +
+            '</div>' +
+            '</form>',
+            icon: 'fa fa-question-circle',
+            animation: 'scale',
+            closeAnimation: 'scale',
+            opacity: 0.5,
+            buttons: {
+                'confirm': {
+                    text: 'Borrar',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        var pass = this.$content.find('.pass').val();
+                        
+                        $.confirm({
+                            autoClose: 'cancelar|8000',
+                            columnClass: 'medium',
+                            type: 'red',
+                            title: 'Acción irreversible',
+                            content: 'Esta acción es irreversible, no podrá recuperar su cuenta. ¿Está seguro?',
+                            icon: 'fa fa-warning',
+                            animation: 'scale',
+                            closeAnimation: 'zoom',
+                            buttons: {
+                                confirm: {
+                                    text: 'Si, seguro!',
+                                    btnClass: 'btn-red',
+                                    action: function () {
+                                        borrar(pass);
+                                    }
+                                },
+                                cancelar: function () {
+
+                                }
+                            }
+                        });
+                    }
+                },
+                cancelar: function () {
+
+                },
+            }
+        });
+    }
+    
+    function borrar(pass){
+        var params = {'pass':pass};
+        $.ajax({
+            data:  params,
+            url:   'borrarCuenta',
+            type:  'post',
+            success: function(response){
+                var borrada = response;
+                if(borrada==1){
+                    //Inicio
+                    window.location.replace("inicio");
+                }
+                console.log(borrada);
+            }
+        });
+        
+    }
     
     function cambia(){
         $("#goProfile").toggleClass("active");
@@ -159,6 +235,10 @@ if(@$_SESSION['login']!=""){
 
                 <div class="row">
                     <button type="submit" id="submit" class="col-sm-5 col-md-6 offset-sm-7 offset-md-6 my-2 my-sm-0 btn btn-lg btn-primary btn-block">Cambiar</button>
+                </div>
+                
+                <div class="row mt-3">
+                    <button type="button" id="borrarUsuario" class="col-sm-5 col-md-6 offset-sm-7 offset-md-6 my-2 my-sm-0 btn btn-lg btn-danger btn-sm btn-block rounded">Borrar cuenta</button>
                 </div>
 
                 <div id="avisoPassOld" class="text-center mt-2" style="display: none;">La contraseña antigua no coincide</div>

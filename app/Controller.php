@@ -136,6 +136,7 @@ class Controller {
         require __DIR__ . '/templates/recover.php';
     }
 	
+    
 	public function perfil() {
         $model =DB::GetInstance();
         $datos = $model->getProfile(getSession());
@@ -191,6 +192,38 @@ class Controller {
 	    require __DIR__ . '/templates/perfil.php';
 	}
     
+    
+    public function borrarUsuario(){
+        @session_start();
+        if(isset($_SESSION['login'])){
+            if($_SESSION['login']!=""){
+                $model=DB::GetInstance();
+                if(isset($_POST['pass'])){
+                    $passOK = $model->getUser(getSession(), hash('sha512', $_POST['pass']));
+                    if($passOK){
+                        $user = getSession();
+                        $borrado = $model->borrarUsuario($user);
+                        if($borrado){
+                            closeSession();
+                            echo "1";
+                        }
+                    }else{
+                        $params['error']="Contraseña incorrecta";
+                        echo "Contraseña incorrecta";
+                        //echo "1";
+                    }
+                }else{
+                    echo "No pass";
+                    //echo "1";
+                }
+            }else{
+                //echo "1";
+            }
+        }else{
+            //echo "1";
+        }
+    }
+        
     
     public function misRecetas(){
         $model=DB::GetInstance();

@@ -491,6 +491,18 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
+    
+    public function borrarUsuario($username){
+        try{
+            $query = "DELETE FROM usuarios WHERE username=:username";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':username', $username);
+            
+            return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
     //PERFIL FIN
     
     
