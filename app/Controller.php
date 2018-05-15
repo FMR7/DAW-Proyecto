@@ -65,7 +65,7 @@ class Controller {
                         
                     }
                     
-                    require __DIR__ . '/templates/inicio.php';
+                    redirecciona("inicio");
                 }
             }
         }
