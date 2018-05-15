@@ -94,6 +94,11 @@ function checkCampos(){
     return $continuar;
 }
 
+
+function redirecciona($destino){
+    echo "<script>window.location.replace(\"$destino\");</script>";
+}
+
 //Inicia una sesión
 function openSession($user){
     @session_start();

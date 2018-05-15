@@ -253,7 +253,7 @@ class Controller {
                 }
             }
         }else{
-            echo "<script>window.location.replace(\"inicio\");</script>";
+            redirecciona("inicio");
         }
     }
     
@@ -326,11 +326,11 @@ class Controller {
                     }
                     echo false;
                 }else{//Faltan campos por rellenar;
-                    echo "<script>window.location.replace(\"inicio\");</script>";
+                    redirecciona("inicio");
                 }
             }
         }else{//Sin sesión
-            echo "<script>window.location.replace(\"inicio\");</script>";
+            redirecciona("inicio");
         }
     }
     
@@ -372,11 +372,11 @@ class Controller {
                         echo false;
                     }
                 }else{//Faltan campos por rellenar;
-                    echo "<script>window.location.replace(\"inicio\");</script>";
+                    redirecciona("inicio");
                 }
             }
         }else{//Sin sesión
-            echo "<script>window.location.replace(\"inicio\");</script>";
+            redirecciona("inicio");
         }
 	}
 	
@@ -416,10 +416,10 @@ class Controller {
                 );
                 require __DIR__ . '/templates/receta.php';
             }else{
-                echo "<script>window.location.replace(\"../inicio\");</script>";
+                redirecciona("../inicio");
             }
         }else{
-            echo "<script>window.location.replace(\"../inicio\");</script>";
+            redirecciona("../inicio");
         }
 	}
 	
@@ -453,15 +453,16 @@ class Controller {
                         echo false;
                     }
                 }else{//Llamada forzada
-                    echo "<script>window.location.replace(\"inicio\");</script>";
+                    redirecciona("inicio");
                 }
             }else{//Sin sesión
-                echo "<script>window.location.replace(\"inicio\");</script>";
+                redirecciona("inicio");
             }
         }else{//Sin sesión
-            echo "<script>window.location.replace(\"inicio\");</script>";
+            redirecciona("inicio");
         }
     }
+    
     
 	public function setComment(){
         @session_start();
@@ -486,15 +487,16 @@ class Controller {
                         echo false;
                     }
                 }else{//Llamada forzada
-                    echo "<script>window.location.replace(\"inicio\");</script>";
+                    redirecciona("inicio");
                 }
             }else{//Sin sesión
-                echo "<script>window.location.replace(\"inicio\");</script>";
+                redirecciona("inicio");
             }
         }else{//Sin sesión
-            echo "<script>window.location.replace(\"inicio\");</script>";
+            redirecciona("inicio");
         }
     }
+    
     
     public function notFound(){
         require __DIR__ . '/templates/404.php';
@@ -506,6 +508,7 @@ class Controller {
         $model=DB::GetInstance();
         return $model->setTokenEmail($user, $token);
     }
+    
     
     public function setTokenForget($email){
         $token = hash('sha512', uniqid(rand(), TRUE));
@@ -527,10 +530,10 @@ class Controller {
                     $model->deleteTokenEmail($username);
                 }
             }else{
-                echo "<script>window.location.replace(\"../inicio\");</script>";
+                redirecciona("../inicio");
             }
         }else{
-            echo "<script>window.location.replace(\"inicio\");</script>";
+            redirecciona("inicio");
         }
     }
     
@@ -549,7 +552,7 @@ class Controller {
                             if($cambiada){
                                 $model->deleteTokenForget(getSession());
                                 closeSession();
-                                echo "<script>window.location.replace(\"../login\");</script>";
+                                redirecciona("../login");
                             }
                         }
                     }
@@ -564,14 +567,14 @@ class Controller {
                     $params['token'] = $_GET['id'];
                     require __DIR__ . '/templates/changePass.php';
                 }else{
-                    echo "<script>window.location.replace(\"../inicio\");</script>";
+                    redirecciona("../inicio");
                 }
             }else{
-                echo "<script>window.location.replace(\"inicio\");</script>";
+                redirecciona("inicio");
             }
         }
    }
-                           
-                           
+    
+    
 }
 ?>
