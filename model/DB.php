@@ -14,7 +14,6 @@ class DB extends PDO {
         }
     }
 
-
     public static function GetInstance(){
         if(self::$con==null){
             self::$con=new self();
@@ -22,7 +21,6 @@ class DB extends PDO {
 
         return self::$con;
     }
-
 
     public function getRecetas(){        
         try {
@@ -33,7 +31,6 @@ class DB extends PDO {
             echo "<p>Error: " . $e->getMessage();
         }
     }
-    
     
     public function getReceta($idReceta){
         try{
@@ -48,7 +45,6 @@ class DB extends PDO {
         }
     }
     
-    
     public function getTiposReceta($idReceta){
         try{
             $query = "SELECT r.idReceta, tr.tipo FROM recetas r JOIN recetas_tipos rt ON r.idReceta=rt.idReceta JOIN tiporeceta tr ON tr.idTipo=rt.idTipo WHERE r.idReceta=:idReceta";
@@ -61,6 +57,8 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
+    
+    
     
     //BUSQUEDAS SIMPLES Y COMBINADAS
     //ESTA POR VER
@@ -163,6 +161,7 @@ class DB extends PDO {
     //ESTA POR VER FIN
 
     
+    
     //Devuelve las opiniones de una receta
     public function getOpinionesRecetas($idReceta){
         try{
@@ -177,7 +176,6 @@ class DB extends PDO {
         }
     }
 
-    
     //Devuelve las recetas de un usuario
     public function getRecetasUser($user){
         try{
@@ -191,6 +189,7 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
+    
     
     
     //RECETA
@@ -280,6 +279,7 @@ class DB extends PDO {
         }
     }
     //RECETA FIN
+    
     
     
     //INSERTAR RECETA
@@ -395,7 +395,7 @@ class DB extends PDO {
         }
     }
     //BORRAR RECETA FIN
-
+    
     
     
     //INICIO
@@ -529,7 +529,6 @@ class DB extends PDO {
     
     
     
-    
     //REGISTER
     public function setUser($user, $email, $pass){
         try{
@@ -546,6 +545,7 @@ class DB extends PDO {
     }
     //REGISTER FIN
 
+    
     
     //CONFIRMAR EMAIL
     public function setTokenEmail($user, $token){
@@ -619,6 +619,7 @@ class DB extends PDO {
         }
     }
     //CONFIRMAR EMAIL FIN
+    
     
     
     //RECUPERAR CONTRASEÑA
@@ -701,6 +702,26 @@ class DB extends PDO {
     //RECUPERAR CONTRASEÑA FIN
     
     
+    
+    //Devuelve si la receta es del usuario
+    public function isFromUser($idReceta, $user){
+        try{
+            $query = "SELECT ur.username, r.* FROM recetas r JOIN usuario_recetas ur ON ur.idReceta=r.idReceta WHERE ur.username=:user and ur.idReceta=:idReceta";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
+            
+	        $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return true;
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
     public function existsReceta($idReceta){
         try{
             $query = "SELECT nombre FROM recetas WHERE idReceta=:idReceta";
@@ -751,25 +772,8 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
-
-    //Devuelve si la receta es del usuario
-    public function isFromUser($idReceta, $user){
-        try{
-            $query = "SELECT ur.username, r.* FROM recetas r JOIN usuario_recetas ur ON ur.idReceta=r.idReceta WHERE ur.username=:user and ur.idReceta=:idReceta";
-            $stmt = $this->prepare($query);
-            $stmt->bindParam(':user', $user);
-            $stmt->bindParam(':idReceta', $idReceta);
-            $stmt->execute();
-            
-	        $rs = $stmt->fetchAll();
-            if(count($rs)==1){
-                return true;
-            }
-            return false;
-        }catch(PDOException $e){
-            echo "<p>Error: ".$e->getMessage();
-        }
-    }
+    
+    
     
     //ADMIN
     public function isAdmin($user){

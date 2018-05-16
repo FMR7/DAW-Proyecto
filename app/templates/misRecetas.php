@@ -174,17 +174,17 @@ if(@$_SESSION['login']!=""){
             </thead>
             <tbody>
                 <?php
-    foreach ($params['recetas'] as $receta){
-                ?>
-                <tr id="<?php echo $receta['idReceta'] ?>" class="<?php echo $receta['dificultad'] ?> <?php echo $receta['tipoIngrediente'] ?> c-<?php echo $receta['numComensales'] ?>">
-                    <td><?php echo $receta['nombre'] ?></td>
-                    <td class="text-center <?php echo $receta['dificultad'] ?>"></td>
-                    <td><?php echo $receta['tipoIngrediente'] ?></td>
-                    <td><?php echo $receta['numComensales'] ?></td>
-                    <td class="remove"><span class="oi oi-minus" title="Borrar receta" aria-hidden="true"></span></td>
-                </tr>
-                <?php
-    }
+                    foreach ($params['recetas'] as $receta){
+                        ?>
+                        <tr id="<?php echo $receta['idReceta'] ?>" class="<?php echo $receta['dificultad'] ?> <?php echo $receta['tipoIngrediente'] ?> c-<?php echo $receta['numComensales'] ?>">
+                            <td><?php echo $receta['nombre'] ?></td>
+                            <td class="text-center <?php echo $receta['dificultad'] ?>"></td>
+                            <td><?php echo $receta['tipoIngrediente'] ?></td>
+                            <td><?php echo $receta['numComensales'] ?></td>
+                            <td class="remove"><span class="oi oi-minus" title="Borrar receta" aria-hidden="true"></span></td>
+                        </tr>
+                        <?php
+                    }
                 ?>
             </tbody>
         </table>
