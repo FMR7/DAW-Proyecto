@@ -3,7 +3,19 @@
 <link rel="stylesheet" href="../../web/css/inicio.css"/>
 <link rel="stylesheet" href="../../web/css/jquery-confirm.min.css"/>
 <style>
+    @media (min-width: 992px){
+        #rece{padding-right: 10px !important;}
+        #come{
+            padding-left: 10px !important;
+            border-left: 1px solid rgb(222, 226, 230);
+        }
+        #favs{
+            padding-left: 10px !important;
+            border-left: 1px solid rgb(222, 226, 230);
+        }
+    }
     .oi-minus{color: #dd0000;}
+    #rece{white-space: nowrap;}
 </style>
 <?php $css = ob_get_clean() ?>
 
@@ -219,8 +231,8 @@
 <?php ob_start() ?>
 
 <div id="contenido" class="col-12 content">
-    <div class="row">
-        <nav id="nav" class="col-12 nav nav-pills nav-fill">
+    <div class="row border rounded bb-0">
+        <nav id="nav" class="col-12 nav nav-pills nav-fill px-0">
             <a id="goRece" class="rounded bb-0 col-12 col-md-6 nav-item nav-link active d-lg-none">Recetas</a>
             <a id="goCome" class="rounded bb-0 col-12 col-md-6 nav-item nav-link d-lg-none">Comentarios</a>
 
@@ -230,8 +242,8 @@
     </div>
     
     
-    <div class="row" id="receta">
-        <div id="rece" class="col-12 col-lg-6 table-responsive d-lg-block">
+    <div class="row border rounded bt-0">
+        <div id="rece" class="col-12 col-lg-6 table-responsive px-0 d-lg-block">
             <table class="table table-responsive">
                 <thead>
                     <tr>
@@ -263,12 +275,12 @@
             </table>
         </div>
 
-        <div id="come" class="col-12 col-lg-6 table-responsive d-none d-lg-block">
+        <div id="come" class="col-12 col-lg-6 table-responsive px-0 d-none d-lg-block">
             <table class="table table-responsive">
                 <thead>
                     <tr>
-                        <th class="text-center">Usuario</th>
-                        <th style="width: 60%;">Comentario</th>
+                        <th>Usuario</th>
+                        <th>Comentario</th>
                         <th style="width: 10px;"></th>
                     </tr>
                 </thead>

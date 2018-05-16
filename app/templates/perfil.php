@@ -13,6 +13,8 @@
     }
     #submit{margin-bottom: 0 !important;}
     #tabla{white-space: nowrap;}
+    #contenido{min-height: 425px;}
+    #contenido>div+div{min-height: 300px;}
 </style>
 <?php $css = ob_get_clean() ?>
 
