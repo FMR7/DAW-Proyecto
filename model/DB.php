@@ -770,5 +770,52 @@ class DB extends PDO {
             echo "<p>Error: ".$e->getMessage();
         }
     }
+    
+    //ADMIN
+    public function isAdmin($user){
+        try{
+            $query = "SELECT username FROM usuarios WHERE admin=1 AND username=:user";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':user', $user);
+            $stmt->execute();
+            
+	        $rs = $stmt->fetchAll();
+            if(count($rs)==1){
+                return true;
+            }
+            return false;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function getAllComments(){
+        try{
+            $query = "SELECT idReceta, IFNULL(username, 'Anónimo') as username, comentario FROM opiniones WHERE comentario<>''";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->execute();
+            $rs = $stmt->fetchAll();
+            
+            
+            return $rs;
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    
+    public function deleteComment($idReceta, $username){
+        try{
+            $query = "DELETE FROM opiniones WHERE idReceta=:idReceta AND username=:username";
+            $stmt = $this->prepare($query);
+            $stmt->bindParam(':idReceta', $idReceta);
+            $stmt->bindParam(':username', $username);
+            
+            return $stmt->execute();
+        }catch(PDOException $e){
+            echo "<p>Error: ".$e->getMessage();
+        }
+    }
+    //ADMIN FIN
 }
 ?>

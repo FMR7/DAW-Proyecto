@@ -84,6 +84,9 @@ class Controller {
             $login=$model->getUser($user, $pass);
             if($login){
                 openSession($user);
+                if($model->isAdmin($user)){
+                    $_SESSION['admin']=1;
+                }
             }else{
                 closeSession();
             }
@@ -243,7 +246,8 @@ class Controller {
 
                 $model=DB::GetInstance();
                 $recetaPropia = $model->isFromUser($id, getSession());
-                if($recetaPropia){
+                $admin=$model->isAdmin(getSession());
+                if(($recetaPropia)||($admin)){
                     $borrada = $model->delReceta($id);
                     if($borrada){
                         echo true;
@@ -272,7 +276,8 @@ class Controller {
     public function editar(){
         $model=DB::GetInstance();
         $recetaPropia = $model->isFromUser(@$_GET['id'], getSession());
-        if($recetaPropia){
+        $admin=$model->isAdmin(getSession());
+        if(($recetaPropia)||($admin)){
             $params = array (
                 'idReceta'     => @$_GET['id'],
                 'receta'       => $model->getReceta(@$_GET['id']),
@@ -304,9 +309,11 @@ class Controller {
 
                     
                     $model=DB::GetInstance();
+                    $recetaPropia = $model->isFromUser($id, getSession());
+                    $admin=$model->isAdmin(getSession());
                     
-                    //Comprobar si la receta es del usuario
-                    if($model->isFromUser($id, getSession())){
+                    //Comprobar si la receta es del usuario o es administrador
+                    if(($recetaPropia)||($admin)){
                         $updated = $model->updateReceta($id, $nombre, $elabo, $ingre, $diff, $tIngre, $numCom);
                         if($updated){
                             //Quitar tipos a receta
@@ -315,13 +322,11 @@ class Controller {
                             //Asignar tipos a receta
                             $model->setRecetaTipos($id, $tRece);
 
-                            //Redirecciona a la nueva receta
-                            $params = array (
-                                'receta' => $model->getReceta($id),
-                                'likes'  => $model->getLikes($id)
-                            );
-
-                            echo true."#".$id;
+                            if($admin){
+                                echo 2;   
+                            }else{
+                                echo 1;   
+                            }
                         }
                     }
                     echo false;
@@ -498,6 +503,30 @@ class Controller {
     }
     
     
+    public function borrarComment(){
+        @session_start();
+        if(isset($_SESSION['login'])){
+            if($_SESSION['login']!=""){
+                $id   = recogeNumero($_POST["idReceta"]);
+                $user = $_POST["username"];
+
+                $model=DB::GetInstance();
+                $admin=$model->isAdmin(getSession());
+                if($admin){
+                    $borrada = $model->deleteComment($id, $user);
+                    if($borrada){
+                        echo true;
+                    }else{
+                        echo false;
+                    }
+                }
+            }
+        }else{
+            redirecciona("inicio");
+        }
+    }
+    
+    
     public function notFound(){
         require __DIR__ . '/templates/404.php';
     }
@@ -576,5 +605,30 @@ class Controller {
    }
     
     
+    public function admin(){
+        @session_start();
+        if(isset($_SESSION['login'])){
+            if($_SESSION['login']!=""){
+                $model=DB::GetInstance();
+                $admin=$model->isAdmin(getSession());
+                if($admin){
+                    $params = array (
+                        'admin'       => "1",
+                        'recetas'     => $model->getRecetas(),
+                        'comentarios' => $model->getAllComments()
+                    );
+                    
+                    require __DIR__ . '/templates/admin.php';
+                }else{
+                    redirecciona("inicio");
+                }
+                
+            }else{
+                redirecciona("inicio");
+            }
+        }else{
+            redirecciona("inicio");
+        }
+    }
 }
 ?>

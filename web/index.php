@@ -14,6 +14,7 @@ $map = array(
     'confirmar'     => array('controller' =>'Controller', 'action' =>'confirmarCuenta'),
     'recetas'       => array('controller' =>'Controller', 'action' =>'misRecetas'),
     'borrar'        => array('controller' =>'Controller', 'action' =>'borrarReceta'),
+    'borrarComment' => array('controller' =>'Controller', 'action' =>'borrarComment'),
 	'nueva'         => array('controller' =>'Controller', 'action' =>'nueva'),
     'subir'         => array('controller' =>'Controller', 'action' =>'subirReceta'),
     'editar'        => array('controller' =>'Controller', 'action' =>'editar'),

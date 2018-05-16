@@ -239,10 +239,10 @@
             },
             success: function(response){
                 var actualizada = response.split("#")[0];
-                var idReceta    = response.split("#")[1];
                 if(actualizada==1){
-                    //window.location.replace("../receta/"+idReceta);
                     window.location.replace("../recetas");
+                }if(actualizada==2){
+                    window.location.replace("../admin");
                 }
             }
         });

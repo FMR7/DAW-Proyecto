@@ -84,19 +84,32 @@ $server=Config::$serverUrl;
                             </li>
 
                             <?php
-                            if (isset($_SESSION['login'])){
+                            if(isset($_SESSION['login'])){
                                 if($_SESSION['login']!=""){
-                                    ?>
-                                    <li class="nav-item">
-                                        <a class="nav-item nav-link" href="<?php echo $server;?>nueva">Subir receta</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-item nav-link" href="<?php echo $server;?>perfil">Mi perfil</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-item nav-link" href="<?php echo $server;?>recetas">Mis recetas</a>
-                                    </li>
-                                    <?php 
+                                    if(isset($_SESSION['admin'])){
+                                        if($_SESSION['admin']==1){
+                                            ?>
+                                            <li class="nav-item">
+                                                <a class="nav-item nav-link" href="<?php echo $server;?>perfil">Mi perfil</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-item nav-link" href="<?php echo $server;?>admin">Administrar</a>
+                                            </li>
+                                            <?php 
+                                        }
+                                    }else{
+                                        ?>
+                                        <li class="nav-item">
+                                            <a class="nav-item nav-link" href="<?php echo $server;?>nueva">Subir receta</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-item nav-link" href="<?php echo $server;?>perfil">Mi perfil</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-item nav-link" href="<?php echo $server;?>recetas">Mis recetas</a>
+                                        </li>
+                                        <?php 
+                                    }
                                 }
                             }
                             ?>
