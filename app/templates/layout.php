@@ -1,6 +1,6 @@
 <!doctype html>
 <?php
-require __DIR__."/../../model/Config.php";
+@require __DIR__."/../../model/Config.php";
 $server=Config::$serverUrl;
 ?>
 <html lang="es">

@@ -92,6 +92,35 @@
         $("#borrarUsuario").click(function(){
             msgBorrarReceta();
         });
+        
+        $("#sendMail").click(function(){
+            var email = <?php echo "\"".@$params['email']."\""; ?>;
+            var params = {'email':email};
+            $.ajax({
+                data:  params,
+                url:   'emailActivar',
+                type:  'post',
+                success: function(response){
+                    $.confirm({
+                        columnClass: 'medium',
+                        type: 'blue',
+                        title: 'Activar cuenta',
+                        content: 'Se ha mandado un correo con un enlace a su dirección',
+                        icon: 'fa fa-question-circle',
+                        animation: 'scale',
+                        closeAnimation: 'scale',
+                        opacity: 0.5,
+                        buttons: {
+                            'confirm': {
+                                text: 'Cerrar',
+                                btnClass: 'btn-blue',
+
+                            }
+                        },
+                    });
+                }
+            });
+        });
     }
     
     function msgBorrarReceta(){
@@ -182,7 +211,7 @@ if(@$_SESSION['login']!=""){
     if(@$params['emailConfirmed']==0){
         ?>
         <div class="col-12 mb-3 bg-warning rounded text-justify">
-            Aún no has confirmado tu dirección de correo. Si no has recibido el correo de cofirmación haz click <u><a href="#">aquí</a></u>.
+            Aún no has confirmado tu dirección de correo. Si no has recibido el correo de confirmación haz click <u><a id="sendMail" href="#">aquí</a></u>.
         </div>
         <?php 
     }

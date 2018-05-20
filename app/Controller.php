@@ -59,11 +59,7 @@ class Controller {
                     //Iniciar sesión
                     openSession($_POST["user"]);
                     
-                    //Inserta un token para la cofirmación del email
-                    $tokenInsertado = $this->setTokenEmail(getSession());
-                    if($tokenInsertado){ //Envía email confirmación
-                        
-                    }
+                    $this->emailActivar();
                     
                     redirecciona("inicio");
                 }
@@ -126,21 +122,16 @@ class Controller {
         }
         
         if($changePass){
-            //Inserta un token para la recuperación de la cuenta
-            $tokenInsertado = $this->setTokenForget($_POST["email"]);
-            if($tokenInsertado){ //Envía email reestablecimiento cuenta
-                //Enviar mail
-                
-            }
+            $this->emailRecuperar();
             
-            $params['enviado'] = "si";
+            redirecciona("login");
         }
         
         require __DIR__ . '/templates/recover.php';
     }
 	
     
-	public function perfil() {
+	public function perfil(){
         $model =DB::GetInstance();
         $datos = $model->getProfile(getSession());
         $favs  = $model->getFavs(getSession());
@@ -194,7 +185,7 @@ class Controller {
         
 	    require __DIR__ . '/templates/perfil.php';
 	}
-    
+        
     
     public function borrarUsuario(){
         @session_start();
@@ -532,15 +523,18 @@ class Controller {
     }
     
     
-    public function setTokenEmail($user){
-        $token = hash('sha512', uniqid(rand(), TRUE));
+    public function getToken(){
+        return hash('sha512', uniqid(rand(), TRUE));
+    }
+    
+    
+    public function setTokenEmail($user, $token){
         $model=DB::GetInstance();
         return $model->setTokenEmail($user, $token);
     }
     
     
-    public function setTokenForget($email){
-        $token = hash('sha512', uniqid(rand(), TRUE));
+    public function setTokenForget($email, $token){
         $model=DB::GetInstance();
         $user = $model->getUserFromEmail($email);
         return $model->setTokenForget($user, $token);
@@ -558,6 +552,7 @@ class Controller {
                 if($activada){
                     $model->deleteTokenEmail($username);
                 }
+                redirecciona("../perfil");
             }else{
                 redirecciona("../inicio");
             }
@@ -628,6 +623,28 @@ class Controller {
             }
         }else{
             redirecciona("inicio");
+        }
+    }
+
+    
+    public function emailActivar(){
+        //Inserta un token para la confirmación del email
+        $token = $this->getToken();
+        $tokenInsertado = $this->setTokenEmail(getSession(), $token);
+        if($tokenInsertado){ //Envía email confirmación
+            echo "TEST".$_POST["email"];
+            print_r($_POST);
+            correoActivarCuenta($_POST["email"], "Activar cuenta", $token);
+        }
+    }
+    
+    
+    public function emailRecuperar(){
+        //Inserta un token para la recuperación de la cuenta
+        $token = $this->getToken();
+        $tokenInsertado = $this->setTokenForget($_POST["email"], $token);
+        if($tokenInsertado){ //Envía email reestablecimiento cuenta
+            correoRecuperarCuenta($_POST["email"], "Recuperar cuenta", $token);
         }
     }
 }

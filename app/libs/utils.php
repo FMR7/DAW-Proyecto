@@ -1,5 +1,5 @@
 <?php
-
+use PHPMailer\PHPMailer\PHPMailer;
 function recogeTexto($campo){
     return preg_replace("/[^a-zA-ZÀ-ÿ\s]/", "", strip_tags($campo));
 }
@@ -123,4 +123,57 @@ function closeSession(){
     setcookie(session_name(), '', 0, $params['path'], $params['domain'], $params['secure'], isset($params['httponly']));
 }
 
+
+function enviarCorreo($email, $asunto, $mensaje){
+    require __DIR__."/../../model/Config.php";
+    $user=Config::$emailUser;
+    $pass=Config::$emailPass;
+    
+    require "phpmailer/PHPMailer.php";
+    require "phpmailer/SMTP.php";
+    require "phpmailer/Exception.php";
+
+    $mail = new PHPMailer;
+    $mail->isSMTP();
+    $mail->SMTPDebug = 0;
+    $mail->Host = 'smtp.gmail.com';
+    $mail->Port = 587;
+    $mail->SMTPSecure = 'tls';
+    $mail->SMTPAuth = true;
+
+    $mail->Username = $user;
+    $mail->Password = $pass;
+    $mail->SetFrom($user);
+
+    $mail->addAddress($email);
+    $mail->Subject = $asunto;
+    $mail->msgHTML($mensaje);
+
+    $mail->SMTPOptions = array(
+        'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        )
+    );
+    $mail->send();
+}
+
+
+function correoActivarCuenta($email, $asunto, $token){
+    $server="http://localhost/";
+    $msg = file_get_contents(__DIR__.'/../templatesMail/msgActivar.html');
+    $msg = str_replace('%enlace%', $server."confirmar/".$token, $msg);
+    
+    enviarCorreo($email, $asunto, $msg);
+}
+
+
+function correoRecuperarCuenta($email, $asunto, $token){
+    $server="http://localhost/";
+    $msg = file_get_contents(__DIR__.'/../templatesMail/msgRecuperar.html');
+    $msg = str_replace('%enlace%', $server."nuevaPass/".$token, $msg);
+    
+    enviarCorreo($email, $asunto, $msg);
+}
 ?>
