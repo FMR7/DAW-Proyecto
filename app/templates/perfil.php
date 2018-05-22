@@ -185,10 +185,19 @@
             success: function(response){
                 var borrada = response;
                 if(borrada==1){
-                    //Inicio
                     window.location.replace("inicio");
+                }else{
+                    $.alert({
+                        title: 'Aviso',
+                        content: 'No se ha borrado la cuenta.<br>Contraseña incorrecta.',
+                        buttons: {
+                            'confirm': {
+                                text: 'Cerrar',
+                                btnClass: 'btn-warning',
+                            }
+                        }
+                    });
                 }
-                console.log(borrada);
             }
         });
         

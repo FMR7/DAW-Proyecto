@@ -203,18 +203,15 @@ class Controller {
                         }
                     }else{
                         $params['error']="Contraseña incorrecta";
-                        echo "Contraseña incorrecta";
-                        //echo "1";
                     }
                 }else{
-                    echo "No pass";
-                    //echo "1";
+                    $params['error']="Contraseña incorrecta";
                 }
             }else{
-                //echo "1";
+                redirecciona("inicio");
             }
         }else{
-            //echo "1";
+            redirecciona("inicio");
         }
     }
         
@@ -632,8 +629,6 @@ class Controller {
         $token = $this->getToken();
         $tokenInsertado = $this->setTokenEmail(getSession(), $token);
         if($tokenInsertado){ //Envía email confirmación
-            echo "TEST".$_POST["email"];
-            print_r($_POST);
             correoActivarCuenta($_POST["email"], "Activar cuenta", $token);
         }
     }
