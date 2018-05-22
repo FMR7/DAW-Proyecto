@@ -336,7 +336,7 @@ if(isset($_SESSION['login'])){
 
         <div class="row" id="numCom">
             <label class="col-4 col-sm-3 col-lg-2 pt-1">Comensales</label>
-            <input type="range" id="fNumCom" min="1" max="20" value="1" class="col-6 col-sm-7 col-lg-8 form-control slider">
+            <input type="range" id="fNumCom" min="1" max="10" value="1" class="col-6 col-sm-7 col-lg-8 form-control slider">
             <input type="number" id="lNumCom" class="col-2 border-0 text-right" value="1">
         </div>
 

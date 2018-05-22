@@ -236,7 +236,7 @@
 
             <div class="row mt-3 pl-2">
                 <label class="col-12 pl-2 mb-0">Comensales</label>
-                <input type="range" id="fNumCom" min="1" max="20" value="1" class="col-10 form-control slider mt-1">
+                <input type="range" id="fNumCom" min="1" max="10" value="1" class="col-10 form-control slider mt-1">
                 <input type="number" id="lNumCom" class="col-2 mb-0 p-0 pl-1 border-0 text-center" value="1">
             </div>
         </div>
