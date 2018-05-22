@@ -8,7 +8,7 @@ $server=Config::$serverUrl;
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="stylesheet" href="../../web/bootstrap-4.1.0/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../web/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="../../web/images/open-iconic/font/css/open-iconic-bootstrap.css">
 
         <?php 
@@ -136,7 +136,7 @@ $server=Config::$serverUrl;
             </div>
             <script type="text/javascript" src="../../web/js/jquery-3.3.1.min.js"></script>
             <script type="text/javascript" src="../../web/js/popper.min.js"></script>
-            <script type="text/javascript" src="../../web/bootstrap-4.1.0/js/bootstrap.js"></script>
+            <script type="text/javascript" src="../../web/js/bootstrap.min.js"></script>
 
 
             <?php 
