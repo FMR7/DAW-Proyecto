@@ -162,7 +162,6 @@
         //Click Publicar
         $("#publicar").click(function(){
             var comment = $("#comentario").val();
-            console.log(comment);
             setComment(comment);
         });
     }
@@ -246,7 +245,23 @@
         $.ajax({
             data:  params,
             url:   '../comment',
-            type:  'post'
+            type:  'post',
+            success: function(response){
+                $.alert({
+                    type: 'blue',
+                    title: 'Publicado',
+                    content: 'El comentario se ha publicado correctamente',
+                    buttons: {
+                        'confirm': {
+                            text: 'Cerrar',
+                            btnClass: 'btn-primary',
+                            action:  function () {
+                                window.location.reload();
+                            }
+                        }
+                    }
+                });
+            }
         });
     }
 </script>

@@ -188,6 +188,7 @@
                     window.location.replace("inicio");
                 }else{
                     $.alert({
+                        type: 'orange',
                         title: 'Aviso',
                         content: 'No se ha borrado la cuenta.<br>Contraseña incorrecta.',
                         buttons: {
