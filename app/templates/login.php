@@ -37,10 +37,8 @@ if(isset($_SESSION['login'])){//Recibe datos
     <input id="user" type="text" name="user" class="form-control" placeholder="Nombre de usuario" autocomplete="username" required autofocus>
     <input id="pass" type="password" name="pass" class="form-control" placeholder="Contraseña" autocomplete="off" required>
     <button id="submit" type="submit" class="btn btn-lg btn-primary btn-block">Acceder</button>
-    <div id="aviso" class="text-center mt-2" style="display: none;">Usuario o contraseña incorrectos</div>
-    <div class="text-center mt-2">
-        Haz click 
-        <a href="recuperar">aquí</a> para reestablecer tu contraseña
+    <div id="aviso" class="text-center mt-2" style="display: none;">
+        ¿No puedes acceder? Haz click <a href="recuperar">aquí</a> para recuperar tu cuenta
     </div>
     <div class="text-center mt-2">
         ¿Aún no tienes cuenta? 
