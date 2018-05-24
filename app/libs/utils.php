@@ -164,6 +164,7 @@ function correoActivarCuenta($email, $asunto, $token){
     $server="http://localhost/";
     $msg = file_get_contents(__DIR__.'/../templatesMail/msgActivar.html');
     $msg = str_replace('%enlace%', $server."confirmar/".$token, $msg);
+    $msg = str_replace('%username%', getSession(), $msg);
     
     enviarCorreo($email, $asunto, $msg);
 }
@@ -173,6 +174,7 @@ function correoRecuperarCuenta($email, $asunto, $token){
     $server="http://localhost/";
     $msg = file_get_contents(__DIR__.'/../templatesMail/msgRecuperar.html');
     $msg = str_replace('%enlace%', $server."nuevaPass/".$token, $msg);
+    $msg = str_replace('%username%', getSession(), $msg);
     
     enviarCorreo($email, $asunto, $msg);
 }
