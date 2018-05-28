@@ -104,7 +104,7 @@
                             closeAnimation: 'zoom',
                             buttons: {
                                 confirm: {
-                                    text: 'Si, seguro!',
+                                    text: '¡Si, seguro!',
                                     btnClass: 'btn-red',
                                     action: function () {
                                         borrar(evt);
