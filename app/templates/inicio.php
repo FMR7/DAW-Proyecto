@@ -131,7 +131,31 @@
             }
         });
 
+        $("#fTipo").change(function(){
+            setTimeout(function(){
+                if($("#fTipo").val() != ""){
+                    var filter = $(".multiselect-selected-text").text();
+                    filter = filter.replace(',', '');
+                    $("#tablaDiv tbody tr").filter(function(){
+                        $("#tablaDiv tbody tr").each(function(){
+                            found = false;
+                            if($(this).hasClass(filter)){
+                                found = true
+                            }
+                            if(!found){
+                                $(this).hide();
+                            }else{
+                                $(this).show();
+                            }
+                        });
+                    });
+                }else{
+                    $("#tablaDiv tbody tr").show();
+                }
+            }, 100);
+        });
 
+        
         function filtroComensales(valor){
             if(valor > 1){
                 var hiddenClasses = new Array();
@@ -225,7 +249,7 @@
             </div>
 
             <div class="row">
-                <select class="multiselect" multiple="multiple">
+                <select class="multiselect" multiple="multiple" id="fTipo">
                     <?php 
                     foreach ($params['tiposReceta'] as $tipoReceta){
                         echo "<option value=".$tipoReceta['idTipo'].">".$tipoReceta['tipo']."</option>";
@@ -260,7 +284,7 @@
                    <?php
                     foreach ($params['recetas'] as $receta){
                     ?>
-                    <tr id="<?php echo $receta['idReceta'] ?>" class="<?php echo $receta['dificultad'] ?> <?php echo $receta['tipoIngrediente'] ?> c-<?php echo $receta['numComensales'] ?>">
+                    <tr id="<?php echo $receta['idReceta'] ?>" class="<?php echo $receta['dificultad'] ?> <?php echo $receta['tipoIngrediente'] ?> c-<?php echo $receta['numComensales'] ?> <?php echo $receta['tipoReceta'] ?>">
                         <td><?php echo $receta['nombre'] ?></td>
                         <td class="text-center <?php echo $receta['dificultad'] ?>"></td>
                         <td><?php echo $receta['tipoIngrediente'] ?></td>

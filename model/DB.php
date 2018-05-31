@@ -24,7 +24,7 @@ class DB extends PDO {
 
     public function getRecetas(){        
         try {
-            $query = "select r.idReceta, r.nombre, d.dificultad, ti.tipoIngrediente, r.numComensales from recetas r JOIN tipoIngredientes ti ON r.tipoIngredientes=ti.idTipoIngrediente JOIN tipodificultades d ON r.dificultad=d.idDificultad";
+            $query = "select r.idReceta, r.nombre, d.dificultad, ti.tipoIngrediente, r.numComensales, GROUP_CONCAT(tr.tipo SEPARATOR ' ') as 'tipoReceta' from recetas r JOIN tipoIngredientes ti ON r.tipoIngredientes=ti.idTipoIngrediente JOIN tipodificultades d ON r.dificultad=d.idDificultad JOIN recetas_tipos rt ON r.idReceta=rt.idReceta JOIN tiporeceta tr ON rt.idTipo=tr.idTipo GROUP BY r.idReceta";
             $stmt = $this->query($query);
             return $stmt->fetchAll();
         } catch(PDOException $e){
