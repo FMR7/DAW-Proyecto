@@ -23,138 +23,46 @@
         //Externalizar y mirar validate.js para sustituir
         $('.alphaonly').bind('keyup blur',function(){ 
             var node = $(this);
-            node.val(node.val().replace(/[^a-z ]/g,'') ); }
-                            );
+            node.val(node.val().replace(/[^a-z ]/g,'') ); 
+        });
 
-        //FALTA BUSQUEDA COMBINADA
         $("#fNombre").keyup(function() {
             var filter = new RegExp($(this).val(),'i');
+            $("#fElabo").trigger("change");
             
-            var fu = filtrosUpdate();
-            
-            if(fu){
-                $("#tablaDiv tbody tr:visible").filter(function(){
-                    $(this).each(function(){
-                        found = false;
-                        $(this).find("td:first-child").each(function(){
-                            content = $(this).html();
-                            if(content.match(filter)){
-                                found = true
-                            }
-                        });
-                        if(!found){
-                            $(this).hide();
-                        }else{
-                            $(this).show();
-                        }
-                    });
-                });
-            }else{
-                $("#tablaDiv tbody tr").filter(function(){
-                    $(this).each(function(){
-                        found = false;
-                        $(this).find("td:first-child").each(function(){
-                            content = $(this).html();
-                            if(content.match(filter)){
-                                found = true
-                            }
-                        });
-                        if(!found){
-                            $(this).hide();
-                        }else{
-                            $(this).show();
-                        }
-                    });
-                });
-            }
-            
-                        
-        });
-
-        $("#fElabo").change(function() {
-            if($(this).val() != "0"){
-                var filter = $(this).find("option:selected").text();
-                $("#tablaDiv tbody tr").filter(function(){
-                    $(this).each(function(){
-                        found = false;
-                        if($(this).hasClass(filter)){
+            $("#tablaDiv tbody tr:visible").filter(function(){
+                $(this).each(function(){
+                    found = false;
+                    $(this).find("td:first-child").each(function(){
+                        content = $(this).html();
+                        if(content.match(filter)){
                             found = true
                         }
-                        if(!found){
-                            $(this).hide();
-                        }else{
-                            $(this).show();
-                        }
                     });
+                    if(!found){
+                        $(this).hide();
+                    }else{
+                        $(this).show();
+                    }
                 });
-            }else{
-                $("#tablaDiv tbody tr").show();
-            }
+            });
+            
         });
 
-        $("#fIngre").change(function() {
-            if($(this).val() != "0"){
-                var filter = $(this).find("option:selected").text();
-                $("#tablaDiv tbody tr").filter(function(){
-                    $(this).each(function(){
-                        found = false;
-                        if($(this).hasClass(filter)){
-                            found = true
-                        }
-                        if(!found){
-                            $(this).hide();
-                        }else{
-                            $(this).show();
-                        }
-                    });
-                });
-            }else{
-                $("#tablaDiv tbody tr").show();
-            }
+        $("#fElabo, #fIngre, #fNumCom").change(function(){
+            $("#lNumCom").val($("#fNumCom").val());
+            filtrar();
         });
-
-        $("#fNumCom").change(function() {
-            $("#lNumCom").val($(this).val());
-            filtroComensales($(this).val());
-        });
-
+        
         $("#lNumCom").blur(function() {
-            if($(this).val() > 0){
-                $("#fNumCom").val($(this).val());
-                if($(this).val()<=$("#fNumCom").attr("max")){
-                    $("#fNumCom").trigger("change");
-                }
-                filtroComensales($(this).val());
-            }else{
-                $("#fNumCom").val(1);
-                $("#fNumCom").trigger("change");
-            }
+            filtrar();
         });
-
+        
         $("#fTipo").change(function(){
             setTimeout(function(){
-                if($("#fTipo").val() != ""){
-                    var filter = $(".multiselect-selected-text").text();
-                    filter = filter.replace(',', '');
-                    $("#tablaDiv tbody tr").filter(function(){
-                        $("#tablaDiv tbody tr").each(function(){
-                            found = false;
-                            if($(this).hasClass(filter)){
-                                found = true
-                            }
-                            if(!found){
-                                $(this).hide();
-                            }else{
-                                $(this).show();
-                            }
-                        });
-                    });
-                }else{
-                    $("#tablaDiv tbody tr").show();
-                }
+                filtrar();
             }, 100);
         });
-
         
         function filtroComensales(valor){
             if(valor > 1){
@@ -162,36 +70,48 @@
                 for(var e=0; e<( valor-1); e++){
                     hiddenClasses.push(".c-"+(e+1));
                 }
-
-                $("#tablaDiv tbody tr").show();
+                
                 $("#tablaDiv tbody tr").filter(hiddenClasses.join()).hide();
-            }else{
-                $("#tablaDiv tbody tr").show();
+            }
+        }
+        
+        function filtrar(){
+            var filtro = "";
+            $("#tablaDiv tbody tr").show();
+
+            if($("#fElabo").val() != "0"){
+                filtro += $("#fElabo").find("option:selected").text() + " ";
+            }if($("#fIngre").val() != "0"){
+                filtro += $("#fIngre").find("option:selected").text() + " ";
+            }if($("#fTipo").val() != ""){
+                $(".active>a>label").each(function(){
+                    filtro += $(this).attr("title")+" ";
+                });
+            }
+            
+            filtro = filtro.trim();
+            
+            if(filtro != ""){
+                $("#tablaDiv tbody tr").filter(function(){
+                    $(this).each(function(){
+                        found = false;
+                        if($(this).hasClass(filtro)){
+                            found = true
+                        }
+                        if(!found){
+                            $(this).hide();
+                        }else{
+                            $(this).show();
+                        }
+                    });
+                });
+            }
+            
+            if($("#lNumCom").val() > 0){ //Aplicar este filtrado el último
+                filtroComensales($("#lNumCom").val());
             }
         }
 
-
-        function filtrosUpdate(){
-            var updated = false;
-            
-            if($("#fElabo").val()!=0){
-                $("#fElabo").trigger("change");
-                console.log("filtrosUpdate fElabo");
-                updated = true;
-            }if($("#fIngre").val()!=0){
-                $("#fIngre").trigger("change");
-                console.log("filtrosUpdate fIngre");
-                updated = true;
-            }if($("#fNumCom").val()>1){
-                $("#fNumCom").trigger("change");
-                console.log("filtrosUpdate fNumCom");
-                updated = true;
-            }
-            
-            return updated;
-        }
-        
-        
         //Click en una receta(fila)
         $("tbody>tr").click(function(){
             //Cargar receta
