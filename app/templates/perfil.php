@@ -58,6 +58,10 @@
         $(".dif").click(function(){sortTable(1)});
         $(".ing").click(function(){sortTable(2)});
         $(".com").click(function(){sortTable(3)});
+        
+        $("#pass, #pass2").change(function(){
+            $("#avisoPass").hide();
+        });
     });
     
     function eventos(){
@@ -83,7 +87,8 @@
         $("#cambiarPass").submit(function(evt){
             //Contraseña mínimo 6 chars
 
-            if(!($("#pass1").val()===$("#pass2").val())){
+            if(!($("#pass").val()===$("#pass2").val())){
+                console.log($("#pass").val()+"---"+$("#pass2").val());
                 $("#avisoPass").show();
                 evt.preventDefault();
             }
