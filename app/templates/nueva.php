@@ -256,7 +256,7 @@ if(isset($_SESSION['login'])){
     ?>
     <div id="contenido" class="col-12 col-md-8 content">
         <div class="row mt-3 mb-3">
-            <input type="text" id="nombre" class="rounded form-control" placeholder="Nombre de la receta" required autofocus>
+            <input type="text" id="nombre" class="rounded form-control" maxlength="22" placeholder="Nombre de la receta" required autofocus>
         </div>
 
         <div class="row">
