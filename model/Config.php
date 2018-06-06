@@ -6,5 +6,8 @@
 		static public $bd_clave = "";
 		
         static public $serverUrl = "http://localhost/";
+        
+        static public $emailUser = "correo@ejemplo.com";
+        static public $emailPass = "contraseña";
 	}
 ?>
